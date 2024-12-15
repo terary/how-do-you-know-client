@@ -1,0 +1,74 @@
+{
+  "questions": [
+    {
+      "questionId": "q00001",
+      "userPrompt": {
+        "text": "What is your shoe size?"
+      },
+      "userResponseType": "text"
+    },
+    {
+      "questionId": "q00002",
+      "userPrompt": {
+        "text": "What is your favorite color?"
+      },
+      "userResponseType": "text"
+    },
+    {
+      "questionId": "q00003",
+      "userPrompt": {
+        "text": "Where were you born?"
+      },
+      "userResponseType": "text"
+    },
+    {
+      "questionId": "q00004",
+      "userPrompt": {
+        "text": "What is your mother's maiden name?"
+      },
+      "userResponseType": "text"
+    },
+    {
+      "questionId": "q00005",
+      "userPrompt": {
+        "text": "What was the name of your first pet?"
+      },
+      "userResponseType": "text"
+    },
+    {
+      "questionId": "q00006",
+      "userPrompt": {
+        "text": "What is your favorite food?"
+      },
+      "userResponseType": "text"
+    },
+    {
+      "questionId": "q00007",
+      "userPrompt": {
+        "text": "What is your dream vacation destination?"
+      },
+      "userResponseType": "text"
+    },
+    {
+      "questionId": "q00008",
+      "userPrompt": {
+        "text": "What is your favorite hobby?"
+      },
+      "userResponseType": "text"
+    },
+    {
+      "questionId": "q00009",
+      "userPrompt": {
+        "text": "What was your first job?"
+      },
+      "userResponseType": "text"
+    },
+    {
+      "questionId": "q00010",
+      "userPrompt": {
+        "text": "What is your favorite book?"
+      },
+      "userResponseType": "text"
+    }
+  ]
+}
