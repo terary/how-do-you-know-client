@@ -10,7 +10,8 @@ type SetUserResponseRequest = {
   questionId: string;
   userResponseType: TUserResponseType;
   userResponse: {
-    text: string;
+    text?: string;
+    selectedOptions?: string[];
   };
 };
 
@@ -18,7 +19,8 @@ type TUserResponse = {
   questionId: string;
   userResponseType: TUserResponseType;
   userResponse: {
-    text: string;
+    text?: string;
+    selectedOptions?: string[];
   };
 };
 

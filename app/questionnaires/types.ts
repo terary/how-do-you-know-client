@@ -22,7 +22,7 @@ type TQuestionGeneric<
 
 type TQuestionTextOneOf4 = TQuestionGeneric<"text", "one-of-4"> & {
   userPromptText: string;
-  choices: { labelText: string; value: string }[];
+  choices: TChoiceOption[];
   validAnswers: TTextItem[]; // sometimes submitting image or sound file - in which case it wont be multiple guess
   answerFodderId: string;
   userResponse: { value: string | null };
@@ -52,11 +52,15 @@ type TQuestionTextTrueFalse = TQuestionGeneric<"text", "one-of-2"> & {
   validAnswers: TBooleanItem[]; // sometimes submitting image or sound file - in which case it wont be multiple guess
   userResponse: { value: "true" | "false" | null };
 };
+type TChoiceOption = {
+  labelText: string;
+  value: string;
+};
 
 type TQuestionTextAnyOf = TQuestionGeneric<"text", "any-of"> & {
   userPromptText: string;
   validAnswers: TTextItem[]; // sometimes submitting image or sound file - in which case it wont be multiple guess
-  choices: { labelText: string; value: string }[];
+  choices: TChoiceOption[];
 
   userResponse: { values: string[] | null };
 };
@@ -75,7 +79,8 @@ type TQuestionMultimediaText = TQuestionGeneric<
 type TQuestionMultimediaOneOf4 = TQuestionGeneric<"multimedia", "one-of-4"> & {
   links: TMultimediaProperties[];
   instructionText: string;
-  choices: { text: string }[];
+  choices: TChoiceOption[];
+
   validAnswers: TTextItem[]; // sometimes submitting image or sound file - in which case it wont be multiple guess
   answerFodderId: string;
   userResponse: { value: string | null };
@@ -84,7 +89,7 @@ type TQuestionMultimediaOneOf4 = TQuestionGeneric<"multimedia", "one-of-4"> & {
 type TQuestionMultimediaAnyOf = TQuestionGeneric<"multimedia", "any-of"> & {
   links: TMultimediaProperties[];
   instructionText: string;
-  choices: { labelText: string; value: string }[];
+  choices: TChoiceOption[];
   validAnswers: TTextItem[]; // sometimes submitting image or sound file - in which case it wont be multiple guess
   answerFodderId: string;
   userResponse: { values: string[] | null };
@@ -121,6 +126,7 @@ type TQuestionUserResponseOneOf4 =
   | TQuestionMultimediaOneOf4;
 
 export type {
+  TChoiceOption,
   TMultimediaLink,
   TQuestionAny,
   TQuestionUserPromptText,

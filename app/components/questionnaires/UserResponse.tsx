@@ -7,6 +7,7 @@ import type {
 import { useState } from "react";
 import { UserResponse1Of4 } from "./UserResponse1Of4";
 import { UserResponseText } from "./UserResponseText";
+import { UserResponseAnyOf } from "./UserResponseAnyOf";
 
 export const UserResponse: FC<{ question: TQuestionAny }> = ({ question }) => {
   const [response, setResponse] = useState<string>("");
@@ -20,30 +21,9 @@ export const UserResponse: FC<{ question: TQuestionAny }> = ({ question }) => {
 
       case "one-of-2":
         return (
-          <div className="flex gap-4">
-            <label className="flex items-center">
-              <input
-                type="radio"
-                name={`question-${question.questionId}`}
-                value="1"
-                checked={response === "1"}
-                onChange={(e) => setResponse(e.target.value)}
-                className="mr-2"
-              />
-              Yes
-            </label>
-            <label className="flex items-center">
-              <input
-                type="radio"
-                name={`question-${question.questionId}`}
-                value="0"
-                checked={response === "0"}
-                onChange={(e) => setResponse(e.target.value)}
-                className="mr-2"
-              />
-              No
-            </label>
-          </div>
+          <UserResponse1Of4
+            question={question as TQuestionUserResponseOneOf4}
+          />
         );
 
       case "one-of-4":
@@ -51,26 +31,19 @@ export const UserResponse: FC<{ question: TQuestionAny }> = ({ question }) => {
           <UserResponse1Of4
             question={question as TQuestionUserResponseOneOf4}
           />
-
-          // <div className="flex gap-4">
-          //   JSON: {JSON.stringify(question)}
-          //   {[1, 2, 3, 4].map((value) => (
-          //     <label key={value} className="flex items-center">
-          //       <input
-          //         type="radio"
-          //         name={`question-${question.questionId}`}
-          //         value={value.toString()}
-          //         checked={response === value.toString()}
-          //         onChange={(e) => setResponse(e.target.value)}
-          //         className="mr-2"
-          //       />
-          //       Option {value}
-          //     </label>
-          //   ))}
-          // </div>
+        );
+      case "any-of":
+        return (
+          //UserResponseAnyOf
+          <UserResponseAnyOf
+            question={question as TQuestionUserResponseOneOf4}
+          />
+          //  <UserR
+          //   question={question as TQuestionUserResponseOneOf4}
+          // />
         );
 
-      case "any-of":
+      case "xany-of":
         return (
           <textarea
             value={response}

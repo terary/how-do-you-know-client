@@ -1,29 +1,31 @@
-import type { FC } from "react";
-import type { TQuestionUserResponseText } from "../../questionnaires/types";
 import {
   useGetUserAnswersQuery,
   useSetUserResponseMutation,
 } from "@/lib/features/user-response/userResponseApiSlice";
 import {
-  setDraftResponse,
-  clearDraftResponse,
   commitDraftResponse,
+  setDraftResponse,
 } from "@/lib/features/user-response/userResponseSlice";
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
+import type { FC } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import type { TQuestionUserResponseText } from "../../questionnaires/types";
 
-import { useState } from "react";
-import {
-  Button,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  TextField,
-} from "@mui/material";
-import { FormLabel } from "@mui/material";
+`
+    Make sure this accepts/displays empty, non-answer and previous answers
+
+    test takers should be able to revisit questions and change previous answers
+     - how is that done currently??
+
+     - FE is using 'acceptedAnswers' backend is placing 'userResponse' object as part of the "questions" "test" document.
+       Should reconcile.  BE will generate unique tests.  It's reasonable to place answers object as part of test document 
+       (which means current state model is goof'd with two lists )
+
+       What will it take to change to placing userResponse as part of the 'test'?
+
+`;
+
 import { FormControl } from "@mui/material";
-import { before } from "node:test";
-import { UserResponse } from "./UserResponse";
 
 export const UserResponseText: FC<{
   question: TQuestionUserResponseText;
@@ -58,6 +60,7 @@ export const UserResponseText: FC<{
         questionId,
         userResponseType: "free-text-255",
         userResponse: {
+          // @ts-ignore - 'text' is unknown?
           text: draftText,
         },
       });
@@ -78,7 +81,7 @@ export const UserResponseText: FC<{
           <div key={response.questionId}>
             <p>Submitted: {response.userResponse.text}</p>
             <input
-              value={draftResponses[response.questionId] || ""}
+              value={(draftResponses[response.questionId] as any).text || ""}
               onChange={(e) =>
                 handleDraftChange(response.questionId, e.target.value)
               }
