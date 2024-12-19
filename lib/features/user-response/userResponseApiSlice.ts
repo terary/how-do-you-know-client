@@ -61,6 +61,19 @@ interface IGetQuestionnaireRequestParameters {
 }
 
 const initialState = { UserResponses: [], total: 0, skip: 0, limit: 0 };
+
+`
+
+    These seems to be working.
+
+    Need to use this API to feed the questionnaire related component(s) then tear-out the questionnaireApi
+    Backend will need to be updated to keep exam in memory (or start using the one there) and we should be **sending ids now**
+
+
+    Let AI do some of this for you... if it's not a great place to use AI, make it a good place to use AI, then use AI
+
+`;
+
 // Define a service using a base URL and expected endpoints
 export const userAnswersApiSlice = createApi({
   // baseQuery: fetchBaseQuery({ baseUrl: "https://dummyjson.com/quotes" }),
@@ -87,7 +100,15 @@ export const userAnswersApiSlice = createApi({
       // cached data returned by the query.
       providesTags: (result, error, id) => [{ type: "UserAnswers", id, error }],
     }),
+    xgetQuestionnaire: build.query<QuestionnaireApiResponse, number>({
+      query: (limit = 10) => `?limit=${limit}`,
 
+      // `providesTags` determines which 'tag' is attached to the
+      // cached data returned by the query.
+      providesTags: (result, error, id) => [
+        { type: "questionnaire", id, error },
+      ],
+    }),
     // getQuestionnaire: build.query<UserAnswersApiResponse, number>({
     getQuestionnaire: build.query<
       IGetQuestionnaireResponse,
@@ -98,9 +119,9 @@ export const userAnswersApiSlice = createApi({
         const END_POINT = "/questionnaire";
         let paramString = END_POINT;
         if (params.questionnaireId) {
-          paramString += "questionnaireId=" + params.questionnaireId;
+          return END_POINT + "?questionnaireId=" + params.questionnaireId;
         }
-        return paramString == END_POINT ? paramString : "?" + paramString;
+        return END_POINT;
       },
 
       // `providesTags` determines which 'tag' is attached to the
