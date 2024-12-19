@@ -2,6 +2,8 @@
 // import { useGetQuotesQuery } from "@/lib/features/quotes/quotesApiSlice";
 // import { useGetQuestionsQuery } from "@/lib/features/questionnaires/questionnairesApiSlice";
 import { useGetQuestionsQuery } from "../../../lib/features/questionnaires/questionnairesApiSlice";
+import { useGetQuestionnaireQuery } from "../../../lib/features/user-response/userResponseApiSlice";
+
 import { useState } from "react";
 import styles from "./Questionnaires.module.css";
 import { QuestionAny } from "./QuestionAny";
@@ -12,12 +14,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 
 export const Questionnaires = () => {
+  `
+
+  You want this got get the questionnaire from 'getQuestionnaire' from the userResponseApiSlice - (end-points have changed)
+
+
+`;
+
   const { data, error, isError, isLoading, isSuccess } =
     useGetQuestionsQuery(5);
   const allAcceptedAnswers = useSelector(
     (state: RootState) => state.userResponse.acceptedResponses
   );
-
+  const {
+    data: data2,
+    error: error2,
+    isError: isError2,
+    isLoading: isLoading2,
+    isSuccess: isSuccess2,
+  } = useGetQuestionnaireQuery({ questionnaireId: "_QUESTIONNAIRE_ID_" });
+  // useGetQuestionnaireQuery(5);
+  console.log({ data2, error2, isError2, isLoading2, isSuccess2 });
   const QuestionAnswerStats = ({
     totalQuestions = -1,
     totalAnswers = -1,
@@ -71,12 +88,25 @@ export const Questionnaires = () => {
       </div>
     );
   }
+  ` 
+  
+  
+  This seems to be working to fetch the questionnaire - I am not sure
+  about question update... I think that won't work because I changed the
+  end-point 
+  
+  
+  
+  `;
+
   if (isSuccess) {
     return (
       <div
         className={styles.container}
         style={{ backgroundColor: "rgba(0,0,0, 0.5)" }}
       >
+        JSON getQuery{" "}
+        {JSON.stringify({ data2, error2, isError2, isLoading2, isSuccess2 })}
         <QuestionAnswerStats
           totalAnswers={Object.keys(allAcceptedAnswers).length}
           totalQuestions={data.questions.length}

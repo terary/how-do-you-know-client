@@ -62,23 +62,8 @@ export const userResponseSlice = createSlice({
       action: PayloadAction<{
         questionId: string;
         selectedOptions: string[];
-        // selectedOptions: {
-        //   [optionId: string]: {
-        //     optionId: string;
-        //     value: boolean;
-        //     labelText: string;
-        //   };
-        // };
       }>
     ) => {
-      console.log({
-        setArrayValueDraftResponse: {
-          stateKeys: Object.keys(state),
-          draftResponses: state.draftResponses,
-          payload: action.payload,
-        },
-      });
-
       if (notIn(action.payload.questionId, state.draftResponses)) {
         // @ts-ignore
         state.draftResponses[action.payload.questionId] = {};
@@ -98,6 +83,9 @@ export const userResponseSlice = createSlice({
       // @ts-ignore state.draftResponse doesn't like being 'selectedValues'
       state.draftResponses[action.payload.questionId].selectedOptions =
         action.payload.selectedOptions;
+
+      // @ts-ignore 'text' is not a property
+      delete state.draftResponses[action.payload.questionId]["text"];
     },
 
     clearDraftResponse: (state, action: PayloadAction<string>) => {
