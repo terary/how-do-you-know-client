@@ -1,7 +1,6 @@
 "use client";
 // import { useGetQuotesQuery } from "@/lib/features/quotes/quotesApiSlice";
 // import { useGetQuestionsQuery } from "@/lib/features/questionnaires/questionnairesApiSlice";
-import { useGetQuestionsQuery } from "../../../lib/features/questionnaires/questionnairesApiSlice";
 import { useGetQuestionnaireQuery } from "../../../lib/features/user-response/userResponseApiSlice";
 
 import { useState } from "react";

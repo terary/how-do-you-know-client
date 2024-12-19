@@ -2,7 +2,6 @@ import type { Action, ThunkAction } from "@reduxjs/toolkit";
 import { combineSlices, configureStore } from "@reduxjs/toolkit";
 import { counterSlice } from "./features/counter/counterSlice";
 import { quotesApiSlice } from "./features/quotes/quotesApiSlice";
-import { questionnairesApiSlice } from "./features/questionnaires/questionnairesApiSlice";
 import { userAnswersApiSlice } from "./features/user-response/userResponseApiSlice";
 import { userResponseSlice } from "./features/user-response/userResponseSlice";
 
@@ -11,7 +10,6 @@ import { userResponseSlice } from "./features/user-response/userResponseSlice";
 const rootReducer = combineSlices(
   counterSlice,
   quotesApiSlice,
-  questionnairesApiSlice,
   userAnswersApiSlice,
   userResponseSlice
 );
@@ -30,7 +28,6 @@ export const makeStore = () => {
     middleware: (getDefaultMiddleware) => {
       return getDefaultMiddleware().concat(
         quotesApiSlice.middleware,
-        questionnairesApiSlice.middleware,
         userAnswersApiSlice.middleware
       );
     },
