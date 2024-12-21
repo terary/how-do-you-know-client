@@ -1,41 +1,36 @@
+import { useSetUserResponseMutation } from "@/lib/features/user-response/userResponseApiSlice";
+import type {
+  AcceptedUserResponse,
+  UserResponseTextType,
+} from "@/lib/features/user-response/userResponseSlice";
 import type { FC } from "react";
 import type { TQuestionUserResponseOneOf4 } from "../../questionnaires/types";
-import {
-  useGetUserAnswersQuery,
-  useSetUserResponseMutation,
-} from "@/lib/features/user-response/userResponseApiSlice";
-import type {
-  UserResponseTextType,
-  UserResponseArraySelectType,
-  AcceptedUserResponse,
-} from "@/lib/features/user-response/userResponseSlice";
 
 import {
-  setDraftResponse,
   clearDraftResponse,
   commitDraftResponse,
+  setDraftResponse,
 } from "@/lib/features/user-response/userResponseSlice";
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Button, FormControlLabel, Radio, RadioGroup } from "@mui/material";
-import { FormLabel } from "@mui/material";
-import { FormControl } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+} from "@mui/material";
 
 export const UserResponse1Of4: FC<{
   question: TQuestionUserResponseOneOf4;
 }> = ({ question }) => {
   const dispatch = useDispatch();
-  const { data: userAnswers } = useGetUserAnswersQuery(10);
   const [setUserResponse] = useSetUserResponseMutation();
 
   // Get local state
   const draftResponses = useSelector(
     (state: RootState) => state.userResponseUI.draftResponses
-  );
-
-  const allAcceptedAnswers = useSelector(
-    (state: RootState) => state.userResponseUI.acceptedResponses
   );
 
   const isEditing = useSelector(
@@ -74,19 +69,10 @@ export const UserResponse1Of4: FC<{
       >
         {question.choices.map((option) => (
           <FormControlLabel
-            key={
-              // @ts-ignore
-              option?.value
-            }
-            value={
-              // @ts-ignore
-              option?.value
-            }
+            key={option?.value}
+            value={option?.value}
             control={<Radio />}
-            label={
-              // @ts-ignore
-              option?.labelText
-            }
+            label={option?.labelText}
           />
         ))}
       </RadioGroup>
@@ -105,26 +91,6 @@ export const UserResponse1Of4: FC<{
         >
           Reset
         </Button>
-      </div>
-
-      {/* Debug information */}
-      <div style={{ marginTop: "1rem", fontSize: "0.8rem", color: "#666" }}>
-        <div>
-          Current Draft: {JSON.stringify(draftResponses[question.questionId])}
-        </div>
-        <div>
-          Accepted Answer:{" "}
-          {
-            // Shouldn't be doing this as X<Y> the typing should be more straight forward (poor design?)
-            JSON.stringify({
-              userResponse: (
-                allAcceptedAnswers[
-                  question.questionId
-                ] as AcceptedUserResponse<UserResponseTextType>
-              )?.userResponse,
-            })
-          }
-        </div>
       </div>
     </FormControl>
   );

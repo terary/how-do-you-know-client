@@ -8,118 +8,63 @@ import { useSelector } from "react-redux";
 import { QuestionAny } from "./QuestionAny";
 import styles from "./Questionnaires.module.css";
 import { UserResponse } from "./UserResponse";
+import { QuestionList } from "./QuestionList";
 export const Questionnaires = () => {
-  // const {
-  //   data: data2,
-  //   error: error2,
-  //   isError: isError2,
-  //   isLoading: isLoading2,
-  //   isSuccess: isSuccess2,
-  // } = useGetQuestionsQuery(5);
-  const {
-    data: data,
-    error: error,
-    isError: isError,
-    isLoading: isLoading,
-    isSuccess: isSuccess,
-  } = useGetQuestionnaireQuery({ questionnaireId: "_THE_QUESTIONNAIRE_ID_" });
-  //} = useGetQuestionnaireQuery({ questionnaireId: "_QUESTIONNAIRE_ID_" });
-  const allAcceptedAnswers = useSelector(
-    (state: RootState) => state.userResponseUI.acceptedResponses
-  );
+  // - so what is the point of this?
 
-  // useGetQuestionnaireQuery(5);
-  // console.log({ data2, error2, isError2, isLoading2, isSuccess2 });
-  console.log({ data, error, isError, isLoading, isSuccess });
+  `
+    This control actually does the API call to get all the questions
+    from that data, the questions are created, the stateUI then calls to update question.history
+    So the history on the whole questionaire changes but not the local question (I think).
 
-  const QuestionAnswerStats = ({
-    totalQuestions = -1,
-    totalAnswers = -1,
-    totalRemaining = -1,
-  }: {
-    totalQuestions: number;
-    totalAnswers: number;
-    totalRemaining: number;
-  }) => {
-    return (
-      <div style={{ display: "table", width: "100%", marginBottom: "1rem" }}>
-        <div style={{ display: "table-row" }}>
-          <div style={{ display: "table-cell", padding: "0.5rem" }}>
-            Number of questions {totalQuestions}
-          </div>
-        </div>
-        <div style={{ display: "table-row" }}>
-          <div style={{ display: "table-cell", padding: "0.5rem" }}>
-            Number of questions answered {totalAnswers}
-          </div>
-        </div>
-        <div style={{ display: "table-row" }}>
-          <div style={{ display: "table-cell", padding: "0.5rem" }}>
-            Number of questions remaining {totalRemaining}
-          </div>
-        </div>
-      </div>
-    );
-  };
+    We we're going to resolve this by exploiting the fact we store objects... This should be fine
+    because the 'history' we're searching for is part of the question (should require more 'effort' than that)
+    but to update the api state
+
+    Effectively the question/userResponse update, response should update question 
+
+
+
+
+`;
+
+  const { data, error, isError, isLoading, isSuccess } =
+    useGetQuestionnaireQuery({ questionnaireId: "_THE_QUESTIONNAIRE_ID_" });
 
   if (isError) {
     return (
       <div>
-        statues:{" "}
-        {JSON.stringify({
-          isError,
-          isSuccess,
-          isLoading,
-          data: data || null,
-          error: error || null,
-        })}
-        <h1>There was an error!!!</h1>
+        <pre>
+          {JSON.stringify(
+            {
+              isError,
+              isSuccess,
+              isLoading,
+              data: data || null,
+              error: error || null,
+            },
+            null,
+            2
+          )}
+        </pre>
+        <h1>There was an error!</h1>
       </div>
     );
   }
 
   if (isLoading) {
-    return (
-      <div>
-        <h1>Loading...</h1>
-      </div>
-    );
+    return <h1>Loading...</h1>;
   }
-  if (isSuccess) {
+
+  if (isSuccess && data) {
     return (
       <div
         className={styles.container}
         style={{ backgroundColor: "rgba(0,0,0, 0.5)" }}
       >
-        <QuestionAnswerStats
-          totalAnswers={Object.keys(allAcceptedAnswers).length}
-          totalQuestions={data.questions.length}
-          totalRemaining={
-            data.questions.length - Object.keys(allAcceptedAnswers).length
-          }
-        />
-        {(data.questions || []).map((question) => (
-          <Card
-            // sx={{ maxWidth: 345, margin: "25px" }}
-            key={question.questionId}
-            variant="elevation"
-          >
-            <CardContent>
-              questionId: {question.questionId}
-              <br />
-              userResponseHistory:{" "}
-              {JSON.stringify({
-                userResponseHistory: question.userResponseHistory || null,
-              })}
-              <QuestionAny key={question.questionId} question={question} />
-            </CardContent>
-
-            <CardActions>
-              userResponseType: {question.userResponseType}{" "}
-              <UserResponse question={question} />
-            </CardActions>
-          </Card>
-        ))}
+        Total Questions: {(data.questions || []).length}
+        <br />
+        <QuestionList />
       </div>
     );
   }

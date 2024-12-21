@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { userAnswersApiSlice } from "./userResponseApiSlice";
+import { TQuestionAny } from "@/app/questionnaires/types";
 
 const notIn = (key: string, obj: Object) => !(key in obj);
 
@@ -20,26 +21,21 @@ export interface AcceptedUserResponse<
   userResponse: T;
 }
 
+type TQuestionIdMap = { [questionId: string]: TQuestionAny };
+
 interface UserResponseState {
-  currentResponse: string;
-  //  draftResponses: Record<string, string>;
   draftResponses: Record<
     string,
     UserResponseArraySelectType | UserResponseTextType
   >;
-  //
-  acceptedResponses: Record<
-    string,
-    AcceptedUserResponse<UserResponseTextType | UserResponseArraySelectType>
-  >;
+  questionMap: TQuestionIdMap;
   isEditing: boolean;
 }
 
 const initialState: UserResponseState = {
-  currentResponse: "",
   draftResponses: {},
-  acceptedResponses: {},
   isEditing: false,
+  questionMap: {},
 };
 
 export const userResponseSlice = createSlice({
@@ -50,10 +46,6 @@ export const userResponseSlice = createSlice({
       state,
       action: PayloadAction<{ questionId: string; text: string }>
     ) => {
-      console.log({
-        stateKeys: Object.keys(state),
-        currentResponseKeys: Object.keys(state.currentResponse),
-      });
       const { text } = action.payload;
       state.draftResponses[action.payload.questionId] = { text };
     },
@@ -89,33 +81,18 @@ export const userResponseSlice = createSlice({
     },
 
     clearDraftResponse: (state, action: PayloadAction<string>) => {
-      console.log({ clearDraftResponse: { action } });
       delete state.draftResponses[action.payload];
     },
     commitDraftResponse: (
       state,
       action: PayloadAction<AcceptedUserResponse<UserResponseTextType>>
     ) => {
-      console.log({
-        commitDraftResponse: { action },
-        stateKeys: Object.keys(state),
-        acceptedResponses: state.acceptedResponses,
-        acceptedResponsesKeys: Object.keys(state.acceptedResponses),
-      });
-      state.acceptedResponses[action.payload.questionId] = action.payload;
       delete state.draftResponses[action.payload.questionId];
     },
     commitArrayValueDraftResponse: (
       state,
       action: PayloadAction<AcceptedUserResponse<UserResponseArraySelectType>>
     ) => {
-      console.log({
-        commitDraftResponse: { action },
-        stateKeys: Object.keys(state),
-        acceptedResponses: state.acceptedResponses,
-        acceptedResponsesKeys: Object.keys(state.acceptedResponses),
-      });
-      state.acceptedResponses[action.payload.questionId] = action.payload;
       delete state.draftResponses[action.payload.questionId];
     },
     setIsEditing: (state, action: PayloadAction<boolean>) => {
@@ -135,8 +112,23 @@ export const userResponseSlice = createSlice({
         userAnswersApiSlice.endpoints.setUserResponse.matchFulfilled,
         (state, action) => {
           state.isEditing = false;
+          const question = state.questionMap[action.payload.questionId];
+          question.userResponseHistory?.push(action.payload);
           // Clear draft after successful submission
           delete state.draftResponses[action.payload.questionId];
+        }
+      )
+      .addMatcher(
+        userAnswersApiSlice.endpoints.getQuestionnaire.matchFulfilled,
+        (state, action) => {
+          const questionMap = (action.payload?.questions || []).reduce(
+            (acc, prev) => {
+              acc[prev.questionId] = prev;
+              return acc;
+            },
+            {} as TQuestionIdMap
+          );
+          state.questionMap = questionMap; // action.payload.questions || [];
         }
       );
   },

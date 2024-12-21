@@ -5,6 +5,7 @@ import type {
 } from "../../questionnaires/types";
 import { QuestionText } from "./QuestionText";
 import { QuestionMultimedia } from "./QuestionMultimedia";
+import { UserResponseHistory } from "./UserResponseHistory";
 
 export const QuestionAny: FC<{ question: TQuestionAny }> = ({ question }) => {
   switch (question.userPromptType) {

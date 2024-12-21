@@ -4,17 +4,7 @@ import type {
   TQuestionAny,
   TUserResponseType,
 } from "../../../app/questionnaires/types";
-import { UserResponse } from "@/app/components/questionnaires/UserResponse";
-// -------------
 
-interface QuestionnaireApiResponse {
-  questions: TQuestionAny[];
-  total: number;
-  skip: number;
-  limit: number;
-}
-
-// -------------
 type SetUserResponseRequest = {
   questionId: string;
   userResponseType: TUserResponseType;
@@ -40,15 +30,8 @@ interface UserAnswersApiResponse {
   limit: number;
 }
 
-// interface QuestionnaireApiResponse {
-//   questions: TQuestionAny[];
-//   total: number;
-//   skip: number;
-//   limit: number;
-// }
-
 interface IGetQuestionnaireResponse {
-  questionnaireId: string; // this isn't what it appears.  Still need to work-out "questionnaire" and "questionnaire instance"
+  questionnaireId: string;
   questions: TQuestionAny[];
   examMetaData?: {
     examId?: string;
@@ -62,9 +45,7 @@ interface IGetQuestionnaireRequestParameters {
 
 // Define a service using a base URL and expected endpoints
 export const userAnswersApiSlice = createApi({
-  // baseQuery: fetchBaseQuery({ baseUrl: "https://dummyjson.com/quotes" }),
   baseQuery: fetchBaseQuery({
-    // baseUrl: "http://predicatetree.com/questionnaires/questions.json",
     baseUrl: "http://localhost:3001/dev-debug/user-answers",
     // baseUrl: "http://localhost:3001/dev-debug/questions",
 
@@ -80,23 +61,13 @@ export const userAnswersApiSlice = createApi({
     // Supply generics for the return type (in this case `QuotesApiResponse`)
     // and the expected query argument. If there is no argument, use `void`
     // for the argument type instead.
-    getUserAnswers: build.query<UserAnswersApiResponse, number>({
+    x_getUserAnswers: build.query<UserAnswersApiResponse, number>({
       query: (limit = 10) => `?limit=${limit}`,
 
       // `providesTags` determines which 'tag' is attached to the
       // cached data returned by the query.
       providesTags: (result, error, id) => [{ type: "UserAnswers", id, error }],
     }),
-    xgetQuestionnaire: build.query<QuestionnaireApiResponse, number>({
-      query: (limit = 10) => `?limit=${limit}`,
-
-      // `providesTags` determines which 'tag' is attached to the
-      // cached data returned by the query.
-      providesTags: (result, error, id) => [
-        { type: "questionnaire", id, error },
-      ],
-    }),
-    // getQuestionnaire: build.query<UserAnswersApiResponse, number>({
     getQuestionnaire: build.query<
       IGetQuestionnaireResponse,
       // number
@@ -104,7 +75,6 @@ export const userAnswersApiSlice = createApi({
     >({
       query: (params) => {
         const END_POINT = "/questionnaire";
-        let paramString = END_POINT;
         if (params.questionnaireId) {
           return END_POINT + "?questionnaireId=" + params.questionnaireId;
         }
@@ -129,6 +99,10 @@ export const userAnswersApiSlice = createApi({
       }),
       // Invalidate the UserAnswers cache when a new response is added
       invalidatesTags: ["UserAnswers"],
+      // transformResponse(baseQueryReturnValue, meta, arg) {
+      //   console.log({ transformResponse: { baseQueryReturnValue, meta, arg } });
+      //   return baseQueryReturnValue as unknown as TUserResponse;
+      // },
     }),
   }),
 });
@@ -137,7 +111,7 @@ export const userAnswersApiSlice = createApi({
 // Same as `quotesApiSlice.endpoints.getQuotes.useQuery`
 //export const { useGetQuestionsQuery } = UserAnswersApiSlice;
 export const {
-  useGetUserAnswersQuery,
+  // useGetUserAnswersQuery,
   useSetUserResponseMutation,
-  useGetQuestionnaireQuery,
+  useGetQuestionnaireQuery, // main query pulls all the questions
 } = userAnswersApiSlice;

@@ -8,15 +8,40 @@ import { useState } from "react";
 import { UserResponse1Of4 } from "./UserResponse1Of4";
 import { UserResponseText } from "./UserResponseText";
 import { UserResponseAnyOf } from "./UserResponseAnyOf";
+import { UserResponseHistory } from "./UserResponseHistory";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
+import { styled } from "@mui/material/styles";
 
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+  ...theme.applyStyles("dark", {
+    backgroundColor: "#1A2027",
+  }),
+}));
 export const UserResponse: FC<{ question: TQuestionAny }> = ({ question }) => {
-  const [response, setResponse] = useState<string>("");
-
   const renderResponseControl = () => {
     switch (question.userResponseType) {
       case "free-text-255":
         return (
-          <UserResponseText question={question as TQuestionUserResponseText} />
+          <Stack>
+            <Item>
+              <UserResponseText
+                question={question as TQuestionUserResponseText}
+              />
+            </Item>
+            <Item>
+              <UserResponseHistory
+                userResponseHistory={question.userResponseHistory || []}
+              />
+            </Item>
+          </Stack>
         );
 
       case "one-of-2":
@@ -34,21 +59,8 @@ export const UserResponse: FC<{ question: TQuestionAny }> = ({ question }) => {
         );
       case "any-of":
         return (
-          //UserResponseAnyOf
           <UserResponseAnyOf
             question={question as TQuestionUserResponseOneOf4}
-          />
-          //  <UserR
-          //   question={question as TQuestionUserResponseOneOf4}
-          // />
-        );
-
-      case "xany-of":
-        return (
-          <textarea
-            value={response}
-            onChange={(e) => setResponse(e.target.value)}
-            className="w-full p-2 border rounded min-h-[100px]"
           />
         );
 
