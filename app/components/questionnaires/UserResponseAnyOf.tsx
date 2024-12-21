@@ -58,15 +58,15 @@ export const UserResponseAnyOf: FC<{
 
   // Get local state
   const draftResponses = useSelector(
-    (state: RootState) => state.userResponse.draftResponses
+    (state: RootState) => state.userResponseUI.draftResponses
   );
 
   const allAcceptedAnswers = useSelector(
-    (state: RootState) => state.userResponse.acceptedResponses
+    (state: RootState) => state.userResponseUI.acceptedResponses
   );
 
   const isEditing = useSelector(
-    (state: RootState) => state.userResponse.isEditing
+    (state: RootState) => state.userResponseUI.isEditing
   );
 
   const handleDraftChange = (option: string, isChecked: boolean) => {

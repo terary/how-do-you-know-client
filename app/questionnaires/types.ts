@@ -18,6 +18,7 @@ type TQuestionGeneric<
   userPromptType: UPromptType;
   userResponseType: UResponseType;
   questionId: string;
+  userResponseHistory?: any[]; // for teaching tool this is a nice have. for exam this is a security risk (maybe).
 };
 
 type TQuestionTextOneOf4 = TQuestionGeneric<"text", "one-of-4"> & {

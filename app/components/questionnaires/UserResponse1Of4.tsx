@@ -31,15 +31,15 @@ export const UserResponse1Of4: FC<{
 
   // Get local state
   const draftResponses = useSelector(
-    (state: RootState) => state.userResponse.draftResponses
+    (state: RootState) => state.userResponseUI.draftResponses
   );
 
   const allAcceptedAnswers = useSelector(
-    (state: RootState) => state.userResponse.acceptedResponses
+    (state: RootState) => state.userResponseUI.acceptedResponses
   );
 
   const isEditing = useSelector(
-    (state: RootState) => state.userResponse.isEditing
+    (state: RootState) => state.userResponseUI.isEditing
   );
 
   const handleDraftChange = (questionId: string, value: string) => {
@@ -54,6 +54,7 @@ export const UserResponse1Of4: FC<{
         questionId,
         userResponseType: "one-of-4",
         userResponse: {
+          // @ts-ignore
           text: draftText,
         },
       });
@@ -108,7 +109,9 @@ export const UserResponse1Of4: FC<{
 
       {/* Debug information */}
       <div style={{ marginTop: "1rem", fontSize: "0.8rem", color: "#666" }}>
-        <div>Current Draft: {draftResponses[question.questionId]}</div>
+        <div>
+          Current Draft: {JSON.stringify(draftResponses[question.questionId])}
+        </div>
         <div>
           Accepted Answer:{" "}
           {

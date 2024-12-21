@@ -36,15 +36,15 @@ export const UserResponseText: FC<{
 
   // Get local state
   const draftResponses = useSelector(
-    (state: RootState) => state.userResponse.draftResponses
+    (state: RootState) => state.userResponseUI.draftResponses
   );
 
   const allAcceptedAnswers = useSelector(
-    (state: RootState) => state.userResponse.acceptedResponses
+    (state: RootState) => state.userResponseUI.acceptedResponses
   );
 
   const isEditing = useSelector(
-    (state: RootState) => state.userResponse.isEditing
+    (state: RootState) => state.userResponseUI.isEditing
   );
 
   const handleDraftChange = (questionId: string, text: string) => {
@@ -59,10 +59,7 @@ export const UserResponseText: FC<{
       const theResponse = await setUserResponse({
         questionId,
         userResponseType: "free-text-255",
-        userResponse: {
-          // @ts-ignore - 'text' is unknown?
-          text: draftText,
-        },
+        userResponse: { ...draftText },
       });
       // dispatch(clearDraftResponse(questionId));
       dispatch(commitDraftResponse(theResponse.data as any));
@@ -76,8 +73,10 @@ export const UserResponseText: FC<{
   return (
     <FormControl>
       <div>
-        allAcceptedAnswers: {JSON.stringify(allAcceptedAnswers)}
-        {(userAnswers?.UserResponses || []).map((response) => (
+        allAcceptedAnswers[questionId]:{" "}
+        {JSON.stringify(allAcceptedAnswers[question.questionId])}
+        UserResponseHistory:{" "}
+        {(userAnswers?.UserResponseHistory || []).map((response) => (
           <div key={response.questionId}>
             <p>Submitted: {response.userResponse.text}</p>
             <input
@@ -110,10 +109,10 @@ export const UserResponseText: FC<{
       </div>
       JSON:{" "}
       {JSON.stringify({
-        userAnswers: userAnswers || null,
-        isEditing,
-        draftResponses,
-        question,
+        // userAnswers: userAnswers || null,
+        // isEditing,
+        "draftResponses[questionId]": draftResponses[question.questionId],
+        // question,
       })}
     </FormControl>
   );

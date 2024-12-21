@@ -1,17 +1,13 @@
 "use client";
-// import { useGetQuotesQuery } from "@/lib/features/quotes/quotesApiSlice";
-// import { useGetQuestionsQuery } from "@/lib/features/questionnaires/questionnairesApiSlice";
 import { useGetQuestionnaireQuery } from "../../../lib/features/user-response/userResponseApiSlice";
 
-import { useState } from "react";
-import styles from "./Questionnaires.module.css";
-import { QuestionAny } from "./QuestionAny";
-import Card from "@mui/material/Card";
-import { CardActions, CardContent } from "@mui/material";
-import { UserResponse } from "./UserResponse";
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
-
+import { CardActions, CardContent } from "@mui/material";
+import Card from "@mui/material/Card";
+import { useSelector } from "react-redux";
+import { QuestionAny } from "./QuestionAny";
+import styles from "./Questionnaires.module.css";
+import { UserResponse } from "./UserResponse";
 export const Questionnaires = () => {
   // const {
   //   data: data2,
@@ -29,7 +25,7 @@ export const Questionnaires = () => {
   } = useGetQuestionnaireQuery({ questionnaireId: "_THE_QUESTIONNAIRE_ID_" });
   //} = useGetQuestionnaireQuery({ questionnaireId: "_QUESTIONNAIRE_ID_" });
   const allAcceptedAnswers = useSelector(
-    (state: RootState) => state.userResponse.acceptedResponses
+    (state: RootState) => state.userResponseUI.acceptedResponses
   );
 
   // useGetQuestionnaireQuery(5);
@@ -110,6 +106,11 @@ export const Questionnaires = () => {
           >
             <CardContent>
               questionId: {question.questionId}
+              <br />
+              userResponseHistory:{" "}
+              {JSON.stringify({
+                userResponseHistory: question.userResponseHistory || null,
+              })}
               <QuestionAny key={question.questionId} question={question} />
             </CardContent>
 

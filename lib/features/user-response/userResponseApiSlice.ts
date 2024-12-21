@@ -34,7 +34,7 @@ type TUserResponse = {
 };
 
 interface UserAnswersApiResponse {
-  UserResponses: TUserResponse[];
+  UserResponseHistory: TUserResponse[];
   total: number;
   skip: number;
   limit: number;
@@ -60,20 +60,6 @@ interface IGetQuestionnaireRequestParameters {
   questionnaireId?: string;
 }
 
-const initialState = { UserResponses: [], total: 0, skip: 0, limit: 0 };
-
-`
-
-    These seems to be working.
-
-    Need to use this API to feed the questionnaire related component(s) then tear-out the questionnaireApi
-    Backend will need to be updated to keep exam in memory (or start using the one there) and we should be **sending ids now**
-
-
-    Let AI do some of this for you... if it's not a great place to use AI, make it a good place to use AI, then use AI
-
-`;
-
 // Define a service using a base URL and expected endpoints
 export const userAnswersApiSlice = createApi({
   // baseQuery: fetchBaseQuery({ baseUrl: "https://dummyjson.com/quotes" }),
@@ -86,7 +72,8 @@ export const userAnswersApiSlice = createApi({
   }),
 
   // initialState: initialState,
-  reducerPath: "userAnswersApi",
+  reducerPath: "userResponseApi",
+
   // Tag types are used for caching and invalidation.
   tagTypes: ["UserAnswers", "questionnaire"],
   endpoints: (build) => ({

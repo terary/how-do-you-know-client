@@ -43,7 +43,7 @@ const initialState: UserResponseState = {
 };
 
 export const userResponseSlice = createSlice({
-  name: "userResponse",
+  name: "userResponseUI",
   initialState,
   reducers: {
     setDraftResponse: (
