@@ -2,9 +2,8 @@ import { FC } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { QuestionAny } from "./QuestionAny";
-import { Card, CardActions, CardContent } from "@mui/material";
-import { UserResponse } from "./UserResponse";
-import { UserResponseHistory } from "./UserResponseHistory";
+import { Card, CardContent } from "@mui/material";
+import { UserResponseContainer } from "./UserResponseContainer";
 import { TQuestionAny } from "@/app/questionnaires/types";
 
 export const QuestionList: FC = () => {
@@ -27,15 +26,8 @@ export const QuestionList: FC = () => {
             </div>
 
             <QuestionAny question={question} />
-            <UserResponseHistory
-              question={question as TQuestionAny}
-              // userResponseHistory={(question as any).userResponseHistory || []}
-            />
+            <UserResponseContainer question={question as TQuestionAny} />
           </CardContent>
-
-          {/* <CardActions>
-            <UserResponse question={question} />
-          </CardActions> */}
         </Card>
       ))}
     </div>
