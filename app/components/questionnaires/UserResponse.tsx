@@ -30,18 +30,7 @@ export const UserResponse: FC<{ question: TQuestionAny }> = ({ question }) => {
     switch (question.userResponseType) {
       case "free-text-255":
         return (
-          <Stack>
-            <Item>
-              <UserResponseText
-                question={question as TQuestionUserResponseText}
-              />
-            </Item>
-            <Item>
-              <UserResponseHistory
-                userResponseHistory={question.userResponseHistory || []}
-              />
-            </Item>
-          </Stack>
+          <UserResponseText question={question as TQuestionUserResponseText} />
         );
 
       case "one-of-2":

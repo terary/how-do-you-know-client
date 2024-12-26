@@ -114,6 +114,10 @@ export const userResponseSlice = createSlice({
           state.isEditing = false;
           const question = state.questionMap[action.payload.questionId];
           question.userResponseHistory?.push(action.payload);
+          console.log({
+            "userAnswersApiSlice.endpoints.setUserResponse.matchFulfilled":
+              action.payload,
+          });
           // Clear draft after successful submission
           delete state.draftResponses[action.payload.questionId];
         }

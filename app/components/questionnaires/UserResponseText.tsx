@@ -10,14 +10,31 @@ import { RootState } from "@/lib/store";
 import type { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { TQuestionUserResponseText } from "../../questionnaires/types";
+import { styled } from "@mui/material/styles";
 
-import { FormControl } from "@mui/material";
+import {
+  Button,
+  Card,
+  FormControl,
+  Paper,
+  Stack,
+  TextField,
+} from "@mui/material";
+const Item = styled(Card)(({ theme }) => ({
+  backgroundColor: "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+  ...theme.applyStyles("dark", {
+    backgroundColor: "#1A2027",
+  }),
+}));
 
 export const UserResponseText: FC<{
   question: TQuestionUserResponseText;
 }> = ({ question }) => {
   const dispatch = useDispatch();
-  // const { data: userAnswers } = useGetUserAnswersQuery(10);
   const [setUserResponse] = useSetUserResponseMutation();
 
   // Get local state
@@ -35,7 +52,6 @@ export const UserResponseText: FC<{
 
   const handleSubmit = async (questionId: string) => {
     const draftText = draftResponses[questionId];
-    //    if (!draftText) return;
 
     try {
       const theResponse = await setUserResponse({
@@ -49,23 +65,41 @@ export const UserResponseText: FC<{
     }
   };
 
+  `
+  If you're going to get this work as is, with history and current answer in state.
+
+  If there is no history
+   display input
+  If there is history
+   display static most recent 
+   display edit/update -> the actual control
+
+
+`;
+
   return (
-    <FormControl>
-      <div>
-        <div>
-          <input
-            onChange={(e) =>
-              handleDraftChange(question.questionId, e.target.value)
-            }
-          />
-        </div>
-        <button
+    <FormControl sx={{ width: "100%" }}>
+      <Stack>
+        {/* <Item> */}
+        <TextField
+          id="outlined-basic"
+          label="Outlined"
+          variant="outlined"
+          onChange={(e) =>
+            handleDraftChange(question.questionId, e.target.value)
+          }
+        />
+        {/* </Item>
+        <Item> */}
+        <Button
+          variant="contained"
           onClick={() => handleSubmit(question.questionId)}
           disabled={isEditing}
         >
-          Submit
-        </button>
-      </div>
+          Save
+        </Button>
+        {/* </Item> */}
+      </Stack>
     </FormControl>
   );
 };

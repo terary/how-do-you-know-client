@@ -4,6 +4,8 @@ import { RootState } from "@/lib/store";
 import { QuestionAny } from "./QuestionAny";
 import { Card, CardActions, CardContent } from "@mui/material";
 import { UserResponse } from "./UserResponse";
+import { UserResponseHistory } from "./UserResponseHistory";
+import { TQuestionAny } from "@/app/questionnaires/types";
 
 export const QuestionList: FC = () => {
   const questionMap = useSelector(
@@ -25,11 +27,15 @@ export const QuestionList: FC = () => {
             </div>
 
             <QuestionAny question={question} />
+            <UserResponseHistory
+              question={question as TQuestionAny}
+              // userResponseHistory={(question as any).userResponseHistory || []}
+            />
           </CardContent>
 
-          <CardActions>
+          {/* <CardActions>
             <UserResponse question={question} />
-          </CardActions>
+          </CardActions> */}
         </Card>
       ))}
     </div>
