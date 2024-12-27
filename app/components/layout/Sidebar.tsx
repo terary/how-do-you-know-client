@@ -19,24 +19,34 @@ import {
   QuestionAnswer,
   FormatQuote,
   Verified,
+  BugReport,
   ChevronLeft,
 } from "@mui/icons-material";
 
 const DRAWER_WIDTH = 240;
 
 export const Sidebar = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const { t } = useTranslation();
 
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
+
   const menuItems = [
-    { text: t("nav.home"), icon: <Home />, path: "/" },
-    { text: t("nav.verify"), icon: <Verified />, path: "/verify" },
-    { text: t("nav.quotes"), icon: <FormatQuote />, path: "/quotes" },
+    { path: "/", label: t("nav.home"), icon: <Home /> },
+    { path: "/verify", label: t("nav.verify"), icon: <Verified /> },
+    { path: "/quotes", label: t("nav.quotes"), icon: <FormatQuote /> },
     {
-      text: t("nav.questionnaires"),
-      icon: <QuestionAnswer />,
       path: "/questionnaires",
+      label: t("nav.questionnaires"),
+      icon: <QuestionAnswer />,
+    },
+    {
+      path: "/error-test",
+      label: t("nav.errorTest"),
+      icon: <BugReport />,
     },
   ];
 
@@ -45,58 +55,43 @@ export const Sidebar = () => {
       variant="permanent"
       sx={{
         width: open ? DRAWER_WIDTH : 65,
-        flexShrink: 0,
+        transition: "width 0.2s",
         "& .MuiDrawer-paper": {
           width: open ? DRAWER_WIDTH : 65,
-          transition: (theme) =>
-            theme.transitions.create("width", {
-              easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.enteringScreen,
-            }),
+          transition: "width 0.2s",
+          whiteSpace: "nowrap",
           overflowX: "hidden",
-          borderRight: 1,
-          borderColor: "divider",
         },
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: open ? "flex-end" : "center",
-          p: 1,
-        }}
-      >
-        <IconButton onClick={() => setOpen(!open)}>
+      <Box sx={{ display: "flex", alignItems: "center", p: 1 }}>
+        <IconButton onClick={toggleDrawer}>
           {open ? <ChevronLeft /> : <MenuIcon />}
         </IconButton>
       </Box>
       <Divider />
       <List>
-        {menuItems.map((item) => (
+        {menuItems.map(({ path, label, icon }) => (
           <ListItem
-            key={item.path}
+            key={path}
             component={Link}
-            href={item.path}
-            selected={pathname === item.path}
+            href={path}
             sx={{
-              minHeight: 48,
-              px: 2.5,
-              "&.Mui-selected": {
-                backgroundColor: "action.selected",
+              backgroundColor:
+                pathname === path ? "action.selected" : "inherit",
+              "&:hover": {
+                backgroundColor: "action.hover",
               },
             }}
           >
-            <ListItemIcon
+            <ListItemIcon>{icon}</ListItemIcon>
+            <ListItemText
+              primary={label}
               sx={{
-                minWidth: 0,
-                mr: open ? 3 : "auto",
-                justifyContent: "center",
+                opacity: open ? 1 : 0,
+                transition: "opacity 0.2s",
               }}
-            >
-              {item.icon}
-            </ListItemIcon>
-            <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
+            />
           </ListItem>
         ))}
       </List>

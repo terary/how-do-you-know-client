@@ -3,7 +3,8 @@
     "home": "Home",
     "verify": "Verify",
     "quotes": "Quotes",
-    "questionnaires": "Questionnaires"
+    "questionnaires": "Questionnaires",
+    "errorTest": "Test Errors"
   },
   "footer": {
     "learn": "Learn",
