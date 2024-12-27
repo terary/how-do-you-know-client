@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 import styles from "../styles/layout.module.css";
 
 export const Nav = () => {
   const pathname = usePathname();
+  const { t } = useTranslation();
 
   return (
     <nav className={styles.nav}>
@@ -14,7 +16,7 @@ export const Nav = () => {
         className={`${styles.link} ${pathname === "/" ? styles.active : ""}`}
         href="/"
       >
-        Home
+        {t("nav.home")}
       </Link>
       <Link
         className={`${styles.link} ${
@@ -22,7 +24,7 @@ export const Nav = () => {
         }`}
         href="/verify"
       >
-        Verify
+        {t("nav.verify")}
       </Link>
       <Link
         className={`${styles.link} ${
@@ -30,7 +32,7 @@ export const Nav = () => {
         }`}
         href="/quotes"
       >
-        Quotes
+        {t("nav.quotes")}
       </Link>
       <Link
         className={`${styles.link} ${
@@ -38,7 +40,7 @@ export const Nav = () => {
         }`}
         href="/questionnaires"
       >
-        Questionnaires
+        {t("nav.questionnaires")}
       </Link>
     </nav>
   );

@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "verify": "Verificar",
+    "quotes": "Citas",
+    "questionnaires": "Cuestionarios"
+  },
+  "footer": {
+    "learn": "Aprender",
+    "and": "y"
+  },
+  "counter": {
+    "increment": "Incrementar",
+    "decrement": "Disminuir",
+    "addAmount": "Agregar Cantidad",
+    "addAsync": "Agregar Asíncrono",
+    "addIfOdd": "Agregar Si Es Impar"
+  },
+  "questionnairePage": {
+    "title": "Página de Cuestionarios",
+    "description": "Esta página está destinada a mostrar Cuestionarios."
+  }
+}
