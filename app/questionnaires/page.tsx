@@ -1,11 +1,14 @@
+"use client";
 import { Questionnaires } from "../components/questionnaires/Questionnaires";
+import { useTranslation } from "react-i18next";
 
-export default function QuotesPage() {
+export default function QuestionnairesPage() {
+  const { t } = useTranslation();
+
   return (
     <>
-      <h1>Questionnaire Page</h1>
-      <p>This page is intended to showcase Questionnaires.</p>
-      Here we go
+      <h1>{t("questionnairePage.title")}</h1>
+      <p>{t("questionnairePage.description")}</p>
       <Questionnaires />
     </>
   );

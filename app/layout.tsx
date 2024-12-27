@@ -1,8 +1,12 @@
-import Image from "next/image";
+"use client";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import type { ReactNode } from "react";
 import { StoreProvider } from "./StoreProvider";
 import { Nav } from "./components/Nav";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
+// import { LanguageSelector } from "./components/LanguageSelector";
+import { LanguageSelector } from "./components/LanguageSelector";
+// import "./lib/i18n";
+import "../lib/i18n";
 
 import "./styles/globals.css";
 import styles from "./styles/layout.module.css";
@@ -18,6 +22,9 @@ export default function RootLayout({ children }: Props) {
         <body>
           <AppRouterCacheProvider>
             <section className={styles.container}>
+              <div className={styles.languageSelector}>
+                <LanguageSelector />
+              </div>
               <Nav />
 
               <main className={styles.main}>{children}</main>

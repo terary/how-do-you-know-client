@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "home": "หน้าแรก",
+    "verify": "ตรวจสอบ",
+    "quotes": "คำคม",
+    "questionnaires": "แบบสอบถาม"
+  },
+  "footer": {
+    "learn": "เรียนรู้",
+    "and": "และ"
+  },
+  "counter": {
+    "increment": "เพิ่ม",
+    "decrement": "ลด",
+    "addAmount": "เพิ่มจำนวน",
+    "addAsync": "เพิ่มแบบ Async",
+    "addIfOdd": "เพิ่มถ้าเป็นเลขคี่"
+  },
+  "questionnairePage": {
+    "title": "หน้าแบบสอบถาม",
+    "description": "หน้านี้มีไว้เพื่อแสดงแบบสอบถาม"
+  }
+}

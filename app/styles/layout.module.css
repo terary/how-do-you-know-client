@@ -75,3 +75,10 @@
     transform: translateY(0px);
   }
 }
+
+.languageSelector {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+}

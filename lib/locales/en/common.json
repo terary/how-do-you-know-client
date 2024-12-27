@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "home": "Home",
+    "verify": "Verify",
+    "quotes": "Quotes",
+    "questionnaires": "Questionnaires"
+  },
+  "footer": {
+    "learn": "Learn",
+    "and": "and"
+  },
+  "counter": {
+    "increment": "Increment",
+    "decrement": "Decrement",
+    "addAmount": "Add Amount",
+    "addAsync": "Add Async",
+    "addIfOdd": "Add If Odd"
+  },
+  "questionnairePage": {
+    "title": "Questionnaire Page",
+    "description": "This page is intended to showcase Questionnaires."
+  }
+}
