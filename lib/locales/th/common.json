@@ -3,7 +3,8 @@
     "home": "หน้าแรก",
     "verify": "ตรวจสอบ",
     "quotes": "คำคม",
-    "questionnaires": "แบบสอบถาม"
+    "questionnaires": "แบบสอบถาม",
+    "errorTest": "ทดสอบข้อผิดพลาด"
   },
   "footer": {
     "learn": "เรียนรู้",

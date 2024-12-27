@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { StoreProvider } from "./StoreProvider";
 import { Sidebar } from "./components/layout/Sidebar";
 import { TopBar } from "./components/layout/TopBar";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import "../lib/i18n";
 import "./styles/globals.css";
 
@@ -17,18 +18,20 @@ export default function RootLayout({ children }: Props) {
     <StoreProvider>
       <html lang="en">
         <body>
-          <AppRouterCacheProvider>
-            <CssBaseline />
-            <Box sx={{ display: "flex" }}>
-              <Sidebar />
-              <Box sx={{ flexGrow: 1, height: "100vh", overflow: "auto" }}>
-                <TopBar />
-                <Box component="main" sx={{ p: 3 }}>
-                  {children}
+          <ErrorBoundary>
+            <AppRouterCacheProvider>
+              <CssBaseline />
+              <Box sx={{ display: "flex" }}>
+                <Sidebar />
+                <Box sx={{ flexGrow: 1, height: "100vh", overflow: "auto" }}>
+                  <TopBar />
+                  <Box component="main" sx={{ p: 3 }}>
+                    {children}
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          </AppRouterCacheProvider>
+            </AppRouterCacheProvider>
+          </ErrorBoundary>
         </body>
       </html>
     </StoreProvider>

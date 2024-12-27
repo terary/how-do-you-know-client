@@ -3,7 +3,8 @@
     "home": "Inicio",
     "verify": "Verificar",
     "quotes": "Citas",
-    "questionnaires": "Cuestionarios"
+    "questionnaires": "Cuestionarios",
+    "errorTest": "Probar Errores"
   },
   "footer": {
     "learn": "Aprender",
