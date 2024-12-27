@@ -19,5 +19,10 @@
   "questionnairePage": {
     "title": "Questionnaire Page",
     "description": "This page is intended to showcase Questionnaires."
+  },
+  "settings": {
+    "profile": "Profile",
+    "account": "Account",
+    "logout": "Logout"
   }
 }

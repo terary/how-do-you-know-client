@@ -19,5 +19,10 @@
   "questionnairePage": {
     "title": "Página de Cuestionarios",
     "description": "Esta página está destinada a mostrar Cuestionarios."
+  },
+  "settings": {
+    "profile": "Perfil",
+    "account": "Cuenta",
+    "logout": "Cerrar sesión"
   }
 }
