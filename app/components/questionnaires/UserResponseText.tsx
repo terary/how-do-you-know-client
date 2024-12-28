@@ -79,8 +79,7 @@ export const UserResponseText: FC<{
 
   return (
     <FormControl sx={{ width: "100%" }}>
-      <Stack>
-        {/* <Item> */}
+      <Stack spacing={2}>
         <TextField
           id="outlined-basic"
           label="Outlined"
@@ -89,16 +88,14 @@ export const UserResponseText: FC<{
             handleDraftChange(question.questionId, e.target.value)
           }
         />
-        {/* </Item>
-        <Item> */}
         <Button
           variant="contained"
           onClick={() => handleSubmit(question.questionId)}
           disabled={isEditing}
+          sx={{ width: "auto", alignSelf: "flex-start" }}
         >
           Save
         </Button>
-        {/* </Item> */}
       </Stack>
     </FormControl>
   );

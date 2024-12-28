@@ -26,7 +26,6 @@ export const UserResponseContainer: FC<UserResponseContainerProps> = ({
   const previousAnswers = history.slice(0, -1);
 
   return (
-    // <Box sx={{ mt: 2 }}>
     <Stack>
       <StackItem>
         <AcceptedAnswer answer={currentAnswer} />
@@ -38,7 +37,7 @@ export const UserResponseContainer: FC<UserResponseContainerProps> = ({
             <Button
               variant="outlined"
               onClick={() => setIsEditing(false)}
-              sx={{ mt: 1 }}
+              sx={{ mt: 1, width: "auto" }}
             >
               {t("questionnaires.cancelEdit")}
             </Button>
@@ -47,7 +46,7 @@ export const UserResponseContainer: FC<UserResponseContainerProps> = ({
           <Button
             variant="contained"
             onClick={() => setIsEditing(true)}
-            sx={{ mb: 2 }}
+            sx={{ mb: 2, width: "auto" }}
           >
             {t("questionnaires.changeAnswer")}
           </Button>
@@ -56,11 +55,6 @@ export const UserResponseContainer: FC<UserResponseContainerProps> = ({
           <PreviousAnswers answers={previousAnswers} />
         )}
       </StackItem>
-      {/* <StackItem>
-        {previousAnswers.length > 0 && (
-          <PreviousAnswers answers={previousAnswers} />
-        )}
-      </StackItem> */}
     </Stack>
   );
 };
