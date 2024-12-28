@@ -41,7 +41,7 @@ export const UserResponseContainer: FC<UserResponseContainerProps> = ({
           <Box sx={{ mt: 2 }}>
             <UserResponse question={question} />
             <Button
-              variant="outlined"
+              variant="contained"
               onClick={() => setIsEditing(false)}
               sx={{ mt: 1, width: "auto" }}
             >

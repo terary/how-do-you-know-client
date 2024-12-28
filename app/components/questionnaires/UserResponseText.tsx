@@ -78,7 +78,7 @@ export const UserResponseText: FC<{
       <Stack spacing={2}>
         <TextField
           id="outlined-basic"
-          label="Outlined"
+          // label="Outlined"
           variant="outlined"
           onChange={(e) =>
             handleDraftChange(question.questionId, e.target.value)
