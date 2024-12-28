@@ -1,0 +1,39 @@
+:root[data-theme="light"] {
+  --background-color: #ffffff;
+  --background-paper: #f5f5f5;
+  --text-color: #000000;
+  --text-secondary: rgba(0, 0, 0, 0.7);
+  --primary-color: #1976d2;
+  --secondary-color: #f5f5f5;
+  --border-color: #e0e0e0;
+}
+
+:root[data-theme="dark"] {
+  --background-color: #121212;
+  --background-paper: #1e1e1e;
+  --text-color: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --primary-color: #90caf9;
+  --secondary-color: #333333;
+  --border-color: #404040;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Add styles for MUI components */
+.MuiPaper-root {
+  background-color: var(--background-paper) !important;
+  color: var(--text-color) !important;
+}
+
+.MuiTypography-root {
+  color: var(--text-color) !important;
+}
+
+.MuiButton-root {
+  color: var(--text-color) !important;
+} 

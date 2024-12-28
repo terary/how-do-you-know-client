@@ -8,6 +8,8 @@ import { TopBar } from "./components/layout/TopBar";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import "../lib/i18n";
 import "./styles/globals.css";
+import { ThemeProvider } from "./context/ThemeContext";
+import "./styles/theme.css";
 
 interface Props {
   readonly children: ReactNode;
@@ -15,25 +17,27 @@ interface Props {
 
 export default function RootLayout({ children }: Props) {
   return (
-    <StoreProvider>
-      <html lang="en">
-        <body>
-          <ErrorBoundary>
-            <AppRouterCacheProvider>
-              <CssBaseline />
-              <Box sx={{ display: "flex" }}>
-                <Sidebar />
-                <Box sx={{ flexGrow: 1, height: "100vh", overflow: "auto" }}>
-                  <TopBar />
-                  <Box component="main" sx={{ p: 3 }}>
-                    {children}
+    <html lang="en">
+      <body>
+        <StoreProvider>
+          <ThemeProvider>
+            <ErrorBoundary>
+              <AppRouterCacheProvider>
+                <CssBaseline />
+                <Box sx={{ display: "flex" }}>
+                  <Sidebar />
+                  <Box sx={{ flexGrow: 1, height: "100vh", overflow: "auto" }}>
+                    <TopBar />
+                    <Box component="main" sx={{ p: 3 }}>
+                      {children}
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
-            </AppRouterCacheProvider>
-          </ErrorBoundary>
-        </body>
-      </html>
-    </StoreProvider>
+              </AppRouterCacheProvider>
+            </ErrorBoundary>
+          </ThemeProvider>
+        </StoreProvider>
+      </body>
+    </html>
   );
 }
