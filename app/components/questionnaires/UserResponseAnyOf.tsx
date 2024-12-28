@@ -19,6 +19,7 @@ import {
   FormControlLabel,
   FormGroup,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 type SelectedOptions = {
   [optionId: string]: { optionId: string; value: boolean; labelText: string };
@@ -27,6 +28,7 @@ type SelectedOptions = {
 export const UserResponseAnyOf: FC<{
   question: TQuestionUserResponseOneOf4;
 }> = ({ question }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [setUserResponse] = useSetUserResponseMutation();
 
@@ -68,31 +70,9 @@ export const UserResponseAnyOf: FC<{
           selectedOptions: selectedOptions,
         },
       });
-      const systemSelectedOptions =
-        theResponse?.data?.userResponse.selectedOptions;
-      console.log({
-        handleSubmit: { theResponse, systemSelectedOptions, selectedOptions },
-      });
 
-      // updates backend
-      dispatch(
-        setArrayValueDraftResponse({
-          questionId: question.questionId,
-          selectedOptions: systemSelectedOptions || [],
-        })
-      );
-
-      // updates the "committed draft" (application source of truth)
+      // Only need to commit the response, which will clear the draft state
       dispatch(commitArrayValueDraftResponse(theResponse.data as any));
-
-      // updates the "working draft" (control's local copy)
-      dispatch(
-        setArrayValueDraftResponse({
-          questionId: question.questionId,
-          // @ts-ignore
-          selectedOptions: systemSelectedOptions,
-        })
-      );
     } catch (error) {
       console.error("Failed to submit response:", error);
     }
@@ -101,42 +81,34 @@ export const UserResponseAnyOf: FC<{
   return (
     <FormControl>
       <FormGroup>
-        {question.choices.map((option) => {
-          return (
-            <FormControlLabel
-              key={option.value}
-              control={
-                <Checkbox
-                  checked={(
-                    (draftResponses[question.questionId] as any)
-                      ?.selectedOptions || []
-                  ).includes(option.value)}
-                  onChange={(e) =>
-                    handleDraftChange(option.value, e.target.checked)
-                  }
-                  name={option.value}
-                />
-              }
-              label={option.labelText}
-            />
-          );
-        })}
+        {question.choices.map((option) => (
+          <FormControlLabel
+            key={option?.value}
+            control={
+              <Checkbox
+                checked={
+                  // @ts-ignore
+                  (
+                    draftResponses[question.questionId]?.selectedOptions || []
+                  ).includes(option?.value)
+                }
+                onChange={(e) =>
+                  handleDraftChange(option?.value, e.target.checked)
+                }
+              />
+            }
+            label={option?.labelText}
+          />
+        ))}
       </FormGroup>
-      <div>
-        <Button
-          variant="contained"
-          onClick={() => handleSubmit(question.questionId)}
-          disabled={isEditing}
-        >
-          Submit
-        </Button>
-        <Button
-          variant="outlined"
-          onClick={() => dispatch(clearDraftResponse(question.questionId))}
-        >
-          Reset
-        </Button>
-      </div>
+
+      <Button
+        variant="contained"
+        onClick={() => handleSubmit(question.questionId)}
+        disabled={isEditing}
+      >
+        {t("singleword.save")}
+      </Button>
     </FormControl>
   );
 };

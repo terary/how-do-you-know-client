@@ -27,7 +27,8 @@
   },
   "singleword": {
     "hide": "خبي",
-    "show": "بين"
+    "show": "بين",
+    "save": "حفظ"
   },
   "settings": {
     "profile": "الملف الشخصي",

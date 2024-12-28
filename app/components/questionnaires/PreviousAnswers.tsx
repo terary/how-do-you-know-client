@@ -20,15 +20,18 @@ export const PreviousAnswers: FC<PreviousAnswersProps> = ({ answers }) => {
       </Button>
       {isVisible && (
         <Box sx={{ mt: 2 }}>
-          {answers.map((answer, index) => (
-            <Typography key={index} variant="body2" sx={{ mb: 1 }}>
-              accepted at:{" "}
-              <DateOver24HoursTimeLessThan
-                inputDate={new Date(answer.systemAcceptTimeUtc || 0)}
-              />
-              '{JSON.stringify(answer.userResponse)}'
-            </Typography>
-          ))}
+          {answers
+            .slice()
+            .reverse()
+            .map((answer, index) => (
+              <Typography key={index} variant="body2" sx={{ mb: 1 }}>
+                accepted at:{" "}
+                <DateOver24HoursTimeLessThan
+                  inputDate={new Date(answer.systemAcceptTimeUtc || 0)}
+                />
+                '{JSON.stringify(answer.userResponse)}'
+              </Typography>
+            ))}
         </Box>
       )}
     </Box>

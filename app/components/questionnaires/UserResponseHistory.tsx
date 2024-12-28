@@ -19,13 +19,15 @@ const MultipleHistoryItems: FC<{
   // userResponseHistory: TUserResponse[];
   question: TQuestionAny;
 }> = ({ question }) => {
-  const userResponseHistory = question.userResponseHistory || [];
+  const userResponseHistory = (question.userResponseHistory || [])
+    .slice()
+    .reverse();
 
   return (
     <>
       {userResponseHistory.map((response, index) => (
         <div key={`${response.questionId}-${index}`}>
-          <p>Response #{index + 1}</p>
+          <p>Response #{userResponseHistory.length - index}</p>
           <p>Question ID: {response.questionId}</p>
           <p>Type: {response.userResponseType}</p>
           <p>systemAcceptTimeUtc: {response.systemAcceptTimeUtc}</p>

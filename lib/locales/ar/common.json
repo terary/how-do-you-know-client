@@ -27,7 +27,8 @@
   },
   "singleword": {
     "hide": "إخفاء",
-    "show": "عرض"
+    "show": "عرض",
+    "save": "حفظ"
   },
   "settings": {
     "profile": "الملف الشخصي",
