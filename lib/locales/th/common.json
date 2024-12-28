@@ -21,6 +21,14 @@
     "title": "หน้าแบบสอบถาม",
     "description": "หน้านี้มีไว้เพื่อแสดงแบบสอบถาม"
   },
+  "questionnaires": {
+    "changeAnswer": "เปลี่ยนคำตอบ",
+    "cancelEdit": "ยกเลิกการแก้ไข"
+  },
+  "singleword": {
+    "hide": "ซ่อน",
+    "show": "แสดง"
+  },
   "settings": {
     "profile": "โปรไฟล์",
     "account": "บัญชี",
