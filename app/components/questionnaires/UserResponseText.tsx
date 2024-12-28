@@ -11,6 +11,7 @@ import type { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { TQuestionUserResponseText } from "../../questionnaires/types";
 import { styled } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
 
 import {
   Button,
@@ -34,6 +35,7 @@ const Item = styled(Card)(({ theme }) => ({
 export const UserResponseText: FC<{
   question: TQuestionUserResponseText;
 }> = ({ question }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [setUserResponse] = useSetUserResponseMutation();
 
@@ -89,7 +91,7 @@ export const UserResponseText: FC<{
           onClick={() => handleSubmit(question.questionId)}
           sx={{ width: "auto", alignSelf: "flex-start" }}
         >
-          Save
+          {t("singleword.save")}
         </Button>
       </Stack>
     </FormControl>
