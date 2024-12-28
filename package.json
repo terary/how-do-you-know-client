@@ -5,6 +5,7 @@
     "build": "next build",
     "start": "next start"
   },
+  "name": "how-do-you-know-client",
   "dependencies": {
     "@emotion/cache": "^11.14.0",
     "@emotion/styled": "^11.14.0",
