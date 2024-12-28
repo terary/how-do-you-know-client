@@ -42,10 +42,6 @@ export const UserResponseText: FC<{
     (state: RootState) => state.userResponseUI.draftResponses
   );
 
-  const isEditing = useSelector(
-    (state: RootState) => state.userResponseUI.isEditing
-  );
-
   const handleDraftChange = (questionId: string, text: string) => {
     dispatch(setDraftResponse({ questionId, text }));
   };
@@ -91,7 +87,6 @@ export const UserResponseText: FC<{
         <Button
           variant="contained"
           onClick={() => handleSubmit(question.questionId)}
-          disabled={isEditing}
           sx={{ width: "auto", alignSelf: "flex-start" }}
         >
           Save

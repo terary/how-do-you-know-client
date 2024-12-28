@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { TQuestionAny } from "@/app/questionnaires/types";
 import { UserResponse } from "./UserResponse";
 import { AcceptedAnswer } from "./AcceptedAnswer";
@@ -17,6 +17,12 @@ export const UserResponseContainer: FC<UserResponseContainerProps> = ({
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const history = question.userResponseHistory || [];
+
+  useEffect(() => {
+    if (history.length > 0) {
+      setIsEditing(false);
+    }
+  }, [history.length]);
 
   if (history.length === 0) {
     return <UserResponse question={question} />;
