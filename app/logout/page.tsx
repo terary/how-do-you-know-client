@@ -2,23 +2,27 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Typography, CircularProgress, Box } from "@mui/material";
+import { useLogoutMutation } from "@/lib/features/auth/authApiSlice";
+import { authService } from "@/lib/services/authService";
 
 export default function LogoutPage() {
   const router = useRouter();
+  const [logout] = useLogoutMutation();
 
   useEffect(() => {
-    // Here you would typically:
-    // 1. Call your logout API
-    // 2. Clear any local storage/cookies
-    // 3. Reset any global state
+    const handleLogout = async () => {
+      try {
+        await logout().unwrap();
+      } catch (error) {
+        console.error("Logout failed:", error);
+      } finally {
+        authService.removeToken();
+        router.push("/login");
+      }
+    };
 
-    // For now, we'll just simulate a delay and redirect
-    const timer = setTimeout(() => {
-      router.push("/");
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, [router]);
+    handleLogout();
+  }, [logout, router]);
 
   return (
     <Box

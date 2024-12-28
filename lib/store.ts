@@ -4,6 +4,7 @@ import { counterSlice } from "./features/counter/counterSlice";
 import { quotesApiSlice } from "./features/quotes/quotesApiSlice";
 import { userAnswersApiSlice } from "./features/user-response/userResponseApiSlice";
 import { userResponseSlice } from "./features/user-response/userResponseSlice";
+import { authApiSlice } from "./features/auth/authApiSlice";
 
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
@@ -11,7 +12,8 @@ const rootReducer = combineSlices(
   counterSlice,
   quotesApiSlice,
   userAnswersApiSlice,
-  userResponseSlice
+  userResponseSlice,
+  authApiSlice
 );
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;
@@ -28,7 +30,8 @@ export const makeStore = () => {
     middleware: (getDefaultMiddleware) => {
       return getDefaultMiddleware().concat(
         quotesApiSlice.middleware,
-        userAnswersApiSlice.middleware
+        userAnswersApiSlice.middleware,
+        authApiSlice.middleware
       );
     },
   });
