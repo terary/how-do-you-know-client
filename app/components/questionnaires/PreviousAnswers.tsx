@@ -1,51 +1,36 @@
 import { FC, useState } from "react";
+import { Box, Button, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { TUserResponse } from "@/lib/features/user-response/types";
-import {
-  Typography,
-  Paper,
-  List,
-  ListItem,
-  Collapse,
-  Button,
-  Box,
-} from "@mui/material";
+import { DateOver24HoursTimeLessThan } from "../common/format/DateOver24HoursTimeLessThan";
 
 interface PreviousAnswersProps {
   answers: TUserResponse[];
 }
 
 export const PreviousAnswers: FC<PreviousAnswersProps> = ({ answers }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const { t } = useTranslation();
 
   return (
-    <Box sx={{ mt: 2 }}>
-      <Button
-        onClick={() => setIsExpanded(!isExpanded)}
-        variant="text"
-        size="small"
-      >
-        {isExpanded ? "Hide" : "Show"} Previous Answers ({answers.length})
+    <Box>
+      Previous Answers
+      <Button onClick={() => setIsVisible(!isVisible)}>
+        {isVisible ? t("singleword.hide") : t("singleword.show")}
       </Button>
-
-      <Collapse in={isExpanded}>
-        <List>
+      {isVisible && (
+        <Box sx={{ mt: 2 }}>
           {answers.map((answer, index) => (
-            <ListItem key={index}>
-              <Paper elevation={1} sx={{ p: 1, width: "100%" }}>
-                <Typography variant="body2">
-                  {answer.userResponse.text}
-                </Typography>
-                <Typography variant="caption" color="textSecondary">
-                  Submitted:{" "}
-                  {new Date(
-                    answer.systemAcceptTimeUtc || 0
-                  ).toLocaleDateString()}
-                </Typography>
-              </Paper>
-            </ListItem>
+            <Typography key={index} variant="body2" sx={{ mb: 1 }}>
+              accepted at:{" "}
+              <DateOver24HoursTimeLessThan
+                inputDate={new Date(answer.systemAcceptTimeUtc || 0)}
+              />
+              '{JSON.stringify(answer.userResponse)}'
+            </Typography>
           ))}
-        </List>
-      </Collapse>
+        </Box>
+      )}
     </Box>
   );
 };

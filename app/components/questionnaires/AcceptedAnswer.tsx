@@ -1,22 +1,71 @@
 import { FC } from "react";
 import { TUserResponse } from "@/lib/features/user-response/types";
 import { Typography, Paper, Box } from "@mui/material";
+import { DateOver24HoursTimeLessThan } from "../common/format/DateOver24HoursTimeLessThan";
 
 interface AcceptedAnswerProps {
   answer: TUserResponse;
 }
 
 export const AcceptedAnswer: FC<AcceptedAnswerProps> = ({ answer }) => {
+  const AcceptedAnswerUserResponse = ({ answer }: AcceptedAnswerProps) => {
+    switch (answer.userResponseType) {
+      case "any-of":
+        return (
+          <Typography variant="body1">
+            {
+              // @ts-ignore - userResponseType does not seem to include non text values?
+              answer.userResponse.selectedOptions?.join(", ")
+            }
+          </Typography>
+        );
+      case "free-text-255":
+        return (
+          <Typography
+            variant="body1"
+            sx={{
+              fontWeight: "bold",
+            }}
+          >
+            {answer.userResponse.text}
+          </Typography>
+        );
+      case "one-of-2":
+        return (
+          <Typography variant="body1">
+            {
+              // @ts-ignore - userResponseType does not seem to include non text values?
+              answer.userResponse.selectedOption
+            }
+          </Typography>
+        );
+      case "one-of-4":
+        return (
+          <Typography variant="body1">{answer.userResponse.text}</Typography>
+        );
+      default:
+        return (
+          <Typography variant="body1" color="error">
+            Unknown response type: {answer.userResponseType}
+            <br />
+            JSON {JSON.stringify(answer)}
+          </Typography>
+        );
+    }
+
+    // return <Typography variant="body1">{answer.userResponse.text}</Typography>;
+  };
+
   return (
-    <Paper elevation={2} sx={{ p: 2, mb: 2, backgroundColor: "#f5f5f5" }}>
+    <>
       <Typography variant="subtitle2" color="textSecondary">
-        Accepted Answer
+        Accepted Answer (submitted{" "}
+        <DateOver24HoursTimeLessThan
+          inputDate={new Date(answer.systemAcceptTimeUtc || 0)}
+        />
+        {/* {new Date(answer.systemAcceptTimeUtc || 0).toLocaleDateString()}): */}
       </Typography>
-      <Typography variant="body1">{answer.userResponse.text}</Typography>
-      <Typography variant="caption" color="textSecondary">
-        Submitted:{" "}
-        {new Date(answer.systemAcceptTimeUtc || 0).toLocaleDateString()}
-      </Typography>
-    </Paper>
+      <AcceptedAnswerUserResponse answer={answer} />
+    </>
   );
 };

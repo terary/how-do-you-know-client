@@ -21,6 +21,14 @@
     "title": "Página de Cuestionarios",
     "description": "Esta página está destinada a mostrar Cuestionarios."
   },
+  "questionnaires": {
+    "changeAnswer": "Cambiar Respuesta",
+    "cancelEdit": "Cancelar Edición"
+  },
+  "singleword": {
+    "hide": "Ocultar",
+    "show": "Mostrar"
+  },
   "settings": {
     "profile": "Perfil",
     "account": "Cuenta",

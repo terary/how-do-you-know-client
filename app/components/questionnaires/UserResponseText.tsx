@@ -42,10 +42,6 @@ export const UserResponseText: FC<{
     (state: RootState) => state.userResponseUI.draftResponses
   );
 
-  const isEditing = useSelector(
-    (state: RootState) => state.userResponseUI.isEditing
-  );
-
   const handleDraftChange = (questionId: string, text: string) => {
     dispatch(setDraftResponse({ questionId, text }));
   };
@@ -79,26 +75,22 @@ export const UserResponseText: FC<{
 
   return (
     <FormControl sx={{ width: "100%" }}>
-      <Stack>
-        {/* <Item> */}
+      <Stack spacing={2}>
         <TextField
           id="outlined-basic"
-          label="Outlined"
+          // label="Outlined"
           variant="outlined"
           onChange={(e) =>
             handleDraftChange(question.questionId, e.target.value)
           }
         />
-        {/* </Item>
-        <Item> */}
         <Button
           variant="contained"
           onClick={() => handleSubmit(question.questionId)}
-          disabled={isEditing}
+          sx={{ width: "auto", alignSelf: "flex-start" }}
         >
           Save
         </Button>
-        {/* </Item> */}
       </Stack>
     </FormControl>
   );

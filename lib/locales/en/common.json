@@ -21,6 +21,14 @@
     "title": "Questionnaire Page",
     "description": "This page is intended to showcase Questionnaires."
   },
+  "questionnaires": {
+    "changeAnswer": "Change Answer",
+    "cancelEdit": "Cancel Edit"
+  },
+  "singleword": {
+    "hide": "Hide",
+    "show": "Show"
+  },
   "settings": {
     "profile": "Profile",
     "account": "Account",
