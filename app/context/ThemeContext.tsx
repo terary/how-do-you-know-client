@@ -15,6 +15,36 @@ const darkTheme = createTheme({
       primary: "#ffffff",
       secondary: "rgba(255, 255, 255, 0.7)",
     },
+    primary: {
+      main: "#90caf9",
+    },
+    secondary: {
+      main: "#333333",
+    },
+  },
+  components: {
+    MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: "#1e1e1e",
+          color: "#ffffff",
+        },
+      },
+    },
+    MuiListItemIcon: {
+      styleOverrides: {
+        root: {
+          color: "inherit",
+        },
+      },
+    },
+    MuiListItemText: {
+      styleOverrides: {
+        primary: {
+          color: "#ffffff",
+        },
+      },
+    },
   },
 });
 
@@ -29,8 +59,22 @@ const lightTheme = createTheme({
       primary: "#000000",
       secondary: "rgba(0, 0, 0, 0.7)",
     },
+    primary: {
+      main: "#1976d2",
+    },
+    secondary: {
+      main: "#f5f5f5",
+    },
   },
 });
+
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error("useTheme must be used within a ThemeProvider");
+  }
+  return context;
+};
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -38,7 +82,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
-    // Set initial theme from localStorage or default
     const savedTheme = (localStorage.getItem("theme") as Theme) || "light";
     setTheme(savedTheme);
     document.documentElement.setAttribute("data-theme", savedTheme);
@@ -51,19 +94,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     document.documentElement.setAttribute("data-theme", newTheme);
   };
 
+  const currentTheme = theme === "light" ? lightTheme : darkTheme;
+
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      <MuiThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
-        {children}
-      </MuiThemeProvider>
+      <MuiThemeProvider theme={currentTheme}>{children}</MuiThemeProvider>
     </ThemeContext.Provider>
   );
-};
-
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (context === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider");
-  }
-  return context;
 };

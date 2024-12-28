@@ -1,0 +1,37 @@
+{
+  "nav": {
+    "home": "الصفحة الرئيسية",
+    "verify": "تحقق",
+    "quotes": "قتباسات",
+    "questionnaires": "ستمارات",
+    "errorTest": "ختبار الخطأ"
+  },
+  "footer": {
+    "learn": "تعلم",
+    "and": "و"
+  },
+  "counter": {
+    "increment": "زيد",
+    "decrement": "نقص",
+    "addAmount": "زيد شي رقم",
+    "addAsync": "زيد من بعد",
+    "addIfOdd": "زيد إلا كان فردي"
+  },
+  "questionnairePage": {
+    "title": "صفحة الاستمارة",
+    "description": "هاد الصفحة خاصة بعرض الاستمارات"
+  },
+  "questionnaires": {
+    "changeAnswer": "بدل الجواب",
+    "cancelEdit": "لغي التعديل"
+  },
+  "singleword": {
+    "hide": "خبي",
+    "show": "بين"
+  },
+  "settings": {
+    "profile": "الملف الشخصي",
+    "account": "الحساب",
+    "logout": "خروج"
+  }
+}

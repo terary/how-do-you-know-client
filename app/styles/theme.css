@@ -24,9 +24,21 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Add styles for MUI components */
+/* MUI Component Overrides */
 .MuiPaper-root {
   background-color: var(--background-paper) !important;
+  color: var(--text-color) !important;
+}
+
+.MuiDrawer-paper {
+  background-color: var(--background-paper) !important;
+}
+
+.MuiListItemIcon-root {
+  color: var(--text-color) !important;
+}
+
+.MuiListItemText-primary {
   color: var(--text-color) !important;
 }
 
@@ -36,4 +48,19 @@ body {
 
 .MuiButton-root {
   color: var(--text-color) !important;
+}
+
+.MuiIconButton-root {
+  color: var(--text-color) !important;
+}
+
+/* RTL support for theme components */
+html[dir="rtl"] .MuiDrawer-paper {
+  left: auto;
+  right: 0;
+}
+
+html[dir="rtl"] .MuiIconButton-root {
+  margin-right: 0;
+  margin-left: 8px;
 } 

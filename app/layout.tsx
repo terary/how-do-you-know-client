@@ -6,6 +6,7 @@ import { StoreProvider } from "./StoreProvider";
 import { Sidebar } from "./components/layout/Sidebar";
 import { TopBar } from "./components/layout/TopBar";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { useTranslation } from "react-i18next";
 import "../lib/i18n";
 import "./styles/globals.css";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -16,8 +17,13 @@ interface Props {
 }
 
 export default function RootLayout({ children }: Props) {
+  const { i18n } = useTranslation();
+
   return (
-    <html lang="en">
+    <html
+      lang={i18n.language}
+      dir={["ar", "ar-MA"].includes(i18n.language) ? "rtl" : "ltr"}
+    >
       <body>
         <StoreProvider>
           <ThemeProvider>

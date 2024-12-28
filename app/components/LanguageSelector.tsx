@@ -21,6 +21,8 @@ export const LanguageSelector = () => {
       <MenuItem value="en">English</MenuItem>
       <MenuItem value="es">Español</MenuItem>
       <MenuItem value="th">ไทย</MenuItem>
+      <MenuItem value="ar">العربية</MenuItem>
+      <MenuItem value="ar-MA">الدارجة المغربية</MenuItem>
     </Select>
   );
 };

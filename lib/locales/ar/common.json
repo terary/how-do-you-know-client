@@ -1,0 +1,37 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "verify": "تحقق",
+    "quotes": "اقتباسات",
+    "questionnaires": "استبيانات",
+    "errorTest": "اختبار الأخطاء"
+  },
+  "footer": {
+    "learn": "تعلم",
+    "and": "و"
+  },
+  "counter": {
+    "increment": "زيادة",
+    "decrement": "إنقاص",
+    "addAmount": "إضافة كمية",
+    "addAsync": "إضافة غير متزامنة",
+    "addIfOdd": "إضافة إذا كان فردياً"
+  },
+  "questionnairePage": {
+    "title": "صفحة الاستبيان",
+    "description": "هذه الصفحة مخصصة لعرض الاستبيانات"
+  },
+  "questionnaires": {
+    "changeAnswer": "تغيير الإجابة",
+    "cancelEdit": "إلغاء التعديل"
+  },
+  "singleword": {
+    "hide": "إخفاء",
+    "show": "عرض"
+  },
+  "settings": {
+    "profile": "الملف الشخصي",
+    "account": "الحساب",
+    "logout": "تسجيل الخروج"
+  }
+}
