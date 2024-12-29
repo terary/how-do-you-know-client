@@ -10,19 +10,6 @@ export const Questionnaires = () => {
   if (isError) {
     return (
       <div>
-        <pre>
-          {JSON.stringify(
-            {
-              isError,
-              isSuccess,
-              isLoading,
-              data: data || null,
-              error: error || null,
-            },
-            null,
-            2
-          )}
-        </pre>
         <h1>There was an error!</h1>
       </div>
     );
