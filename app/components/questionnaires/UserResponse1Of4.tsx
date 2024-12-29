@@ -51,10 +51,10 @@ export const UserResponse1Of4: FC<{
         questionId,
         userResponseType: "one-of-4",
         userResponse: {
-          text: draftText?.text || "",
+          text: (draftText as UserResponseTextType)?.text || "",
         },
       });
-      dispatch(commitDraftResponse(theResponse.data));
+      dispatch(commitDraftResponse(theResponse?.data as any));
     } catch (error) {
       console.error("Failed to submit response:", error);
     }
@@ -65,7 +65,10 @@ export const UserResponse1Of4: FC<{
       <RadioGroup
         aria-labelledby="demo-controlled-radio-buttons-group"
         name="controlled-radio-buttons-group"
-        value={draftResponses[question.questionId]?.text || ""}
+        value={
+          (draftResponses[question.questionId] as UserResponseTextType)?.text ||
+          ""
+        }
         onChange={(e) => handleDraftChange(question.questionId, e.target.value)}
       >
         {question.choices.map((option) => (

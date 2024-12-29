@@ -12,17 +12,30 @@ export const AcceptedAnswer: FC<AcceptedAnswerProps> = ({ answer }) => {
     switch (answer.userResponseType) {
       case "one-of-4":
         return (
-          <Typography variant="body1">{answer.userResponse.text}</Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              fontWeight: "bold",
+            }}
+          >
+            {answer.userResponse.text}
+          </Typography>
         );
       case "any-of":
         return (
-          <Typography variant="body1">
+          <Typography
+            variant="body1"
+            sx={{
+              fontWeight: "bold",
+            }}
+          >
             {
               // @ts-ignore - userResponseType does not seem to include non text values?
               answer.userResponse.selectedOptions?.join(", ")
             }
           </Typography>
         );
+      case "one-of-2":
       case "free-text-255":
         return (
           <Typography
@@ -34,15 +47,15 @@ export const AcceptedAnswer: FC<AcceptedAnswerProps> = ({ answer }) => {
             {answer.userResponse.text}
           </Typography>
         );
-      case "one-of-2":
-        return (
-          <Typography variant="body1">
-            {
-              // @ts-ignore - userResponseType does not seem to include non text values?
-              answer.userResponse.selectedOption
-            }
-          </Typography>
-        );
+      // case "one-of-2":
+      //   return (
+      //     <Typography variant="body1">
+      //       {
+      //         // @ts-ignore - userResponseType does not seem to include non text values?
+      //         answer.userResponse.selectedOption
+      //       }
+      //     </Typography>
+      //   );
       default:
         return (
           <Typography variant="body1" color="error">
