@@ -10,6 +10,10 @@ interface AcceptedAnswerProps {
 export const AcceptedAnswer: FC<AcceptedAnswerProps> = ({ answer }) => {
   const AcceptedAnswerUserResponse = ({ answer }: AcceptedAnswerProps) => {
     switch (answer.userResponseType) {
+      case "one-of-4":
+        return (
+          <Typography variant="body1">{answer.userResponse.text}</Typography>
+        );
       case "any-of":
         return (
           <Typography variant="body1">
@@ -38,10 +42,6 @@ export const AcceptedAnswer: FC<AcceptedAnswerProps> = ({ answer }) => {
               answer.userResponse.selectedOption
             }
           </Typography>
-        );
-      case "one-of-4":
-        return (
-          <Typography variant="body1">{answer.userResponse.text}</Typography>
         );
       default:
         return (

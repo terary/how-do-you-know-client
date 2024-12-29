@@ -21,10 +21,12 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 export const UserResponse1Of4: FC<{
   question: TQuestionUserResponseOneOf4;
 }> = ({ question }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [setUserResponse] = useSetUserResponseMutation();
 
@@ -49,11 +51,10 @@ export const UserResponse1Of4: FC<{
         questionId,
         userResponseType: "one-of-4",
         userResponse: {
-          // @ts-ignore
-          text: draftText,
+          text: draftText?.text || "",
         },
       });
-      dispatch(commitDraftResponse(theResponse.data as any));
+      dispatch(commitDraftResponse(theResponse.data));
     } catch (error) {
       console.error("Failed to submit response:", error);
     }
@@ -64,7 +65,7 @@ export const UserResponse1Of4: FC<{
       <RadioGroup
         aria-labelledby="demo-controlled-radio-buttons-group"
         name="controlled-radio-buttons-group"
-        value={draftResponses[question.questionId] || ""}
+        value={draftResponses[question.questionId]?.text || ""}
         onChange={(e) => handleDraftChange(question.questionId, e.target.value)}
       >
         {question.choices.map((option) => (
@@ -83,13 +84,7 @@ export const UserResponse1Of4: FC<{
           onClick={() => handleSubmit(question.questionId)}
           disabled={isEditing}
         >
-          Submit
-        </Button>
-        <Button
-          variant="outlined"
-          onClick={() => dispatch(clearDraftResponse(question.questionId))}
-        >
-          Reset
+          {t("singleword.save")}
         </Button>
       </div>
     </FormControl>
