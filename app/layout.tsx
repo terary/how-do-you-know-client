@@ -11,6 +11,8 @@ import "../lib/i18n";
 import "./styles/globals.css";
 import { ThemeProvider } from "./context/ThemeContext";
 import "./styles/theme.css";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 interface Props {
   readonly children: ReactNode;
@@ -25,24 +27,28 @@ export default function RootLayout({ children }: Props) {
       dir={["ar", "ar-MA"].includes(i18n.language) ? "rtl" : "ltr"}
     >
       <body>
-        <StoreProvider>
-          <ThemeProvider>
-            <ErrorBoundary>
-              <AppRouterCacheProvider>
-                <CssBaseline />
-                <Box sx={{ display: "flex" }}>
-                  <Sidebar />
-                  <Box sx={{ flexGrow: 1, height: "100vh", overflow: "auto" }}>
-                    <TopBar />
-                    <Box component="main" sx={{ p: 3 }}>
-                      {children}
+        <Provider store={store}>
+          <StoreProvider>
+            <ThemeProvider>
+              <ErrorBoundary>
+                <AppRouterCacheProvider>
+                  <CssBaseline />
+                  <Box sx={{ display: "flex" }}>
+                    <Sidebar />
+                    <Box
+                      sx={{ flexGrow: 1, height: "100vh", overflow: "auto" }}
+                    >
+                      <TopBar />
+                      <Box component="main" sx={{ p: 3 }}>
+                        {children}
+                      </Box>
                     </Box>
                   </Box>
-                </Box>
-              </AppRouterCacheProvider>
-            </ErrorBoundary>
-          </ThemeProvider>
-        </StoreProvider>
+                </AppRouterCacheProvider>
+              </ErrorBoundary>
+            </ThemeProvider>
+          </StoreProvider>
+        </Provider>
       </body>
     </html>
   );
