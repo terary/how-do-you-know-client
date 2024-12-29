@@ -27,7 +27,8 @@
   },
   "singleword": {
     "hide": "ซ่อน",
-    "show": "แสดง"
+    "show": "แสดง",
+    "save": "บันทึก"
   },
   "settings": {
     "profile": "โปรไฟล์",

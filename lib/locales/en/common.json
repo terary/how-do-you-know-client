@@ -27,7 +27,8 @@
   },
   "singleword": {
     "hide": "Hide",
-    "show": "Show"
+    "show": "Show",
+    "save": "Save"
   },
   "settings": {
     "profile": "Profile",
