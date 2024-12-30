@@ -18,8 +18,6 @@ export const UserResponseContainer: FC<UserResponseContainerProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const history = question.userResponseHistory || [];
 
-  console.log("UserResponseContainer history:", history);
-
   useEffect(() => {
     if (history.length > 0) {
       setIsEditing(false);

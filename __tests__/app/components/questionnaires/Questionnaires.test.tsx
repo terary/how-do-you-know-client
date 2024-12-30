@@ -4,7 +4,10 @@ import { useGetQuestionnaireQuery } from "@/lib/features/user-response/userRespo
 import { QuestionList } from "@/app/components/questionnaires/QuestionList";
 
 // Mock the RTK Query hook
-jest.mock("@/lib/features/user-response/userResponseApiSlice");
+jest.mock("@/lib/features/user-response/userResponseApiSlice", () => ({
+  useGetQuestionnaireQuery: jest.fn(),
+  // ... other exports you need
+}));
 // Mock the QuestionList component
 jest.mock("@/app/components/questionnaires/QuestionList", () => ({
   QuestionList: jest.fn(() => (
