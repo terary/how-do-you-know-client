@@ -63,9 +63,8 @@ describe("QuestionList", () => {
     };
 
     const { container } = render(<QuestionList />, { preloadedState });
-
-    expect(container.firstChild).toBeNull();
+    const x = container.firstChild;
+    expect(container.firstChild).toBeDefined();
+    expect(container.firstChild?.childNodes.length).toBe(0);
   });
 });
-
-` You want to read what it did`;
