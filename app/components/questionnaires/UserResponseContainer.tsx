@@ -16,6 +16,12 @@ export const UserResponseContainer: FC<UserResponseContainerProps> = ({
 }) => {
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
+
+  // Guard clause for undefined question
+  if (!question) {
+    return null;
+  }
+
   const history = question.userResponseHistory || [];
 
   useEffect(() => {
