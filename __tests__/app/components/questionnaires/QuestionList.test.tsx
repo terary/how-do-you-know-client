@@ -52,6 +52,20 @@ describe("QuestionList", () => {
 
     expect(container.firstChild).toMatchSnapshot();
   });
+
+  it("renders nothing when questionMap is undefined", () => {
+    const preloadedState = {
+      userResponseUI: {
+        questionMap: undefined,
+        draftResponses: {},
+        isEditing: false,
+      },
+    };
+
+    const { container } = render(<QuestionList />, { preloadedState });
+
+    expect(container.firstChild).toBeNull();
+  });
 });
 
 ` You want to read what it did`;
