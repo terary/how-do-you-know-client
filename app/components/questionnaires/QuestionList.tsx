@@ -11,19 +11,9 @@ export const QuestionList: FC = () => {
     (state: RootState) => state.userResponseUI.questionMap
   );
 
-  const DevDebugQuestionMeta = ({ question }: { question: TQuestionAny }) => {
-    return (
-      <div style={{ fontWeight: "lighter", backgroundColor: "lightgray" }}>
-        <div>Debug</div>
-        <div>questionId: {question.questionId} </div>
-        <div>userPromptType: {question.userPromptType} </div>
-        <div>userResponseType: {question.userResponseType} </div>
-      </div>
-    );
-  };
   return (
     <div>
-      {Object.values(questionMap).map((question) => (
+      {Object.values(questionMap || {}).map((question) => (
         <Card
           key={question.questionId}
           variant="elevation"
@@ -31,7 +21,6 @@ export const QuestionList: FC = () => {
           sx={{ margin: "10px" }}
         >
           <CardContent>
-            {/* <DevDebugQuestionMeta question={question} /> */}
             <QuestionAny question={question} />
             <UserResponseContainer question={question as TQuestionAny} />
           </CardContent>
