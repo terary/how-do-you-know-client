@@ -7,9 +7,8 @@ describe("Page", () => {
   it("renders a heading", () => {
     render(<Page />);
 
-    const buttons = screen.getAllByRole("button");
+    const appWelcomeMessage = screen.getByText("Welcome to How Do You Know"); // .getAllByRole("button");
 
-    expect(buttons.length).toBe(5);
-    // expect(buttons).toBeInTheDocument();
+    expect(appWelcomeMessage).toBeInTheDocument();
   });
 });
