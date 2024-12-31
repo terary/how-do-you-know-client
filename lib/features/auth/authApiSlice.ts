@@ -40,6 +40,16 @@ export const authApiSlice = createApi({
     }),
     getProfile: builder.query<ProfileResponseDto, void>({
       query: () => "/profile",
+      transformResponse: (response: ProfileResponseDto) => response,
+      async onQueryStarted(arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+        } catch (error: any) {
+          if (error?.error?.status === 401) {
+            window.location.href = "/login";
+          }
+        }
+      },
       providesTags: ["Profile"],
     }),
     updateProfile: builder.mutation<ProfileResponseDto, UpdateProfileDto>({

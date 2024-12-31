@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import {
   Typography,
@@ -20,10 +21,18 @@ import {
 
 export default function ProfilePage() {
   const { t } = useTranslation();
+  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
 
   const { data: profile, isLoading, error } = useGetProfileQuery();
+
+  useEffect(() => {
+    if (error && "status" in error && error.status === 401) {
+      router.push("/login");
+    }
+  }, [error, router]);
+
   const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
 
   const [formData, setFormData] = useState({
