@@ -48,13 +48,13 @@ describe("UserResponseContainer", () => {
         questionId: "123",
         userResponseType: "one-of-4",
         userResponse: { text: "Option A" },
-        systemAcceptTimeUtc: "2024-03-20T10:00:00Z",
+        systemAcceptTimeUtc: 1710928800000,
       },
       {
         questionId: "123",
         userResponseType: "one-of-4",
         userResponse: { text: "Option B" },
-        systemAcceptTimeUtc: "2024-03-21T10:00:00Z",
+        systemAcceptTimeUtc: 1711015200000,
       },
     ],
   };
