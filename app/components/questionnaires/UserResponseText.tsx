@@ -44,6 +44,11 @@ export const UserResponseText: FC<{
     (state: RootState) => state.userResponseUI.draftResponses
   );
 
+  // Add guard clause for undefined question
+  if (!question) {
+    return null;
+  }
+
   const handleDraftChange = (questionId: string, text: string) => {
     dispatch(setDraftResponse({ questionId, text }));
   };
@@ -62,18 +67,6 @@ export const UserResponseText: FC<{
       console.error("Failed to submit response:", error);
     }
   };
-
-  `
-  If you're going to get this work as is, with history and current answer in state.
-
-  If there is no history
-   display input
-  If there is history
-   display static most recent 
-   display edit/update -> the actual control
-
-
-`;
 
   return (
     <FormControl sx={{ width: "100%" }}>
