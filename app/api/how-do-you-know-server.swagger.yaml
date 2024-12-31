@@ -164,14 +164,62 @@ paths:
         - auth
   /auth/profile:
     get:
+      description: Retrieves the authenticated user's profile information
       operationId: AuthController_getProfile
       parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfileResponseDto"
       responses:
         "200":
           description: Returns the user profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileResponseDto"
+        "401":
+          description: Unauthorized - Invalid or missing JWT token
       security:
         - bearer: []
       summary: Get user profile
+      tags:
+        - auth
+    post:
+      description: Updates the authenticated user's profile information
+      operationId: AuthController_updateUserProfile
+      parameters: []
+      requestBody:
+        required: true
+        description: Profile update data
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProfileDto"
+            examples:
+              example1:
+                summary: Profile Update Example
+                description: A sample profile update request
+                value:
+                  firstName: John
+                  lastName: Doe
+                  email: john.doe@example.com
+      responses:
+        "200":
+          description: Returns the updated user profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileResponseDto"
+        "400":
+          description: Bad Request - Invalid input data
+        "401":
+          description: Unauthorized - Invalid or missing JWT token
+      security:
+        - bearer: []
+      summary: Update user profile
       tags:
         - auth
 info:
@@ -197,3 +245,43 @@ components:
     Function:
       type: object
       properties: {}
+    ProfileResponseDto:
+      type: object
+      properties:
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+      required:
+        - username
+        - firstName
+        - lastName
+        - email
+        - createdAt
+        - updatedAt
+        - roles
+    UpdateProfileDto:
+      type: object
+      properties:
+        displayName:
+          type: string
+          description: The user's display name
+          example: John Doe
+        email:
+          type: string
+          description: The user's email address
+          example: john@example.com
