@@ -3,6 +3,7 @@ import {
   clearDraftResponse,
   commitArrayValueDraftResponse,
   setArrayValueDraftResponse,
+  UserResponseArraySelectType,
 } from "@/lib/features/user-response/userResponseSlice";
 import { RootState } from "@/lib/store";
 import { type FC } from "react";
@@ -59,9 +60,9 @@ export const UserResponseAnyOf: FC<{
   };
 
   const handleSubmit = async (questionId: string) => {
-    const selectedOptions =
-      // @ts-ignore - "selectedOptions" is not a property of draftResponses[question.questionId]
-      (draftResponses[question.questionId]?.selectedOptions || []) as string[];
+    const selectedOptions = ((
+      draftResponses[question.questionId] as UserResponseArraySelectType
+    )?.selectedOptions || []) as string[];
     try {
       const theResponse = await setUserResponse({
         questionId,
@@ -77,7 +78,7 @@ export const UserResponseAnyOf: FC<{
       console.error("Failed to submit response:", error);
     }
   };
-
+  // UserResponseArraySelectType
   return (
     <FormControl>
       <FormGroup>
@@ -86,12 +87,13 @@ export const UserResponseAnyOf: FC<{
             key={option?.value}
             control={
               <Checkbox
-                checked={
-                  // @ts-ignore
+                checked={(
                   (
-                    draftResponses[question.questionId]?.selectedOptions || []
-                  ).includes(option?.value)
-                }
+                    draftResponses[
+                      question.questionId
+                    ] as UserResponseArraySelectType
+                  )?.selectedOptions || []
+                ).includes(option?.value)}
                 onChange={(e) =>
                   handleDraftChange(option?.value, e.target.checked)
                 }

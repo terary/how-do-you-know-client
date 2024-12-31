@@ -4,6 +4,7 @@ import type {
   TQuestionAny,
   TUserResponseType,
 } from "../../../app/questionnaires/types";
+import { fetch } from "cross-fetch";
 
 type SetUserResponseRequest = {
   questionId: string;
@@ -47,9 +48,7 @@ interface IGetQuestionnaireRequestParameters {
 export const userAnswersApiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:3001/dev-debug/user-answers",
-    // baseUrl: "http://localhost:3001/dev-debug/questions",
-
-    isJsonContentType: () => true,
+    fetchFn: fetch,
   }),
 
   // initialState: initialState,

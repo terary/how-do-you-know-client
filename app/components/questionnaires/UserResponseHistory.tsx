@@ -2,24 +2,11 @@ import { useState, type FC } from "react";
 import type { TUserResponse } from "@/lib/features/user-response/types";
 import { TQuestionAny } from "@/app/questionnaires/types";
 
-`
-    Think this through, then let AI do the work
-
-
-    Have a solid plan first about History.length
-
-    What/Who controls if history.length > 0, > 1, .. should that logic be in the History control? (probably not)
-
-
-
-
-`;
-
 const MultipleHistoryItems: FC<{
   // userResponseHistory: TUserResponse[];
   question: TQuestionAny;
 }> = ({ question }) => {
-  const userResponseHistory = (question.userResponseHistory || [])
+  const userResponseHistory = (question?.userResponseHistory || [])
     .slice()
     .reverse();
 
@@ -39,12 +26,28 @@ const MultipleHistoryItems: FC<{
   );
 };
 
-const UserResponseHistory: FC<{
+export const UserResponseHistory: FC<{
   // userResponseHistory: TUserResponse[];
   question: TQuestionAny;
 }> = ({ question }) => {
-  const userResponseHistory = question.userResponseHistory || [];
   const [isExpanded, setIsExpanded] = useState(false);
+
+  // Guard clause for undefined question
+  if (!question) {
+    return (
+      <div>
+        <h4>
+          Response History
+          <span className="ml-2">(0)</span>
+        </h4>
+      </div>
+    );
+  }
+
+  const userResponseHistory = (question.userResponseHistory || [])
+    .slice()
+    .reverse();
+
   const SingularHistoryItem = (historyItem: TUserResponse) => {
     return <>Answered: {historyItem.userResponse.text}</>;
   };
@@ -63,5 +66,3 @@ const UserResponseHistory: FC<{
     </div>
   );
 };
-
-export { UserResponseHistory };

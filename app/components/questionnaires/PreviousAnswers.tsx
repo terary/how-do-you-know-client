@@ -9,29 +9,27 @@ interface PreviousAnswersProps {
 }
 
 export const PreviousAnswers: FC<PreviousAnswersProps> = ({ answers }) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const previousAnswers = (answers || []).slice(0, -1).reverse();
   const { t } = useTranslation();
 
   return (
     <Box>
       Previous Answers
-      <Button onClick={() => setIsVisible(!isVisible)}>
-        {isVisible ? t("singleword.hide") : t("singleword.show")}
+      <Button onClick={() => setIsExpanded(!isExpanded)}>
+        {isExpanded ? t("singleword.hide") : t("singleword.show")}
       </Button>
-      {isVisible && (
+      {isExpanded && (
         <Box sx={{ mt: 2 }}>
-          {answers
-            .slice()
-            .reverse()
-            .map((answer, index) => (
-              <Typography key={index} variant="body2" sx={{ mb: 1 }}>
-                accepted at:{" "}
-                <DateOver24HoursTimeLessThan
-                  inputDate={new Date(answer.systemAcceptTimeUtc || 0)}
-                />
-                '{JSON.stringify(answer.userResponse)}'
-              </Typography>
-            ))}
+          {previousAnswers.map((answer, index) => (
+            <Typography key={index} variant="body2" sx={{ mb: 1 }}>
+              accepted at:{" "}
+              <DateOver24HoursTimeLessThan
+                inputDate={new Date(answer.systemAcceptTimeUtc || 0)}
+              />
+              '{JSON.stringify(answer.userResponse)}'
+            </Typography>
+          ))}
         </Box>
       )}
     </Box>

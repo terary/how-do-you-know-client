@@ -16,9 +16,13 @@ export const UserResponseContainer: FC<UserResponseContainerProps> = ({
 }) => {
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
-  const history = question.userResponseHistory || [];
 
-  console.log("UserResponseContainer history:", history);
+  // Guard clause for undefined question
+  if (!question) {
+    return null;
+  }
+
+  const history = question.userResponseHistory || [];
 
   useEffect(() => {
     if (history.length > 0) {
