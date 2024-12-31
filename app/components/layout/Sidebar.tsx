@@ -36,7 +36,6 @@ export const Sidebar = () => {
   const menuItems = [
     { path: "/", label: t("nav.home"), icon: <Home /> },
     { path: "/verify", label: t("nav.verify"), icon: <Verified /> },
-    { path: "/quotes", label: t("nav.quotes"), icon: <FormatQuote /> },
     {
       path: "/questionnaires",
       label: t("nav.questionnaires"),
