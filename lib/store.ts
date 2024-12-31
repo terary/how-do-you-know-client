@@ -32,3 +32,16 @@ export type AppThunk<ThunkReturnType = void> = ThunkAction<
   unknown,
   Action
 >;
+`
+  This branch is ready to be merged into the main branch.
+
+  You will want to note on the login page
+   the quarky behavior with storage cookies vs local storage
+   also explain that the auth token is handled by nestjs so it always goes with the requests 
+   (I think, or authenticated root request)
+
+   You DONT want to figure it out again
+
+
+
+`;
