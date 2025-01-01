@@ -171,4 +171,32 @@ describe("QuestionAdvancedMeta", () => {
     // Should still be expanded
     expect(screen.getByTestId("ExpandLessIcon")).toBeInTheDocument();
   });
+
+  it("handles flag question checkbox changes correctly", async () => {
+    render(<QuestionAdvancedMeta question={mockQuestion} />);
+
+    // Expand section
+    const expandButton = screen.getByRole("button");
+    await act(async () => {
+      fireEvent.click(expandButton);
+    });
+
+    // Toggle Flag Question checkbox
+    const flagCheckbox = screen.getByLabelText("Flag Question");
+    await act(async () => {
+      fireEvent.click(flagCheckbox);
+    });
+
+    expect(mockDispatch).toHaveBeenCalledWith(
+      updateQuestionFEMeta({
+        questionId: "123",
+        feMeta: {
+          isSkipped: false,
+          isUserFlagged: true,
+          userFlags: "",
+          userSortPosition: 0,
+        },
+      })
+    );
+  });
 });
