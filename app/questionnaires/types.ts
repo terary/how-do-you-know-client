@@ -1,3 +1,10 @@
+export interface IQuestionFEMeta {
+  isSkipped: boolean;
+  isUserFlagged: boolean;
+  userFlags: string;
+  userSortPosition: number;
+}
+
 type TUserPromptType = "text" | "multimedia";
 type TUserResponseType = "any-of" | "free-text-255" | "one-of-2" | "one-of-4";
 type TTextItem = { labelText: string; value: string };
@@ -19,6 +26,7 @@ type TQuestionGeneric<
   userResponseType: UResponseType;
   questionId: string;
   userResponseHistory?: any[]; // for teaching tool this is a nice have. for exam this is a security risk (maybe).
+  feMeta?: IQuestionFEMeta;
 };
 
 type TQuestionTextOneOf4 = TQuestionGeneric<"text", "one-of-4"> & {

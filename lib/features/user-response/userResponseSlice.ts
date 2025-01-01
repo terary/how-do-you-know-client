@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { userAnswersApiSlice } from "./userResponseApiSlice";
-import { TQuestionAny } from "@/app/questionnaires/types";
+import { TQuestionAny, IQuestionFEMeta } from "@/app/questionnaires/types";
 
 const notIn = (key: string, obj: Object) => !(key in obj);
 
@@ -36,6 +36,21 @@ const initialState: UserResponseState = {
   draftResponses: {},
   isEditing: false,
   questionMap: {},
+};
+
+const initializeFEMeta = (
+  question: TQuestionAny,
+  index: number
+): TQuestionAny => {
+  return {
+    ...question,
+    feMeta: {
+      isSkipped: false,
+      isUserFlagged: false,
+      userFlags: "",
+      userSortPosition: index, // Initialize with array index position
+    },
+  };
 };
 
 export const userResponseSlice = createSlice({
@@ -98,6 +113,18 @@ export const userResponseSlice = createSlice({
     setIsEditing: (state, action: PayloadAction<boolean>) => {
       state.isEditing = action.payload;
     },
+    updateQuestionFEMeta: (
+      state,
+      action: PayloadAction<{
+        questionId: string;
+        feMeta: IQuestionFEMeta;
+      }>
+    ) => {
+      const question = state.questionMap[action.payload.questionId];
+      if (question) {
+        question.feMeta = action.payload.feMeta;
+      }
+    },
   },
   // Handle API states using extraReducers
   extraReducers: (builder) => {
@@ -125,14 +152,11 @@ export const userResponseSlice = createSlice({
       .addMatcher(
         userAnswersApiSlice.endpoints.getQuestionnaire.matchFulfilled,
         (state, action) => {
-          const questionMap = (action.payload?.questions || []).reduce(
-            (acc, prev) => {
-              acc[prev.questionId] = prev;
-              return acc;
-            },
-            {} as TQuestionIdMap
-          );
-          state.questionMap = questionMap; // action.payload.questions || [];
+          const questions = action.payload.questions || [];
+          state.questionMap = questions.reduce((acc, question, index) => {
+            acc[question.questionId] = initializeFEMeta(question, index);
+            return acc;
+          }, {} as TQuestionIdMap);
         }
       );
   },
@@ -145,5 +169,6 @@ export const {
   setIsEditing,
   commitDraftResponse,
   commitArrayValueDraftResponse,
+  updateQuestionFEMeta,
 } = userResponseSlice.actions;
 export default userResponseSlice.reducer;

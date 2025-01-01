@@ -43,6 +43,11 @@ interface IGetQuestionnaireRequestParameters {
   questionnaireId?: string;
 }
 
+const stripFEMeta = (question: TQuestionAny): Omit<TQuestionAny, "feMeta"> => {
+  const { feMeta, ...rest } = question;
+  return rest;
+};
+
 // Define a service using a base URL and expected endpoints
 export const userAnswersApiSlice = createApi({
   baseQuery: fetchBaseQuery({

@@ -178,6 +178,12 @@ describe("userResponseSlice", () => {
           userResponseType: "free-text-255",
           userResponseHistory: [],
           userResponse: { text: null },
+          feMeta: {
+            isSkipped: false,
+            isUserFlagged: false,
+            userFlags: "",
+            userSortPosition: 0,
+          },
         },
         {
           questionId: "q2",
@@ -186,6 +192,12 @@ describe("userResponseSlice", () => {
           userResponseType: "free-text-255",
           userResponseHistory: [],
           userResponse: { text: null },
+          feMeta: {
+            isSkipped: false,
+            isUserFlagged: false,
+            userFlags: "",
+            userSortPosition: 1,
+          },
         },
       ];
 
@@ -201,6 +213,7 @@ describe("userResponseSlice", () => {
           questions: mockQuestions,
         },
       });
+
       expect(actual.questionMap).toEqual({
         q1: mockQuestions[0],
         q2: mockQuestions[1],

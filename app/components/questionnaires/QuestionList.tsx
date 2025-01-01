@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { QuestionAny } from "./QuestionAny";
 import { Card, CardContent } from "@mui/material";
-import { UserResponseContainer } from "./UserResponseContainer";
 import { TQuestionAny } from "@/app/questionnaires/types";
 
 export const QuestionList: FC = () => {
@@ -21,8 +20,7 @@ export const QuestionList: FC = () => {
           sx={{ margin: "10px" }}
         >
           <CardContent>
-            <QuestionAny question={question} />
-            <UserResponseContainer question={question as TQuestionAny} />
+            <QuestionAny question={question as TQuestionAny} />
           </CardContent>
         </Card>
       ))}
