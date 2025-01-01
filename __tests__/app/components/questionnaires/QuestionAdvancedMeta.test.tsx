@@ -199,4 +199,40 @@ describe("QuestionAdvancedMeta", () => {
       })
     );
   });
+
+  it("handles empty sort position input", async () => {
+    render(<QuestionAdvancedMeta question={mockQuestion} />);
+
+    // Expand section
+    const expandButton = screen.getByRole("button");
+    await act(async () => {
+      fireEvent.click(expandButton);
+    });
+
+    // Get sort position input
+    const sortPositionInput = screen.getByLabelText("Sort Position");
+
+    // First set a value
+    await act(async () => {
+      fireEvent.change(sortPositionInput, { target: { value: "5" } });
+    });
+
+    // Then clear it
+    await act(async () => {
+      fireEvent.change(sortPositionInput, { target: { value: "" } });
+    });
+
+    // Verify that clearing the input sets sort position to 0
+    expect(mockDispatch).toHaveBeenLastCalledWith(
+      updateQuestionFEMeta({
+        questionId: "123",
+        feMeta: {
+          isSkipped: false,
+          isUserFlagged: false,
+          userFlags: "",
+          userSortPosition: 0,
+        },
+      })
+    );
+  });
 });

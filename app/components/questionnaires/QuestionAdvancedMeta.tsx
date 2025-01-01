@@ -108,7 +108,8 @@ export const QuestionAdvancedMeta: FC<QuestionAdvancedMetaProps> = ({
               value={feMeta.userSortPosition}
               onChange={(e) =>
                 handleMetaChange({
-                  userSortPosition: parseInt(e.target.value, 10),
+                  userSortPosition:
+                    e.target.value === "" ? 0 : parseInt(e.target.value, 10),
                 })
               }
               size="small"
