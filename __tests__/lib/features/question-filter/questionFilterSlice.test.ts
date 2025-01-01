@@ -138,5 +138,61 @@ describe("questionFilterSlice", () => {
       expect(filtered).toHaveLength(1);
       expect(filtered[0].questionId).toBe("q1");
     });
+
+    it("should not match questions with empty or undefined tags when filtering by tag", () => {
+      const questionsWithEmptyTags = {
+        ...mockQuestions,
+        q4: {
+          questionId: "q4",
+          userPromptType: "text",
+          userPromptText: "Question 4",
+          userResponseType: "free-text-255",
+          userResponse: { text: null },
+          feMeta: {
+            isSkipped: false,
+            userFlags: "", // empty string
+            userSortPosition: 3,
+          },
+        },
+        q5: {
+          questionId: "q5",
+          userPromptType: "text",
+          userPromptText: "Question 5",
+          userResponseType: "free-text-255",
+          userResponse: { text: null },
+          feMeta: {
+            isSkipped: false,
+            userFlags: "   ", // whitespace only
+            userSortPosition: 4,
+          },
+        },
+        q6: {
+          questionId: "q6",
+          userPromptType: "text",
+          userPromptText: "Question 6",
+          userResponseType: "free-text-255",
+          userResponse: { text: null },
+          feMeta: {
+            isSkipped: false,
+            // userFlags undefined
+            userSortPosition: 5,
+          },
+        },
+      };
+
+      const state = {
+        questionFilter: {
+          showSkipped: true,
+          tagFilter: "important",
+        },
+        userResponseUI: {
+          questionMap: questionsWithEmptyTags,
+        },
+      };
+
+      const filtered = selectFilteredQuestions(state as any);
+      expect(filtered).toHaveLength(2);
+      expect(filtered.map((q) => q.questionId)).toEqual(["q1", "q2"]);
+    });
   });
 });

@@ -33,13 +33,9 @@ describe("AdvancedQuestionSortFilter", () => {
 
     expect(screen.getByText("Filter & Sort")).toBeInTheDocument();
     expect(screen.getByLabelText("Filter by Tag")).toBeInTheDocument();
-    expect(screen.getByText("Apply")).toBeInTheDocument();
-    expect(screen.getByText("Show Skipped")).toBeInTheDocument();
-    expect(screen.getByText("Show All")).toBeInTheDocument();
-    expect(screen.getByText("Clear All Meta")).toBeInTheDocument();
   });
 
-  it("handles tag filter submission", () => {
+  it("updates tag filter as user types", () => {
     render(<AdvancedQuestionSortFilter />, {
       preloadedState: basePreloadedState,
     });
@@ -47,9 +43,6 @@ describe("AdvancedQuestionSortFilter", () => {
     const input = screen.getByLabelText("Filter by Tag");
     fireEvent.change(input, { target: { value: "test-tag" } });
     expect(input).toHaveValue("test-tag");
-
-    const submitButton = screen.getByText("Apply");
-    fireEvent.click(submitButton);
   });
 
   it("handles show skipped button click", () => {
@@ -57,17 +50,8 @@ describe("AdvancedQuestionSortFilter", () => {
       preloadedState: basePreloadedState,
     });
 
-    const showSkippedButton = screen.getByText("Show Skipped");
+    const showSkippedButton = screen.getByText("questionnaire.unSkipQuestions");
     fireEvent.click(showSkippedButton);
-  });
-
-  it("handles show all button click", () => {
-    render(<AdvancedQuestionSortFilter />, {
-      preloadedState: basePreloadedState,
-    });
-
-    const showAllButton = screen.getByText("Show All");
-    fireEvent.click(showAllButton);
   });
 
   it("handles clear all meta button click", () => {
@@ -75,7 +59,7 @@ describe("AdvancedQuestionSortFilter", () => {
       preloadedState: basePreloadedState,
     });
 
-    const clearAllMetaButton = screen.getByText("Clear All Meta");
+    const clearAllMetaButton = screen.getByText("singleword.reset");
     fireEvent.click(clearAllMetaButton);
   });
 

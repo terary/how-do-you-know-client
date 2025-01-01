@@ -17,9 +17,7 @@ jest.mock("react-i18next", () => ({
       const translations: { [key: string]: string } = {
         "questionnaire.advanced": "Advanced",
         "questionnaire.skipQuestion": "Skip Question",
-        "questionnaire.flagQuestion": "Flag Question",
-        "questionnaire.userNotes": "User Notes",
-        "questionnaire.sortPosition": "Sort Position",
+        "questionnaire.userTags": "User Tags",
       };
       return translations[key] || key;
     },
@@ -34,7 +32,6 @@ describe("QuestionAdvancedMeta", () => {
     userResponseType: "free-text-255",
     feMeta: {
       isSkipped: false,
-      isUserFlagged: false,
       userFlags: "",
       userSortPosition: 0,
     },
@@ -81,7 +78,6 @@ describe("QuestionAdvancedMeta", () => {
         questionId: "123",
         feMeta: {
           isSkipped: true,
-          isUserFlagged: false,
           userFlags: "",
           userSortPosition: 0,
         },
@@ -98,10 +94,11 @@ describe("QuestionAdvancedMeta", () => {
       fireEvent.click(expandButton);
     });
 
-    // Change User Notes
-    const userNotesInput = screen.getByLabelText("User Notes");
+    // Change User Tags
+    const userTagsInput = screen.getByLabelText("User Tags");
     await act(async () => {
-      fireEvent.change(userNotesInput, { target: { value: "Test note" } });
+      fireEvent.change(userTagsInput, { target: { value: "Test tag" } });
+      fireEvent.blur(userTagsInput);
     });
 
     expect(mockDispatch).toHaveBeenCalledWith(
@@ -109,37 +106,8 @@ describe("QuestionAdvancedMeta", () => {
         questionId: "123",
         feMeta: {
           isSkipped: false,
-          isUserFlagged: false,
-          userFlags: "Test note",
+          userFlags: "Test tag",
           userSortPosition: 0,
-        },
-      })
-    );
-  });
-
-  it("handles sort position changes", async () => {
-    render(<QuestionAdvancedMeta question={mockQuestion} />);
-
-    // Expand section
-    const expandButton = screen.getByRole("button");
-    await act(async () => {
-      fireEvent.click(expandButton);
-    });
-
-    // Change Sort Position
-    const sortPositionInput = screen.getByLabelText("Sort Position");
-    await act(async () => {
-      fireEvent.change(sortPositionInput, { target: { value: "5" } });
-    });
-
-    expect(mockDispatch).toHaveBeenCalledWith(
-      updateQuestionFEMeta({
-        questionId: "123",
-        feMeta: {
-          isSkipped: false,
-          isUserFlagged: false,
-          userFlags: "",
-          userSortPosition: 5,
         },
       })
     );
@@ -158,12 +126,8 @@ describe("QuestionAdvancedMeta", () => {
     fireEvent.click(expandButton);
 
     const skipCheckbox = screen.getByLabelText("Skip Question");
-    const flagCheckbox = screen.getByLabelText("Flag Question");
-
     expect(skipCheckbox).not.toBeChecked();
-    expect(flagCheckbox).not.toBeChecked();
-    expect(screen.getByLabelText("User Notes")).toHaveValue("");
-    expect(screen.getByLabelText("Sort Position")).toHaveValue(0);
+    expect(screen.getByLabelText("User Tags")).toHaveValue("");
   });
 
   it("maintains expanded state between renders", async () => {
@@ -186,69 +150,5 @@ describe("QuestionAdvancedMeta", () => {
 
     // Should still be expanded
     expect(screen.getByTestId("ExpandLessIcon")).toBeInTheDocument();
-  });
-
-  it("handles flag question checkbox changes correctly", async () => {
-    render(<QuestionAdvancedMeta question={mockQuestion} />);
-
-    // Expand section
-    const expandButton = screen.getByRole("button");
-    await act(async () => {
-      fireEvent.click(expandButton);
-    });
-
-    // Toggle Flag Question checkbox
-    const flagCheckbox = screen.getByLabelText("Flag Question");
-    await act(async () => {
-      fireEvent.click(flagCheckbox);
-    });
-
-    expect(mockDispatch).toHaveBeenCalledWith(
-      updateQuestionFEMeta({
-        questionId: "123",
-        feMeta: {
-          isSkipped: false,
-          isUserFlagged: true,
-          userFlags: "",
-          userSortPosition: 0,
-        },
-      })
-    );
-  });
-
-  it("handles empty sort position input", async () => {
-    render(<QuestionAdvancedMeta question={mockQuestion} />);
-
-    // Expand section
-    const expandButton = screen.getByRole("button");
-    await act(async () => {
-      fireEvent.click(expandButton);
-    });
-
-    // Get sort position input
-    const sortPositionInput = screen.getByLabelText("Sort Position");
-
-    // First set a value
-    await act(async () => {
-      fireEvent.change(sortPositionInput, { target: { value: "5" } });
-    });
-
-    // Then clear it
-    await act(async () => {
-      fireEvent.change(sortPositionInput, { target: { value: "" } });
-    });
-
-    // Verify that clearing the input sets sort position to 0
-    expect(mockDispatch).toHaveBeenLastCalledWith(
-      updateQuestionFEMeta({
-        questionId: "123",
-        feMeta: {
-          isSkipped: false,
-          isUserFlagged: false,
-          userFlags: "",
-          userSortPosition: 0,
-        },
-      })
-    );
   });
 });

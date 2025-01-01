@@ -27,11 +27,6 @@ export const AdvancedQuestionSortFilter: FC = () => {
     (state: RootState) => state.questionFilter
   );
 
-  const handleTagFilterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(setTagFilter(tagFilter));
-  };
-
   const handleUnSkipAll = () => {
     dispatch(unSkipAllQuestions());
     dispatch(setShowSkipped(true));
@@ -52,22 +47,17 @@ export const AdvancedQuestionSortFilter: FC = () => {
 
       <Stack spacing={2}>
         <Box>
-          <form onSubmit={handleTagFilterSubmit}>
-            <Stack direction="row" spacing={1}>
-              <TextField
-                size="small"
-                label={t("questionnaire.filterByTag")}
-                value={tagFilter}
-                onChange={(e) => dispatch(setTagFilter(e.target.value))}
-                placeholder={t("questionnaire.enterTagsSpaceSeparated")}
-                helperText={t("questionnaire.useSpacesToSeparateTags")}
-                fullWidth
-              />
-              {/* <Button type="submit" variant="contained">
-                {t("singleword.apply")}
-              </Button> */}
-            </Stack>
-          </form>
+          <Stack direction="row" spacing={1}>
+            <TextField
+              size="small"
+              label={t("questionnaire.filterByTag")}
+              value={tagFilter}
+              onChange={(e) => dispatch(setTagFilter(e.target.value))}
+              placeholder={t("questionnaire.enterTagsSpaceSeparated")}
+              helperText={t("questionnaire.useSpacesToSeparateTags")}
+              fullWidth
+            />
+          </Stack>
         </Box>
 
         <Stack direction="row" spacing={1}>

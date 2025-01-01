@@ -27,7 +27,7 @@ export const QuestionAdvancedMeta: FC<QuestionAdvancedMetaProps> = ({
   const [localTags, setLocalTags] = useState(question.feMeta?.userFlags || "");
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const feMeta = question.feMeta || {
+  const feMeta: IQuestionFEMeta = question.feMeta || {
     isSkipped: false,
     userFlags: "",
     userSortPosition: 0,
@@ -104,21 +104,6 @@ export const QuestionAdvancedMeta: FC<QuestionAdvancedMetaProps> = ({
               size="small"
             />
           </Box>
-          {/* <Box>
-            <TextField
-              fullWidth
-              label={t("questionnaire.sortPosition")}
-              type="number"
-              value={feMeta.userSortPosition}
-              onChange={(e) =>
-                handleMetaChange({
-                  userSortPosition:
-                    e.target.value === "" ? 0 : parseInt(e.target.value, 10),
-                })
-              }
-              size="small"
-            />
-          </Box> */}
         </Stack>
       </Collapse>
     </Box>

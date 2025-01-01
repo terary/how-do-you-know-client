@@ -20,78 +20,70 @@ exports[`QuestionList renders empty when no questions in store 1`] = `
       <div
         class="MuiBox-root css-0"
       >
-        <form>
+        <div
+          class="MuiStack-root css-niqf4j-MuiStack-root"
+        >
           <div
-            class="MuiStack-root css-niqf4j-MuiStack-root"
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
           >
+            <label
+              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1kfabtt-MuiFormLabel-root-MuiInputLabel-root"
+              data-shrink="false"
+              for=":r5:"
+              id=":r5:-label"
+            >
+              questionnaire.filterByTag
+            </label>
             <div
-              class="MuiFormControl-root MuiTextField-root css-1xp5r68-MuiFormControl-root-MuiTextField-root"
+              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall css-1blp12k-MuiInputBase-root-MuiOutlinedInput-root"
             >
-              <label
-                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeSmall MuiInputLabel-outlined css-1kfabtt-MuiFormLabel-root-MuiInputLabel-root"
-                data-shrink="false"
-                for=":r7:"
-                id=":r7:-label"
+              <input
+                aria-describedby=":r5:-helper-text"
+                aria-invalid="false"
+                class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-1pzfmz2-MuiInputBase-input-MuiOutlinedInput-input"
+                id=":r5:"
+                placeholder="questionnaire.enterTagsSpaceSeparated"
+                type="text"
+                value=""
+              />
+              <fieldset
+                aria-hidden="true"
+                class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
               >
-                questionnaire.filterByTag
-              </label>
-              <div
-                class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
-              >
-                <input
-                  aria-invalid="false"
-                  class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-1pzfmz2-MuiInputBase-input-MuiOutlinedInput-input"
-                  id=":r7:"
-                  type="text"
-                  value=""
-                />
-                <fieldset
-                  aria-hidden="true"
-                  class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
+                <legend
+                  class="css-81qg8w"
                 >
-                  <legend
-                    class="css-81qg8w"
-                  >
-                    <span>
-                      questionnaire.filterByTag
-                    </span>
-                  </legend>
-                </fieldset>
-              </div>
+                  <span>
+                    questionnaire.filterByTag
+                  </span>
+                </legend>
+              </fieldset>
             </div>
-            <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-1abvrni-MuiButtonBase-root-MuiButton-root"
-              tabindex="0"
-              type="submit"
+            <p
+              class="MuiFormHelperText-root MuiFormHelperText-sizeSmall MuiFormHelperText-contained css-2s8ubb-MuiFormHelperText-root"
+              id=":r5:-helper-text"
             >
-              singleword.apply
-            </button>
+              questionnaire.useSpacesToSeparateTags
+            </p>
           </div>
-        </form>
+        </div>
       </div>
       <div
         class="MuiStack-root css-niqf4j-MuiStack-root"
       >
         <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedInherit MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorInherit MuiButton-root MuiButton-outlined MuiButton-outlinedInherit MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorInherit css-vyhutw-MuiButtonBase-root-MuiButton-root"
+          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-1btmbba-MuiButtonBase-root-MuiButton-root"
           tabindex="0"
           type="button"
         >
-          questionnaire.showSkipped
+          questionnaire.unSkipQuestions
         </button>
         <button
           class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-1btmbba-MuiButtonBase-root-MuiButton-root"
           tabindex="0"
           type="button"
         >
-          questionnaire.showAll
-        </button>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedWarning MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorWarning MuiButton-root MuiButton-outlined MuiButton-outlinedWarning MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorWarning css-1q98nef-MuiButtonBase-root-MuiButton-root"
-          tabindex="0"
-          type="button"
-        >
-          questionnaire.clearAllMeta
+          singleword.reset
         </button>
       </div>
     </div>
