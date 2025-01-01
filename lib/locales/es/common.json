@@ -27,15 +27,21 @@
   },
   "questionnaire": {
     "advanced": "Avanzado",
-    "skipQuestion": "Omitir Pregunta",
+    "skipQuestion": "Saltar Pregunta",
     "flagQuestion": "Marcar Pregunta",
     "userNotes": "Notas del Usuario",
-    "sortPosition": "Posición de Ordenamiento"
+    "sortPosition": "Posición de Orden",
+    "filterAndSort": "Filtrar y Ordenar",
+    "filterByTag": "Filtrar por Etiqueta",
+    "showSkipped": "Mostrar Saltadas",
+    "showAll": "Mostrar Todo",
+    "clearAllMeta": "Borrar Todo Meta"
   },
   "singleword": {
     "hide": "Ocultar",
     "show": "Mostrar",
-    "save": "Guardar"
+    "save": "Guardar",
+    "apply": "Aplicar"
   },
   "settings": {
     "profile": "Perfil",

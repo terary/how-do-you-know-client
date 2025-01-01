@@ -1,0 +1,20 @@
+{
+  "questionnaire": {
+    "advanced": "Avancé",
+    "skipQuestion": "Sauter la Question",
+    "flagQuestion": "Marquer la Question",
+    "userNotes": "Notes Utilisateur",
+    "sortPosition": "Position de Tri",
+    "filterAndSort": "Filtrer & Trier",
+    "filterByTag": "Filtrer par Tag",
+    "showSkipped": "Afficher Sautées",
+    "showAll": "Afficher Tout",
+    "clearAllMeta": "Effacer Tout Meta"
+  },
+  "singleword": {
+    "hide": "Masquer",
+    "show": "Afficher",
+    "save": "Enregistrer",
+    "apply": "Appliquer"
+  }
+}

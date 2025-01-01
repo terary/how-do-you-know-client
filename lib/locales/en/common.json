@@ -30,12 +30,18 @@
     "skipQuestion": "Skip Question",
     "flagQuestion": "Flag Question",
     "userNotes": "User Notes",
-    "sortPosition": "Sort Position"
+    "sortPosition": "Sort Position",
+    "filterAndSort": "Filter & Sort",
+    "filterByTag": "Filter by Tag",
+    "showSkipped": "Show Skipped",
+    "showAll": "Show All",
+    "clearAllMeta": "Clear All Meta"
   },
   "singleword": {
     "hide": "Hide",
     "show": "Show",
-    "save": "Save"
+    "save": "Save",
+    "apply": "Apply"
   },
   "settings": {
     "profile": "Profile",
