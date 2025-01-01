@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { useTranslation } from "react-i18next";
 
 interface QuestionAdvancedMetaProps {
   question: TQuestionAny;
@@ -24,6 +25,7 @@ export const QuestionAdvancedMeta: FC<QuestionAdvancedMetaProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const feMeta = question.feMeta || {
     isSkipped: false,
     isUserFlagged: false,
@@ -52,7 +54,9 @@ export const QuestionAdvancedMeta: FC<QuestionAdvancedMetaProps> = ({
           alignItems: "center",
         }}
       >
-        <Typography variant="subtitle2">Advanced</Typography>
+        <Typography variant="subtitle2">
+          {t("questionnaire.advanced")}
+        </Typography>
         <IconButton
           onClick={() => setIsExpanded(!isExpanded)}
           size="small"
@@ -73,7 +77,7 @@ export const QuestionAdvancedMeta: FC<QuestionAdvancedMetaProps> = ({
                   }
                 />
               }
-              label="Skip Question"
+              label={t("questionnaire.skipQuestion")}
             />
           </Box>
           <Box>
@@ -86,13 +90,13 @@ export const QuestionAdvancedMeta: FC<QuestionAdvancedMetaProps> = ({
                   }
                 />
               }
-              label="Flag Question"
+              label={t("questionnaire.flagQuestion")}
             />
           </Box>
           <Box>
             <TextField
               fullWidth
-              label="User Notes"
+              label={t("questionnaire.userNotes")}
               multiline
               rows={2}
               value={feMeta.userFlags}
@@ -103,7 +107,7 @@ export const QuestionAdvancedMeta: FC<QuestionAdvancedMetaProps> = ({
           <Box>
             <TextField
               fullWidth
-              label="Sort Position"
+              label={t("questionnaire.sortPosition")}
               type="number"
               value={feMeta.userSortPosition}
               onChange={(e) =>

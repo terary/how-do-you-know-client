@@ -25,6 +25,13 @@
     "changeAnswer": "Cambiar Respuesta",
     "cancelEdit": "Cancelar Edición"
   },
+  "questionnaire": {
+    "advanced": "Avanzado",
+    "skipQuestion": "Omitir Pregunta",
+    "flagQuestion": "Marcar Pregunta",
+    "userNotes": "Notas del Usuario",
+    "sortPosition": "Posición de Ordenamiento"
+  },
   "singleword": {
     "hide": "Ocultar",
     "show": "Mostrar",

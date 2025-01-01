@@ -1,38 +1,45 @@
 {
   "nav": {
-    "home": "الصفحة الرئيسية",
+    "home": "الرئيسية",
     "verify": "تحقق",
-    "quotes": "قتباسات",
-    "questionnaires": "ستمارات",
-    "errorTest": "ختبار الخطأ"
+    "quotes": "اقتباسات",
+    "questionnaires": "استبيانات",
+    "errorTest": "اختبار الأخطاء"
   },
   "footer": {
     "learn": "تعلم",
     "and": "و"
   },
   "counter": {
-    "increment": "زيد",
-    "decrement": "نقص",
-    "addAmount": "زيد شي رقم",
-    "addAsync": "زيد من بعد",
-    "addIfOdd": "زيد إلا كان فردي"
+    "increment": "زيادة",
+    "decrement": "نقصان",
+    "addAmount": "إضافة كمية",
+    "addAsync": "إضافة غير متزامنة",
+    "addIfOdd": "أضف إذا كان فردياً"
   },
   "questionnairePage": {
-    "title": "صفحة الاستمارة",
-    "description": "هاد الصفحة خاصة بعرض الاستمارات"
+    "title": "صفحة الاستبيان",
+    "description": "هذه الصفحة مخصصة لعرض الاستبيانات"
   },
   "questionnaires": {
-    "changeAnswer": "بدل الجواب",
-    "cancelEdit": "لغي التعديل"
+    "changeAnswer": "تغيير الإجابة",
+    "cancelEdit": "إلغاء التعديل"
+  },
+  "questionnaire": {
+    "advanced": "متقدم",
+    "skipQuestion": "تجاوز السؤال",
+    "flagQuestion": "تأشير السؤال",
+    "userNotes": "ملاحظات المستخدم",
+    "sortPosition": "موقع الترتيب"
   },
   "singleword": {
-    "hide": "خبي",
-    "show": "بين",
+    "hide": "إخفاء",
+    "show": "عرض",
     "save": "حفظ"
   },
   "settings": {
     "profile": "الملف الشخصي",
     "account": "الحساب",
-    "logout": "خروج"
+    "logout": "تسجيل الخروج"
   }
 }

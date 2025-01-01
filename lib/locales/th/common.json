@@ -25,6 +25,13 @@
     "changeAnswer": "เปลี่ยนคำตอบ",
     "cancelEdit": "ยกเลิกการแก้ไข"
   },
+  "questionnaire": {
+    "advanced": "ขั้นสูง",
+    "skipQuestion": "ข้ามคำถาม",
+    "flagQuestion": "ทำเครื่องหมายคำถาม",
+    "userNotes": "บันทึกของผู้ใช้",
+    "sortPosition": "ตำแหน่งการเรียงลำดับ"
+  },
   "singleword": {
     "hide": "ซ่อน",
     "show": "แสดง",

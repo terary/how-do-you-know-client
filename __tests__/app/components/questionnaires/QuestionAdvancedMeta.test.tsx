@@ -10,6 +10,22 @@ jest.mock("react-redux", () => ({
   useDispatch: () => mockDispatch,
 }));
 
+// Mock the translation hook
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: { [key: string]: string } = {
+        "questionnaire.advanced": "Advanced",
+        "questionnaire.skipQuestion": "Skip Question",
+        "questionnaire.flagQuestion": "Flag Question",
+        "questionnaire.userNotes": "User Notes",
+        "questionnaire.sortPosition": "Sort Position",
+      };
+      return translations[key] || key;
+    },
+  }),
+}));
+
 describe("QuestionAdvancedMeta", () => {
   const mockQuestion: TQuestionAny = {
     questionId: "123",

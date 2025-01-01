@@ -25,6 +25,13 @@
     "changeAnswer": "Change Answer",
     "cancelEdit": "Cancel Edit"
   },
+  "questionnaire": {
+    "advanced": "Advanced",
+    "skipQuestion": "Skip Question",
+    "flagQuestion": "Flag Question",
+    "userNotes": "User Notes",
+    "sortPosition": "Sort Position"
+  },
   "singleword": {
     "hide": "Hide",
     "show": "Show",

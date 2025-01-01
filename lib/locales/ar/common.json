@@ -15,7 +15,7 @@
     "decrement": "إنقاص",
     "addAmount": "إضافة كمية",
     "addAsync": "إضافة غير متزامنة",
-    "addIfOdd": "إضافة إذا كان فردياً"
+    "addIfOdd": "إضف إذا كان فردياً"
   },
   "questionnairePage": {
     "title": "صفحة الاستبيان",
@@ -24,6 +24,13 @@
   "questionnaires": {
     "changeAnswer": "تغيير الإجابة",
     "cancelEdit": "إلغاء التعديل"
+  },
+  "questionnaire": {
+    "advanced": "متقدم",
+    "skipQuestion": "تخطي السؤال",
+    "flagQuestion": "تعليم السؤال",
+    "userNotes": "ملاحظات المستخدم",
+    "sortPosition": "موضع الترتيب"
   },
   "singleword": {
     "hide": "إخفاء",
