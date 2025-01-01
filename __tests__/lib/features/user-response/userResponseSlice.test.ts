@@ -5,6 +5,7 @@ import userResponseReducer, {
   commitDraftResponse,
   commitArrayValueDraftResponse,
   setIsEditing,
+  updateQuestionFEMeta,
 } from "@/lib/features/user-response/userResponseSlice";
 import { userAnswersApiSlice } from "@/lib/features/user-response/userResponseApiSlice";
 import { TQuestionAny } from "@/app/questionnaires/types";
@@ -232,6 +233,65 @@ describe("userResponseSlice", () => {
         payload: {},
       });
       expect(actual.questionMap).toEqual({});
+    });
+  });
+
+  describe("updateQuestionFEMeta", () => {
+    it("should handle updateQuestionFEMeta when question exists", () => {
+      const initialQuestionState = {
+        ...initialState,
+        questionMap: {
+          q1: {
+            questionId: "q1",
+            userPromptType: "text",
+            userPromptText: "test question",
+            feMeta: {
+              isSkipped: false,
+              isUserFlagged: false,
+              userFlags: "",
+              userSortPosition: 0,
+            },
+          },
+        },
+      };
+
+      const actual = userResponseReducer(
+        initialQuestionState as any,
+        updateQuestionFEMeta({
+          questionId: "q1",
+          feMeta: {
+            isSkipped: true,
+            isUserFlagged: true,
+            userFlags: "test flag",
+            userSortPosition: 1,
+          },
+        })
+      );
+
+      expect(actual.questionMap.q1.feMeta).toEqual({
+        isSkipped: true,
+        isUserFlagged: true,
+        userFlags: "test flag",
+        userSortPosition: 1,
+      });
+    });
+
+    it("should handle updateQuestionFEMeta when question does not exist", () => {
+      const actual = userResponseReducer(
+        initialState,
+        updateQuestionFEMeta({
+          questionId: "nonexistent",
+          feMeta: {
+            isSkipped: true,
+            isUserFlagged: true,
+            userFlags: "test flag",
+            userSortPosition: 1,
+          },
+        })
+      );
+
+      // State should remain unchanged when question doesn't exist
+      expect(actual).toEqual(initialState);
     });
   });
 });
