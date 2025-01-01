@@ -3,7 +3,7 @@
     "advanced": "Avancé",
     "skipQuestion": "Ignorer la Question",
     "flagQuestion": "Marquer la Question",
-    "userNotes": "Notes Utilisateur",
+    "userTags": "Tags",
     "sortPosition": "Position de Tri",
     "filterAndSort": "Filtrer et Trier",
     "filterByTag": "Filtrer par Tag",
@@ -17,6 +17,7 @@
     "hide": "Masquer",
     "show": "Afficher",
     "save": "Enregistrer",
-    "apply": "Appliquer"
+    "apply": "Appliquer",
+    "reset": "Réinitialiser"
   }
 }

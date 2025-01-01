@@ -29,7 +29,7 @@
     "advanced": "Avanzado",
     "skipQuestion": "Omitir Pregunta",
     "flagQuestion": "Marcar Pregunta",
-    "userNotes": "Notas del Usuario",
+    "userTags": "Etiquetas",
     "sortPosition": "Posición de Ordenamiento",
     "filterAndSort": "Filtrar y Ordenar",
     "filterByTag": "Filtrar por Etiqueta",
@@ -43,7 +43,8 @@
     "hide": "Ocultar",
     "show": "Mostrar",
     "save": "Guardar",
-    "apply": "Aplicar"
+    "apply": "Aplicar",
+    "reset": "Restablecer"
   },
   "settings": {
     "profile": "Perfil",

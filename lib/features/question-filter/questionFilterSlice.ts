@@ -20,16 +20,11 @@ export const questionFilterSlice = createSlice({
     setTagFilter: (state, action: PayloadAction<string>) => {
       state.tagFilter = action.payload;
     },
-    clearFilters: (state) => {
-      state.showSkipped = false;
-      state.tagFilter = "";
-    },
   },
 });
 
 // Export actions
-export const { setShowSkipped, setTagFilter, clearFilters } =
-  questionFilterSlice.actions;
+export const { setShowSkipped, setTagFilter } = questionFilterSlice.actions;
 
 // Memoized base selectors
 const selectQuestionMap = (state: RootState) =>

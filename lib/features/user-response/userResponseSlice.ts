@@ -125,6 +125,23 @@ export const userResponseSlice = createSlice({
         question.feMeta = action.payload.feMeta;
       }
     },
+    unSkipAllQuestions: (state) => {
+      Object.values(state.questionMap).forEach((question) => {
+        if (question.feMeta) {
+          question.feMeta.isSkipped = false;
+        }
+      });
+    },
+    resetAllFEMeta: (state) => {
+      Object.values(state.questionMap).forEach((question, index) => {
+        question.feMeta = {
+          isSkipped: false,
+          isUserFlagged: false,
+          userFlags: "",
+          userSortPosition: index,
+        };
+      });
+    },
   },
   // Handle API states using extraReducers
   extraReducers: (builder) => {
@@ -166,5 +183,7 @@ export const {
   commitDraftResponse,
   commitArrayValueDraftResponse,
   updateQuestionFEMeta,
+  unSkipAllQuestions,
+  resetAllFEMeta,
 } = userResponseSlice.actions;
 export default userResponseSlice.reducer;

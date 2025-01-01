@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   Box,
   Button,
@@ -13,8 +13,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setShowSkipped,
   setTagFilter,
-  clearFilters,
 } from "@/lib/features/question-filter/questionFilterSlice";
+import {
+  unSkipAllQuestions,
+  resetAllFEMeta,
+} from "@/lib/features/user-response/userResponseSlice";
 import { RootState } from "@/lib/store";
 
 export const AdvancedQuestionSortFilter: FC = () => {
@@ -29,17 +32,15 @@ export const AdvancedQuestionSortFilter: FC = () => {
     dispatch(setTagFilter(tagFilter));
   };
 
-  const handleShowSkipped = () => {
-    dispatch(setShowSkipped(!showSkipped));
-  };
-
-  const handleShowAll = () => {
+  const handleUnSkipAll = () => {
+    dispatch(unSkipAllQuestions());
     dispatch(setShowSkipped(true));
-    dispatch(setTagFilter(""));
   };
 
-  const handleClearAllMeta = () => {
-    dispatch(clearFilters());
+  const handleReset = () => {
+    dispatch(resetAllFEMeta());
+    dispatch(setShowSkipped(false));
+    dispatch(setTagFilter(""));
   };
 
   return (
@@ -62,46 +63,23 @@ export const AdvancedQuestionSortFilter: FC = () => {
                 helperText={t("questionnaire.useSpacesToSeparateTags")}
                 fullWidth
               />
-              <Button type="submit" variant="contained">
+              {/* <Button type="submit" variant="contained">
                 {t("singleword.apply")}
-              </Button>
+              </Button> */}
             </Stack>
           </form>
         </Box>
 
         <Stack direction="row" spacing={1}>
-          <Button
-            variant="outlined"
-            onClick={handleShowSkipped}
-            color={showSkipped ? "primary" : "inherit"}
-          >
-            {t("questionnaire.showSkipped")}
+          <Button variant="outlined" onClick={handleUnSkipAll}>
+            {t("questionnaire.unSkipQuestions")}
           </Button>
 
-          <Button variant="outlined" onClick={handleShowAll}>
-            {t("questionnaire.showAll")}
-          </Button>
-
-          <Button
-            variant="outlined"
-            color="warning"
-            onClick={handleClearAllMeta}
-          >
-            {t("questionnaire.clearAllMeta")}
+          <Button variant="outlined" onClick={handleReset}>
+            {t("singleword.reset")}
           </Button>
         </Stack>
       </Stack>
     </Paper>
   );
 };
-
-`
-    This is looking pretty good.
-    So far it filters skipped ands 'shows skipped'.
-    
-    Next do the tag filter. (first fix tests)
-
-    user notes are a great idea, as a study aide.  However, those answer should persist and possible allow edit
-    based on questionId 
-
-`;

@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { updateQuestionFEMeta } from "@/lib/features/user-response/userResponseSlice";
 import { IQuestionFEMeta, TQuestionAny } from "@/app/questionnaires/types";
@@ -24,6 +24,7 @@ export const QuestionAdvancedMeta: FC<QuestionAdvancedMetaProps> = ({
   question,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [localTags, setLocalTags] = useState(question.feMeta?.userFlags || "");
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const feMeta = question.feMeta || {
@@ -32,6 +33,10 @@ export const QuestionAdvancedMeta: FC<QuestionAdvancedMetaProps> = ({
     userFlags: "",
     userSortPosition: 0,
   };
+
+  useEffect(() => {
+    setLocalTags(question.feMeta?.userFlags || "");
+  }, [question.feMeta?.userFlags]);
 
   const handleMetaChange = (updates: Partial<IQuestionFEMeta>) => {
     dispatch(
@@ -43,6 +48,14 @@ export const QuestionAdvancedMeta: FC<QuestionAdvancedMetaProps> = ({
         },
       })
     );
+  };
+
+  const handleTagsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLocalTags(e.target.value);
+  };
+
+  const handleTagsBlur = () => {
+    handleMetaChange({ userFlags: localTags });
   };
 
   return (
@@ -80,7 +93,7 @@ export const QuestionAdvancedMeta: FC<QuestionAdvancedMetaProps> = ({
               label={t("questionnaire.skipQuestion")}
             />
           </Box>
-          <Box>
+          {/* <Box>
             <FormControlLabel
               control={
                 <Checkbox
@@ -92,19 +105,20 @@ export const QuestionAdvancedMeta: FC<QuestionAdvancedMetaProps> = ({
               }
               label={t("questionnaire.flagQuestion")}
             />
-          </Box>
+          </Box> */}
           <Box>
             <TextField
               fullWidth
-              label={t("questionnaire.userNotes")}
+              label={t("questionnaire.userTags")}
               multiline
               rows={2}
-              value={feMeta.userFlags}
-              onChange={(e) => handleMetaChange({ userFlags: e.target.value })}
+              value={localTags}
+              onChange={handleTagsChange}
+              onBlur={handleTagsBlur}
               size="small"
             />
           </Box>
-          <Box>
+          {/* <Box>
             <TextField
               fullWidth
               label={t("questionnaire.sortPosition")}
@@ -118,7 +132,7 @@ export const QuestionAdvancedMeta: FC<QuestionAdvancedMetaProps> = ({
               }
               size="small"
             />
-          </Box>
+          </Box> */}
         </Stack>
       </Collapse>
     </Box>

@@ -29,7 +29,7 @@
     "advanced": "متقدم",
     "skipQuestion": "تخطي السؤال",
     "flagQuestion": "تعليم السؤال",
-    "userNotes": "ملاحظات المستخدم",
+    "userTags": "الوسوم",
     "sortPosition": "موضع الترتيب",
     "filterAndSort": "تصفية وترتيب",
     "filterByTag": "تصفية حسب الوسم",
@@ -42,7 +42,9 @@
   "singleword": {
     "hide": "إخفاء",
     "show": "عرض",
-    "save": "حفظ"
+    "save": "حفظ",
+    "apply": "تطبيق",
+    "reset": "إعادة تعيين"
   },
   "settings": {
     "profile": "الملف الشخصي",

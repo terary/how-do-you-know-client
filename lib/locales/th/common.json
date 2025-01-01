@@ -29,7 +29,7 @@
     "advanced": "ขั้นสูง",
     "skipQuestion": "ข้ามคำถาม",
     "flagQuestion": "ทำเครื่องหมายคำถาม",
-    "userNotes": "บันทึกของผู้ใช้",
+    "userTags": "แท็ก",
     "sortPosition": "ตำแหน่งการเรียง",
     "filterAndSort": "กรองและเรียง",
     "filterByTag": "กรองตามแท็ก",
@@ -42,7 +42,9 @@
   "singleword": {
     "hide": "ซ่อน",
     "show": "แสดง",
-    "save": "บันทึก"
+    "save": "บันทึก",
+    "apply": "นำไปใช้",
+    "reset": "รีเซ็ต"
   },
   "settings": {
     "profile": "โปรไฟล์",
