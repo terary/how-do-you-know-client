@@ -46,7 +46,6 @@ const initializeFEMeta = (
     ...question,
     feMeta: {
       isSkipped: false,
-      isUserFlagged: false,
       userFlags: "",
       userSortPosition: index, // Initialize with array index position
     },
@@ -136,7 +135,6 @@ export const userResponseSlice = createSlice({
       Object.values(state.questionMap).forEach((question, index) => {
         question.feMeta = {
           isSkipped: false,
-          isUserFlagged: false,
           userFlags: "",
           userSortPosition: index,
         };

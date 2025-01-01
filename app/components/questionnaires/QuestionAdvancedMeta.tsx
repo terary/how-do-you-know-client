@@ -29,7 +29,6 @@ export const QuestionAdvancedMeta: FC<QuestionAdvancedMetaProps> = ({
   const { t } = useTranslation();
   const feMeta = question.feMeta || {
     isSkipped: false,
-    isUserFlagged: false,
     userFlags: "",
     userSortPosition: 0,
   };
@@ -93,19 +92,6 @@ export const QuestionAdvancedMeta: FC<QuestionAdvancedMetaProps> = ({
               label={t("questionnaire.skipQuestion")}
             />
           </Box>
-          {/* <Box>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={feMeta.isUserFlagged}
-                  onChange={(e) =>
-                    handleMetaChange({ isUserFlagged: e.target.checked })
-                  }
-                />
-              }
-              label={t("questionnaire.flagQuestion")}
-            />
-          </Box> */}
           <Box>
             <TextField
               fullWidth

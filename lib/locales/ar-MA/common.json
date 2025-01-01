@@ -26,10 +26,9 @@
     "cancelEdit": "إلغاء التعديل"
   },
   "questionnaire": {
-    "advanced": "متقدم",
     "skipQuestion": "تخطي السؤال",
-    "flagQuestion": "تعليم السؤال",
-    "userTags": "الوسوم",
+    "userTags": "علامات المستخدم",
+    "advanced": "متقدم",
     "sortPosition": "موضع الترتيب",
     "filterAndSort": "تصفية وترتيب",
     "filterByTag": "تصفية حسب الوسم",

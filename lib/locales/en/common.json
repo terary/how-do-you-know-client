@@ -26,10 +26,9 @@
     "cancelEdit": "Cancel Edit"
   },
   "questionnaire": {
-    "advanced": "Advanced",
     "skipQuestion": "Skip Question",
-    "flagQuestion": "Flag Question",
-    "userTags": "Tags",
+    "userTags": "User Tags",
+    "advanced": "Advanced",
     "sortPosition": "Sort Position",
     "filterAndSort": "Filter & Sort",
     "filterByTag": "Filter by Tag",

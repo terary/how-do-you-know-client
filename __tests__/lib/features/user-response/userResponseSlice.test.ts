@@ -247,7 +247,6 @@ describe("userResponseSlice", () => {
             userPromptText: "test question",
             feMeta: {
               isSkipped: false,
-              isUserFlagged: false,
               userFlags: "",
               userSortPosition: 0,
             },
@@ -261,7 +260,6 @@ describe("userResponseSlice", () => {
           questionId: "q1",
           feMeta: {
             isSkipped: true,
-            isUserFlagged: true,
             userFlags: "test flag",
             userSortPosition: 1,
           },
@@ -270,7 +268,6 @@ describe("userResponseSlice", () => {
 
       expect(actual.questionMap.q1.feMeta).toEqual({
         isSkipped: true,
-        isUserFlagged: true,
         userFlags: "test flag",
         userSortPosition: 1,
       });
@@ -283,7 +280,6 @@ describe("userResponseSlice", () => {
           questionId: "nonexistent",
           feMeta: {
             isSkipped: true,
-            isUserFlagged: true,
             userFlags: "test flag",
             userSortPosition: 1,
           },

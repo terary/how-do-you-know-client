@@ -1,6 +1,5 @@
 export interface IQuestionFEMeta {
   isSkipped: boolean;
-  isUserFlagged: boolean;
   userFlags: string;
   userSortPosition: number;
 }

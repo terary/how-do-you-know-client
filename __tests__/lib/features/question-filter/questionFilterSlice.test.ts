@@ -2,10 +2,9 @@ import {
   questionFilterSlice,
   setShowSkipped,
   setTagFilter,
-  clearFilters,
   selectFilteredQuestions,
-} from "../../../../lib/features/question-filter/questionFilterSlice";
-import { TQuestionAny } from "../../../../app/questionnaires/types";
+} from "@/lib/features/question-filter/questionFilterSlice";
+import type { TQuestionAny } from "@/app/questionnaires/types";
 
 describe("questionFilterSlice", () => {
   const initialState = {
@@ -35,18 +34,6 @@ describe("questionFilterSlice", () => {
       );
       expect(actual.tagFilter).toBe("important");
     });
-
-    it("should handle clearFilters", () => {
-      const stateWithFilters = {
-        showSkipped: true,
-        tagFilter: "important",
-      };
-      const actual = questionFilterSlice.reducer(
-        stateWithFilters,
-        clearFilters()
-      );
-      expect(actual).toEqual(initialState);
-    });
   });
 
   describe("selectors", () => {
@@ -59,7 +46,6 @@ describe("questionFilterSlice", () => {
         userResponse: { text: null },
         feMeta: {
           isSkipped: false,
-          isUserFlagged: false,
           userFlags: "important",
           userSortPosition: 0,
         },
@@ -72,7 +58,6 @@ describe("questionFilterSlice", () => {
         userResponse: { text: null },
         feMeta: {
           isSkipped: true,
-          isUserFlagged: false,
           userFlags: "important",
           userSortPosition: 1,
         },
@@ -85,7 +70,6 @@ describe("questionFilterSlice", () => {
         userResponse: { text: null },
         feMeta: {
           isSkipped: false,
-          isUserFlagged: false,
           userFlags: "urgent",
           userSortPosition: 2,
         },

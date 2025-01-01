@@ -26,11 +26,10 @@
     "cancelEdit": "Cancelar Edición"
   },
   "questionnaire": {
+    "skipQuestion": "Saltar Pregunta",
+    "userTags": "Etiquetas de Usuario",
     "advanced": "Avanzado",
-    "skipQuestion": "Omitir Pregunta",
-    "flagQuestion": "Marcar Pregunta",
-    "userTags": "Etiquetas",
-    "sortPosition": "Posición de Ordenamiento",
+    "sortPosition": "Posición de Clasificación",
     "filterAndSort": "Filtrar y Ordenar",
     "filterByTag": "Filtrar por Etiqueta",
     "showSkipped": "Mostrar Omitidas",
