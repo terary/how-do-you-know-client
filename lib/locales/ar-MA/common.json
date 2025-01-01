@@ -27,10 +27,17 @@
   },
   "questionnaire": {
     "advanced": "متقدم",
-    "skipQuestion": "تجاوز السؤال",
-    "flagQuestion": "تأشير السؤال",
+    "skipQuestion": "تخطي السؤال",
+    "flagQuestion": "تعليم السؤال",
     "userNotes": "ملاحظات المستخدم",
-    "sortPosition": "موقع الترتيب"
+    "sortPosition": "موضع الترتيب",
+    "filterAndSort": "تصفية وترتيب",
+    "filterByTag": "تصفية حسب الوسم",
+    "showSkipped": "إظهار المتخطى",
+    "showAll": "إظهار الكل",
+    "clearAllMeta": "مسح كل البيانات",
+    "enterTagsSpaceSeparated": "أدخل الوسوم للتصفية...",
+    "useSpacesToSeparateTags": "استخدم المسافات لفصل الوسوم المتعددة"
   },
   "singleword": {
     "hide": "إخفاء",

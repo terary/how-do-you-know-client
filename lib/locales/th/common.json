@@ -30,7 +30,14 @@
     "skipQuestion": "ข้ามคำถาม",
     "flagQuestion": "ทำเครื่องหมายคำถาม",
     "userNotes": "บันทึกของผู้ใช้",
-    "sortPosition": "ตำแหน่งการเรียงลำดับ"
+    "sortPosition": "ตำแหน่งการเรียง",
+    "filterAndSort": "กรองและเรียง",
+    "filterByTag": "กรองตามแท็ก",
+    "showSkipped": "แสดงที่ข้าม",
+    "showAll": "แสดงทั้งหมด",
+    "clearAllMeta": "ล้างข้อมูลทั้งหมด",
+    "enterTagsSpaceSeparated": "ป้อนแท็กเพื่อกรอง...",
+    "useSpacesToSeparateTags": "ใช้เว้นวรรคเพื่อแยกแท็กหลายรายการ"
   },
   "singleword": {
     "hide": "ซ่อน",

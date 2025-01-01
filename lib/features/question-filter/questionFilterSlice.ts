@@ -47,8 +47,16 @@ export const selectFilteredQuestions = createSelector(
         return false;
       }
 
-      if (tagFilter && !question.feMeta?.userFlags?.includes(tagFilter)) {
-        return false;
+      if (tagFilter) {
+        const searchText = tagFilter.toLowerCase().trim();
+        const questionTags =
+          question.feMeta?.userFlags?.toLowerCase().trim().split(/\s+/) || [];
+
+        // If no tags in question, don't match
+        if (questionTags.length === 0) return false;
+
+        // Check if any question tag contains the search text
+        return questionTags.some((tag) => tag.includes(searchText));
       }
 
       return true;

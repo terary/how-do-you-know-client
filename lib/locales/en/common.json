@@ -35,7 +35,9 @@
     "filterByTag": "Filter by Tag",
     "showSkipped": "Show Skipped",
     "showAll": "Show All",
-    "clearAllMeta": "Clear All Meta"
+    "clearAllMeta": "Clear All Meta",
+    "enterTagsSpaceSeparated": "Enter tags to filter...",
+    "useSpacesToSeparateTags": "Use spaces to separate multiple tags"
   },
   "singleword": {
     "hide": "Hide",

@@ -58,6 +58,9 @@ export const AdvancedQuestionSortFilter: FC = () => {
                 label={t("questionnaire.filterByTag")}
                 value={tagFilter}
                 onChange={(e) => dispatch(setTagFilter(e.target.value))}
+                placeholder={t("questionnaire.enterTagsSpaceSeparated")}
+                helperText={t("questionnaire.useSpacesToSeparateTags")}
+                fullWidth
               />
               <Button type="submit" variant="contained">
                 {t("singleword.apply")}
