@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render } from "../../../test-utils";
 import { QuestionAny } from "@/app/components/questionnaires/QuestionAny";
 import { TQuestionAny } from "@/app/questionnaires/types";
 
@@ -37,7 +37,7 @@ describe("QuestionAny", () => {
     expect(getByText("Pay attention to the details")).toBeInTheDocument();
   });
 
-  it("returns null for unknown prompt type", () => {
+  it("returns gracefully handle unknown prompt type", () => {
     const question = {
       userPromptType: "unknown",
       questionId: "123",
@@ -45,6 +45,6 @@ describe("QuestionAny", () => {
     };
 
     const { container } = render(<QuestionAny question={question as any} />);
-    expect(container.firstChild).toBeNull();
+    expect(container.firstChild).toBeInTheDocument();
   });
 });

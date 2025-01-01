@@ -24,47 +24,50 @@ describe("QuestionList", () => {
     },
   };
 
+  const basePreloadedState = {
+    userResponseUI: {
+      questionMap: mockQuestions,
+      draftResponses: {},
+      isEditing: false,
+    },
+    questionFilter: {
+      showSkipped: false,
+      tagFilter: "",
+    },
+  };
+
   it("renders list of questions from redux store", () => {
-    const preloadedState = {
-      userResponseUI: {
-        questionMap: mockQuestions,
-        draftResponses: {},
-        isEditing: false,
-      },
-    };
-
-    const { getByText } = render(<QuestionList />, { preloadedState });
-
+    const { getByText } = render(<QuestionList />, {
+      preloadedState: basePreloadedState,
+    });
     expect(getByText("First question")).toBeInTheDocument();
     expect(getByText("Second question")).toBeInTheDocument();
   });
 
   it("renders empty when no questions in store", () => {
     const preloadedState = {
+      ...basePreloadedState,
       userResponseUI: {
+        ...basePreloadedState.userResponseUI,
         questionMap: {},
-        draftResponses: {},
-        isEditing: false,
       },
     };
 
     const { container } = render(<QuestionList />, { preloadedState });
-
     expect(container.firstChild).toMatchSnapshot();
   });
 
   it("renders nothing when questionMap is undefined", () => {
     const preloadedState = {
+      ...basePreloadedState,
       userResponseUI: {
+        ...basePreloadedState.userResponseUI,
         questionMap: undefined,
-        draftResponses: {},
-        isEditing: false,
       },
     };
 
-    const { container } = render(<QuestionList />, { preloadedState });
-    const x = container.firstChild;
+    const { container } = render(<QuestionList />, { preloadedState } as any);
     expect(container.firstChild).toBeDefined();
-    expect(container.firstChild?.childNodes.length).toBe(0);
+    expect(container.firstChild?.childNodes.length).toBe(1); // Just the AdvancedQuestionSortFilter
   });
 });

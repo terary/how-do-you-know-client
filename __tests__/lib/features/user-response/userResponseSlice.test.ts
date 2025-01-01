@@ -5,6 +5,9 @@ import userResponseReducer, {
   commitDraftResponse,
   commitArrayValueDraftResponse,
   setIsEditing,
+  updateQuestionFEMeta,
+  unSkipAllQuestions,
+  resetAllFEMeta,
 } from "@/lib/features/user-response/userResponseSlice";
 import { userAnswersApiSlice } from "@/lib/features/user-response/userResponseApiSlice";
 import { TQuestionAny } from "@/app/questionnaires/types";
@@ -178,6 +181,11 @@ describe("userResponseSlice", () => {
           userResponseType: "free-text-255",
           userResponseHistory: [],
           userResponse: { text: null },
+          feMeta: {
+            isSkipped: false,
+            userFlags: "",
+            userSortPosition: 0,
+          },
         },
         {
           questionId: "q2",
@@ -186,6 +194,11 @@ describe("userResponseSlice", () => {
           userResponseType: "free-text-255",
           userResponseHistory: [],
           userResponse: { text: null },
+          feMeta: {
+            isSkipped: false,
+            userFlags: "",
+            userSortPosition: 1,
+          },
         },
       ];
 
@@ -201,6 +214,7 @@ describe("userResponseSlice", () => {
           questions: mockQuestions,
         },
       });
+
       expect(actual.questionMap).toEqual({
         q1: mockQuestions[0],
         q2: mockQuestions[1],
@@ -219,6 +233,202 @@ describe("userResponseSlice", () => {
         payload: {},
       });
       expect(actual.questionMap).toEqual({});
+    });
+  });
+
+  describe("updateQuestionFEMeta", () => {
+    it("should handle updateQuestionFEMeta when question exists", () => {
+      const initialQuestionState = {
+        ...initialState,
+        questionMap: {
+          q1: {
+            questionId: "q1",
+            userPromptType: "text",
+            userPromptText: "test question",
+            feMeta: {
+              isSkipped: false,
+              userFlags: "",
+              userSortPosition: 0,
+            },
+          },
+        },
+      };
+
+      const actual = userResponseReducer(
+        initialQuestionState as any,
+        updateQuestionFEMeta({
+          questionId: "q1",
+          feMeta: {
+            isSkipped: true,
+            userFlags: "test flag",
+            userSortPosition: 1,
+          },
+        })
+      );
+
+      expect(actual.questionMap.q1.feMeta).toEqual({
+        isSkipped: true,
+        userFlags: "test flag",
+        userSortPosition: 1,
+      });
+    });
+
+    it("should handle updateQuestionFEMeta when question does not exist", () => {
+      const actual = userResponseReducer(
+        initialState,
+        updateQuestionFEMeta({
+          questionId: "nonexistent",
+          feMeta: {
+            isSkipped: true,
+            userFlags: "test flag",
+            userSortPosition: 1,
+          },
+        })
+      );
+
+      // State should remain unchanged when question doesn't exist
+      expect(actual).toEqual(initialState);
+    });
+  });
+
+  describe("unSkipAllQuestions", () => {
+    it("should unSkip all questions", () => {
+      const stateWithSkippedQuestions = {
+        ...initialState,
+        questionMap: {
+          q1: {
+            questionId: "q1",
+            feMeta: {
+              isSkipped: true,
+              userFlags: "test",
+              userSortPosition: 0,
+            },
+          },
+          q2: {
+            questionId: "q2",
+            feMeta: {
+              isSkipped: true,
+              userFlags: "important",
+              userSortPosition: 1,
+            },
+          },
+        },
+      };
+
+      const actual = userResponseReducer(
+        stateWithSkippedQuestions as any,
+        unSkipAllQuestions()
+      );
+
+      expect(actual.questionMap.q1.feMeta!.isSkipped).toBe(false);
+      expect(actual.questionMap.q2.feMeta!.isSkipped).toBe(false);
+      // Verify other meta properties remain unchanged
+      expect(actual.questionMap.q1.feMeta!.userFlags).toBe("test");
+      expect(actual.questionMap.q2.feMeta!.userFlags).toBe("important");
+    });
+
+    it("should handle questions without feMeta", () => {
+      const stateWithMixedQuestions = {
+        ...initialState,
+        questionMap: {
+          q1: {
+            questionId: "q1",
+            feMeta: {
+              isSkipped: true,
+              userFlags: "test",
+              userSortPosition: 0,
+            },
+          },
+          q2: {
+            questionId: "q2", // No feMeta
+          },
+        },
+      };
+
+      const actual = userResponseReducer(
+        stateWithMixedQuestions as any,
+        unSkipAllQuestions()
+      );
+
+      expect(actual.questionMap.q1.feMeta!.isSkipped).toBe(false);
+      expect(actual.questionMap.q2.feMeta).toBeUndefined();
+    });
+  });
+
+  describe("resetAllFEMeta", () => {
+    it("should reset all FE meta with correct sort positions", () => {
+      const stateWithQuestions = {
+        ...initialState,
+        questionMap: {
+          q1: {
+            questionId: "q1",
+            feMeta: {
+              isSkipped: true,
+              userFlags: "test",
+              userSortPosition: 5,
+            },
+          },
+          q2: {
+            questionId: "q2",
+            feMeta: {
+              isSkipped: true,
+              userFlags: "important",
+              userSortPosition: 10,
+            },
+          },
+        },
+      };
+
+      const actual = userResponseReducer(
+        stateWithQuestions as any,
+        resetAllFEMeta()
+      );
+
+      expect(actual.questionMap.q1.feMeta!).toEqual({
+        isSkipped: false,
+        userFlags: "",
+        userSortPosition: 0,
+      });
+      expect(actual.questionMap.q2.feMeta!).toEqual({
+        isSkipped: false,
+        userFlags: "",
+        userSortPosition: 1,
+      });
+    });
+
+    it("should handle questions without existing feMeta", () => {
+      const stateWithMixedQuestions = {
+        ...initialState,
+        questionMap: {
+          q1: {
+            questionId: "q1",
+            feMeta: {
+              isSkipped: true,
+              userFlags: "test",
+              userSortPosition: 5,
+            },
+          },
+          q2: {
+            questionId: "q2", // No feMeta
+          },
+        },
+      };
+
+      const actual = userResponseReducer(
+        stateWithMixedQuestions as any,
+        resetAllFEMeta()
+      );
+
+      expect(actual.questionMap.q1.feMeta!).toEqual({
+        isSkipped: false,
+        userFlags: "",
+        userSortPosition: 0,
+      });
+      expect(actual.questionMap.q2.feMeta!).toEqual({
+        isSkipped: false,
+        userFlags: "",
+        userSortPosition: 1,
+      });
     });
   });
 });

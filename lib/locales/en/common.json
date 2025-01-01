@@ -25,10 +25,24 @@
     "changeAnswer": "Change Answer",
     "cancelEdit": "Cancel Edit"
   },
+  "questionnaire": {
+    "skipQuestion": "Skip Question",
+    "userTags": "User Tags",
+    "advanced": "Advanced",
+    "sortPosition": "Sort Position",
+    "filterAndSort": "Filter & Sort",
+    "filterByTag": "Filter by Tag",
+    "unSkipQuestions": "Un-skip Questions",
+    "showAll": "Show All",
+    "enterTagsSpaceSeparated": "Enter tags to filter...",
+    "useSpacesToSeparateTags": "Use spaces to separate multiple tags"
+  },
   "singleword": {
     "hide": "Hide",
     "show": "Show",
-    "save": "Save"
+    "save": "Save",
+    "apply": "Apply",
+    "reset": "Reset"
   },
   "settings": {
     "profile": "Profile",

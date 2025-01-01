@@ -76,6 +76,7 @@ export const AcceptedAnswer: FC<AcceptedAnswerProps> = ({ answer }) => {
         <DateOver24HoursTimeLessThan
           inputDate={new Date(answer.systemAcceptTimeUtc || 0)}
         />
+        )
         {/* {new Date(answer.systemAcceptTimeUtc || 0).toLocaleDateString()}): */}
       </Typography>
       <AcceptedAnswerUserResponse answer={answer} />

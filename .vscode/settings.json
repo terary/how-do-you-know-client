@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
-        "singleword"
-    ]
+    "singleword"
+  ],
+  "jest.runMode": "on-demand"
 }

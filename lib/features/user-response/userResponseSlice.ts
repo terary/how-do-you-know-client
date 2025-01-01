@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { userAnswersApiSlice } from "./userResponseApiSlice";
-import { TQuestionAny } from "@/app/questionnaires/types";
+import { TQuestionAny, IQuestionFEMeta } from "@/app/questionnaires/types";
 
 const notIn = (key: string, obj: Object) => !(key in obj);
 
@@ -36,6 +36,20 @@ const initialState: UserResponseState = {
   draftResponses: {},
   isEditing: false,
   questionMap: {},
+};
+
+const initializeFEMeta = (
+  question: TQuestionAny,
+  index: number
+): TQuestionAny => {
+  return {
+    ...question,
+    feMeta: {
+      isSkipped: false,
+      userFlags: "",
+      userSortPosition: index, // Initialize with array index position
+    },
+  };
 };
 
 export const userResponseSlice = createSlice({
@@ -98,6 +112,34 @@ export const userResponseSlice = createSlice({
     setIsEditing: (state, action: PayloadAction<boolean>) => {
       state.isEditing = action.payload;
     },
+    updateQuestionFEMeta: (
+      state,
+      action: PayloadAction<{
+        questionId: string;
+        feMeta: IQuestionFEMeta;
+      }>
+    ) => {
+      const question = state.questionMap[action.payload.questionId];
+      if (question) {
+        question.feMeta = action.payload.feMeta;
+      }
+    },
+    unSkipAllQuestions: (state) => {
+      Object.values(state.questionMap).forEach((question) => {
+        if (question.feMeta) {
+          question.feMeta.isSkipped = false;
+        }
+      });
+    },
+    resetAllFEMeta: (state) => {
+      Object.values(state.questionMap).forEach((question, index) => {
+        question.feMeta = {
+          isSkipped: false,
+          userFlags: "",
+          userSortPosition: index,
+        };
+      });
+    },
   },
   // Handle API states using extraReducers
   extraReducers: (builder) => {
@@ -114,10 +156,6 @@ export const userResponseSlice = createSlice({
           state.isEditing = false;
           const question = state.questionMap[action.payload.questionId];
           question.userResponseHistory?.push(action.payload);
-          console.log({
-            "userAnswersApiSlice.endpoints.setUserResponse.matchFulfilled":
-              action.payload,
-          });
           // Clear draft after successful submission
           delete state.draftResponses[action.payload.questionId];
         }
@@ -125,14 +163,11 @@ export const userResponseSlice = createSlice({
       .addMatcher(
         userAnswersApiSlice.endpoints.getQuestionnaire.matchFulfilled,
         (state, action) => {
-          const questionMap = (action.payload?.questions || []).reduce(
-            (acc, prev) => {
-              acc[prev.questionId] = prev;
-              return acc;
-            },
-            {} as TQuestionIdMap
-          );
-          state.questionMap = questionMap; // action.payload.questions || [];
+          const questions = action.payload.questions || [];
+          state.questionMap = questions.reduce((acc, question, index) => {
+            acc[question.questionId] = initializeFEMeta(question, index);
+            return acc;
+          }, {} as TQuestionIdMap);
         }
       );
   },
@@ -145,5 +180,8 @@ export const {
   setIsEditing,
   commitDraftResponse,
   commitArrayValueDraftResponse,
+  updateQuestionFEMeta,
+  unSkipAllQuestions,
+  resetAllFEMeta,
 } = userResponseSlice.actions;
 export default userResponseSlice.reducer;

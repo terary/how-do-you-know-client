@@ -25,10 +25,25 @@
     "changeAnswer": "Cambiar Respuesta",
     "cancelEdit": "Cancelar Edición"
   },
+  "questionnaire": {
+    "skipQuestion": "Saltar Pregunta",
+    "userTags": "Etiquetas de Usuario",
+    "advanced": "Avanzado",
+    "sortPosition": "Posición de Clasificación",
+    "filterAndSort": "Filtrar y Ordenar",
+    "filterByTag": "Filtrar por Etiqueta",
+    "showSkipped": "Mostrar Omitidas",
+    "showAll": "Mostrar Todo",
+    "clearAllMeta": "Borrar Todo Meta",
+    "enterTagsSpaceSeparated": "Ingrese etiquetas para filtrar...",
+    "useSpacesToSeparateTags": "Use espacios para separar múltiples etiquetas"
+  },
   "singleword": {
     "hide": "Ocultar",
     "show": "Mostrar",
-    "save": "Guardar"
+    "save": "Guardar",
+    "apply": "Aplicar",
+    "reset": "Restablecer"
   },
   "settings": {
     "profile": "Perfil",

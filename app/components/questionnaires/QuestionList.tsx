@@ -1,19 +1,18 @@
 import { FC } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
 import { QuestionAny } from "./QuestionAny";
 import { Card, CardContent } from "@mui/material";
-import { UserResponseContainer } from "./UserResponseContainer";
 import { TQuestionAny } from "@/app/questionnaires/types";
+import { AdvancedQuestionSortFilter } from "./AdvancedQuestionSortFilter";
+import { selectFilteredQuestions } from "@/lib/features/question-filter/questionFilterSlice";
 
 export const QuestionList: FC = () => {
-  const questionMap = useSelector(
-    (state: RootState) => state.userResponseUI.questionMap
-  );
+  const filteredQuestions = useSelector(selectFilteredQuestions);
 
   return (
     <div>
-      {Object.values(questionMap || {}).map((question) => (
+      <AdvancedQuestionSortFilter />
+      {filteredQuestions.map((question) => (
         <Card
           key={question.questionId}
           variant="elevation"
@@ -21,8 +20,7 @@ export const QuestionList: FC = () => {
           sx={{ margin: "10px" }}
         >
           <CardContent>
-            <QuestionAny question={question} />
-            <UserResponseContainer question={question as TQuestionAny} />
+            <QuestionAny question={question as TQuestionAny} />
           </CardContent>
         </Card>
       ))}
