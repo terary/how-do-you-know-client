@@ -1,6 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { authService } from "@/lib/services/authService";
 
+export interface CreateFodderPoolDto {
+  name: string;
+  description: string;
+  items?: { text: string }[];
+}
+
 export interface FodderPoolItem {
   id: string;
   pool_id: string;
@@ -11,6 +17,8 @@ export interface FodderPoolItem {
 
 export interface FodderPool {
   id: string;
+  name: string;
+  description: string;
   items: FodderPoolItem[];
 }
 
@@ -37,10 +45,11 @@ export const fodderPoolsApiSlice = createApi({
       query: (id) => `/${id}`,
       providesTags: (result, error, id) => [{ type: "FodderPools", id }],
     }),
-    createFodderPool: builder.mutation<FodderPool, void>({
-      query: () => ({
+    createFodderPool: builder.mutation<FodderPool, CreateFodderPoolDto>({
+      query: (data) => ({
         url: "/",
         method: "POST",
+        body: data,
       }),
       invalidatesTags: ["FodderPools"],
     }),

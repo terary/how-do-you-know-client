@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Box,
@@ -41,6 +41,7 @@ import {
   useUpdateItemsMutation,
   type FodderPool,
   type FodderPoolItem,
+  type CreateFodderPoolDto,
 } from "@/lib/features/fodder-pools/fodderPoolsApiSlice";
 
 interface ItemsDialogProps {
@@ -53,9 +54,15 @@ interface ItemsDialogProps {
 const ItemsDialog = ({ open, onClose, pool, onSubmit }: ItemsDialogProps) => {
   const { t } = useTranslation();
   const [newItem, setNewItem] = useState("");
-  const [items, setItems] = useState<string[]>(
-    pool?.items.map((item) => item.text) || []
-  );
+  const [items, setItems] = useState<string[]>([]);
+
+  // Reset items when pool changes or dialog opens
+  useEffect(() => {
+    if (open) {
+      setItems(pool?.items.map((item) => item.text) || []);
+      setNewItem("");
+    }
+  }, [pool, open]);
 
   const handleAddItem = () => {
     if (newItem.trim()) {
@@ -70,7 +77,6 @@ const ItemsDialog = ({ open, onClose, pool, onSubmit }: ItemsDialogProps) => {
 
   const handleSubmit = () => {
     onSubmit(items);
-    onClose();
   };
 
   return (
@@ -96,9 +102,9 @@ const ItemsDialog = ({ open, onClose, pool, onSubmit }: ItemsDialogProps) => {
             </Button>
           </Box>
           <List>
-            {items.map((item) => (
+            {items.map((item, index) => (
               <ListItem
-                key={item}
+                key={index}
                 secondaryAction={
                   <IconButton
                     edge="end"
@@ -125,6 +131,78 @@ const ItemsDialog = ({ open, onClose, pool, onSubmit }: ItemsDialogProps) => {
   );
 };
 
+interface PoolDialogProps {
+  open: boolean;
+  onClose: () => void;
+  onSubmit: (data: CreateFodderPoolDto) => Promise<void>;
+  initialData?: Partial<CreateFodderPoolDto>;
+}
+
+const PoolDialog = ({
+  open,
+  onClose,
+  onSubmit,
+  initialData,
+}: PoolDialogProps) => {
+  const { t } = useTranslation();
+  const [formData, setFormData] = useState<CreateFodderPoolDto>({
+    name: initialData?.name || "",
+    description: initialData?.description || "",
+    items: initialData?.items || [],
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = () => {
+    onSubmit(formData);
+  };
+
+  return (
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+      <DialogTitle>
+        {initialData ? t("fodderPools.editPool") : t("fodderPools.createPool")}
+      </DialogTitle>
+      <DialogContent>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
+          <TextField
+            fullWidth
+            label={t("fodderPools.name")}
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          <TextField
+            fullWidth
+            label={t("fodderPools.description")}
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            multiline
+            rows={3}
+          />
+        </Box>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>{t("singleword.cancel")}</Button>
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          disabled={!formData.name.trim()}
+        >
+          {t("singleword.save")}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 export default function FodderPoolsPage() {
   const { t } = useTranslation();
   const { data: pools = [], isLoading } = useGetFodderPoolsQuery();
@@ -132,15 +210,17 @@ export default function FodderPoolsPage() {
   const [deleteFodderPool] = useDeleteFodderPoolMutation();
   const [updateItems] = useUpdateItemsMutation();
 
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [itemsDialogOpen, setItemsDialogOpen] = useState(false);
+  const [poolDialogOpen, setPoolDialogOpen] = useState(false);
   const [selectedPool, setSelectedPool] = useState<FodderPool | undefined>();
   const [error, setError] = useState<string | null>(null);
 
-  const handleCreate = async () => {
+  const handleCreateSubmit = async (data: CreateFodderPoolDto) => {
     try {
-      const pool = await createFodderPool().unwrap();
+      const pool = await createFodderPool(data).unwrap();
+      setPoolDialogOpen(false);
       setSelectedPool(pool);
-      setDialogOpen(true);
+      setItemsDialogOpen(true);
     } catch (error) {
       console.error("Failed to create fodder pool:", error);
       setError("Failed to create fodder pool");
@@ -164,7 +244,7 @@ export default function FodderPoolsPage() {
         id: selectedPool.id,
         items: items.map((item) => item.trim()).filter((item) => item !== ""),
       }).unwrap();
-      setDialogOpen(false);
+      setItemsDialogOpen(false);
       setSelectedPool(undefined);
     } catch (error) {
       console.error("Failed to update items:", error);
@@ -174,6 +254,8 @@ export default function FodderPoolsPage() {
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", flex: 1 },
+    { field: "name", headerName: t("fodderPools.name"), flex: 1 },
+    { field: "description", headerName: t("fodderPools.description"), flex: 1 },
     {
       field: "items",
       headerName: t("fodderPools.items"),
@@ -199,7 +281,7 @@ export default function FodderPoolsPage() {
           label={t("singleword.edit")}
           onClick={() => {
             setSelectedPool(params.row);
-            setDialogOpen(true);
+            setItemsDialogOpen(true);
           }}
         />,
         <GridActionsCellItem
@@ -230,7 +312,7 @@ export default function FodderPoolsPage() {
             <Button
               variant="contained"
               startIcon={<AddIcon />}
-              onClick={handleCreate}
+              onClick={() => setPoolDialogOpen(true)}
             >
               {t("fodderPools.createPool")}
             </Button>
@@ -250,10 +332,16 @@ export default function FodderPoolsPage() {
           />
         </Paper>
 
+        <PoolDialog
+          open={poolDialogOpen}
+          onClose={() => setPoolDialogOpen(false)}
+          onSubmit={handleCreateSubmit}
+        />
+
         <ItemsDialog
-          open={dialogOpen}
+          open={itemsDialogOpen}
           onClose={() => {
-            setDialogOpen(false);
+            setItemsDialogOpen(false);
             setSelectedPool(undefined);
           }}
           pool={selectedPool}
