@@ -9,6 +9,146 @@ paths:
           description: ""
       tags:
         - App
+  /users:
+    post:
+      operationId: UsersController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserDto"
+      responses:
+        "201":
+          description: The user has been successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateUserDto"
+        "400":
+          description: Bad request - invalid data.
+      summary: Create a new user
+      tags:
+        - users
+    get:
+      operationId: UsersController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: List of all users.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CreateUserDto"
+      security:
+        - bearer: []
+      summary: Get all users
+      tags:
+        - users
+  /users/{username}:
+    get:
+      operationId: UsersController_findOne
+      parameters:
+        - name: username
+          required: true
+          in: path
+          description: Username of the user to find
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The found user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateUserDto"
+        "404":
+          description: User not found.
+      security:
+        - bearer: []
+      summary: Get a user by username
+      tags:
+        - users
+    patch:
+      operationId: UsersController_update
+      parameters:
+        - name: username
+          required: true
+          in: path
+          description: Username of the user to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserDto"
+      responses:
+        "200":
+          description: The user has been successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateUserDto"
+        "400":
+          description: Bad request - invalid data.
+        "404":
+          description: User not found.
+      security:
+        - bearer: []
+      summary: Update a user
+      tags:
+        - users
+    delete:
+      operationId: UsersController_remove
+      parameters:
+        - name: username
+          required: true
+          in: path
+          description: Username of the user to delete
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The user has been successfully deleted.
+        "404":
+          description: User not found.
+      security:
+        - bearer: []
+      summary: Delete a user
+      tags:
+        - users
+  /auth/login:
+    post:
+      operationId: AuthController_login
+      parameters: []
+      responses:
+        "201":
+          description: ""
+      tags:
+        - Auth
+  /auth/profile:
+    get:
+      operationId: AuthController_getProfile
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - Auth
+  /dev-debug/test-database:
+    get:
+      operationId: DevDebugController_testDatabase
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
   /dev-debug:
     post:
       operationId: DevDebugController_create
@@ -122,106 +262,207 @@ paths:
           description: ""
       tags:
         - DevDebug
-  /auth/login:
-    post:
-      operationId: AuthController_signIn
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Function"
-      responses:
-        "200":
-          description: Returns JWT access token
-          content:
-            application/json:
-              schema:
-                properties:
-                  access_token:
-                    type: string
-      summary: Sign in to get access token
-      tags:
-        - auth
-  /auth/logout:
-    post:
-      operationId: AuthController_signOut
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Function"
-      responses:
-        "200":
-          description: Successfully signed out
-      security:
-        - bearer: []
-      summary: Sign out
-      tags:
-        - auth
-  /auth/profile:
+  /questions/templates:
     get:
-      description: Retrieves the authenticated user's profile information
-      operationId: AuthController_getProfile
+      operationId: QuestionsController_findAllTemplates
       parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ProfileResponseDto"
       responses:
         "200":
-          description: Returns the user profile
+          description: List of all question templates
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProfileResponseDto"
-        "401":
-          description: Unauthorized - Invalid or missing JWT token
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuestionTemplate"
       security:
         - bearer: []
-      summary: Get user profile
+      summary: Get all question templates
       tags:
-        - auth
+        - questions
     post:
-      description: Updates the authenticated user's profile information
-      operationId: AuthController_updateUserProfile
+      operationId: QuestionsController_createTemplate
       parameters: []
       requestBody:
         required: true
-        description: Profile update data
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateProfileDto"
-            examples:
-              example1:
-                summary: Profile Update Example
-                description: A sample profile update request
-                value:
-                  firstName: John
-                  lastName: Doe
-                  email: john.doe@example.com
+              $ref: "#/components/schemas/CreateTemplateDto"
       responses:
-        "200":
-          description: Returns the updated user profile
+        "201":
+          description: The question template has been created
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProfileResponseDto"
+                $ref: "#/components/schemas/QuestionTemplate"
         "400":
-          description: Bad Request - Invalid input data
-        "401":
-          description: Unauthorized - Invalid or missing JWT token
+          description: Invalid input
       security:
         - bearer: []
-      summary: Update user profile
+      summary: Create a new question template
       tags:
-        - auth
+        - questions
+  /questions/templates/{id}:
+    get:
+      operationId: QuestionsController_findTemplateById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the question template
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The question template
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionTemplate"
+        "404":
+          description: Template not found
+      security:
+        - bearer: []
+      summary: Get a question template by ID
+      tags:
+        - questions
+  /questions/templates/{id}/generate:
+    post:
+      operationId: QuestionsController_generateActual
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the question template
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateActualDto"
+      responses:
+        "201":
+          description: The actual question has been generated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionActual"
+        "400":
+          description: Invalid input
+        "404":
+          description: Template not found
+      security:
+        - bearer: []
+      summary: Generate an actual question from a template
+      tags:
+        - questions
+  /questions/actuals/{id}:
+    get:
+      operationId: QuestionsController_findActualById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the actual question
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The actual question
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionActual"
+        "404":
+          description: Question not found
+      security:
+        - bearer: []
+      summary: Get an actual question by ID
+      tags:
+        - questions
+  /fodder-pools:
+    get:
+      operationId: FodderPoolsController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - FodderPools
+    post:
+      operationId: FodderPoolsController_create
+      parameters: []
+      responses:
+        "201":
+          description: ""
+      tags:
+        - FodderPools
+  /fodder-pools/{id}:
+    get:
+      operationId: FodderPoolsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags:
+        - FodderPools
+    delete:
+      operationId: FodderPoolsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags:
+        - FodderPools
+  /fodder-pools/{id}/items:
+    post:
+      operationId: FodderPoolsController_addItems
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        "201":
+          description: ""
+      tags:
+        - FodderPools
+  /fodder-pools/{poolId}/items:
+    delete:
+      operationId: FodderPoolsController_removeItems
+      parameters:
+        - name: poolId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags:
+        - FodderPools
 info:
   title: How Do You Know API
   description: The How Do You Know API description
@@ -236,52 +477,164 @@ components:
       bearerFormat: JWT
       type: http
   schemas:
+    CreateUserDto:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Unique username for the user
+          example: johndoe
+        firstName:
+          type: string
+          description: First name of the user
+          example: John
+        lastName:
+          type: string
+          description: Last name of the user
+          example: Doe
+        email:
+          type: string
+          description: Email address of the user
+          example: john.doe@example.com
+        password:
+          type: string
+          description: Password for the user account
+          example: strongPassword123
+        roles:
+          type: array
+          description: User roles
+          example:
+            - student
+            - teacher
+          items:
+            type: string
+            enum:
+              - student
+              - teacher
+              - admin
+      required:
+        - username
+        - firstName
+        - lastName
+        - email
+        - password
+        - roles
+    UpdateUserDto:
+      type: object
+      properties: {}
     CreateDevDebugDto:
       type: object
       properties: {}
     UpdateDevDebugDto:
       type: object
       properties: {}
-    Function:
+    QuestionTemplate:
       type: object
       properties: {}
-    ProfileResponseDto:
+    MediaDto:
       type: object
       properties:
-        username:
+        mediaContentType:
           type: string
-        firstName:
+          enum:
+            - audio/mpeg
+            - video/mp4
+          description: Content type of the media
+        height:
+          type: number
+          description: Height of the media in pixels
+        width:
+          type: number
+          description: Width of the media in pixels
+        url:
           type: string
-        lastName:
+          description: URL of the media content
+        specialInstructionText:
           type: string
-        email:
+          description: Special instructions for the media
+        duration:
+          type: number
+          description: Duration in seconds
+        fileSize:
+          type: number
+          description: File size in bytes
+        thumbnailUrl:
           type: string
-        createdAt:
-          format: date-time
+          description: Thumbnail URL for video content
+      required:
+        - mediaContentType
+        - height
+        - width
+        - url
+    ValidAnswerDto:
+      type: object
+      properties:
+        text:
           type: string
-        updatedAt:
-          format: date-time
+          description: Text answer
+        booleanValue:
+          type: boolean
+          description: Boolean answer
+        fodderPoolId:
           type: string
-        roles:
+          description: ID of the fodder pool
+    CreateTemplateDto:
+      type: object
+      properties:
+        userPromptType:
+          type: string
+          enum:
+            - text
+            - multimedia
+          description: Type of user prompt
+        userResponseType:
+          type: string
+          enum:
+            - free-text-255
+            - multiple-choice-4
+            - true-false
+          description: Type of user response
+        exclusivityType:
+          type: string
+          enum:
+            - exam-only
+            - practice-only
+            - exam-practice-both
+          description: Question exclusivity type
+        userPromptText:
+          type: string
+          description: Text of the user prompt
+        instructionText:
+          type: string
+          description: Instruction text
+        media:
           type: array
           items:
-            type: string
+            $ref: "#/components/schemas/MediaDto"
+        validAnswers:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidAnswerDto"
       required:
-        - username
-        - firstName
-        - lastName
-        - email
-        - createdAt
-        - updatedAt
-        - roles
-    UpdateProfileDto:
+        - userPromptType
+        - userResponseType
+        - exclusivityType
+        - validAnswers
+    GenerateActualDto:
       type: object
       properties:
-        displayName:
+        examType:
           type: string
-          description: The user's display name
-          example: John Doe
-        email:
-          type: string
-          description: The user's email address
-          example: john@example.com
+          enum:
+            - practice
+            - live
+          description: Type of exam
+        sectionPosition:
+          type: number
+          description: Position in the section
+      required:
+        - examType
+        - sectionPosition
+    QuestionActual:
+      type: object
+      properties: {}

@@ -23,6 +23,7 @@ import {
   BugReport,
   ChevronLeft,
   AccountCircle,
+  Group as GroupIcon,
 } from "@mui/icons-material";
 
 const DRAWER_WIDTH = 240;
@@ -41,6 +42,7 @@ export const Sidebar = () => {
       label: t("nav.questionnaires"),
       icon: <QuestionAnswer />,
     },
+    { path: "/users", label: t("nav.users"), icon: <GroupIcon /> },
     { path: "/error-test", label: t("nav.errorTest"), icon: <BugReport /> },
     { path: "/profile", label: t("settings.profile"), icon: <AccountCircle /> },
   ];

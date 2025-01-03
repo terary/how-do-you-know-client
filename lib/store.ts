@@ -4,6 +4,7 @@ import { userAnswersApiSlice } from "./features/user-response/userResponseApiSli
 import { userResponseSlice } from "./features/user-response/userResponseSlice";
 import { authApiSlice } from "./features/auth/authApiSlice";
 import { questionFilterSlice } from "./features/question-filter/questionFilterSlice";
+import { usersApiSlice } from "./features/users/usersApiSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -11,12 +12,14 @@ export const makeStore = () => {
       userResponseUI: userResponseSlice.reducer,
       [userAnswersApiSlice.reducerPath]: userAnswersApiSlice.reducer,
       [authApiSlice.reducerPath]: authApiSlice.reducer,
+      [usersApiSlice.reducerPath]: usersApiSlice.reducer,
       questionFilter: questionFilterSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => {
       return getDefaultMiddleware().concat(
         userAnswersApiSlice.middleware,
-        authApiSlice.middleware
+        authApiSlice.middleware,
+        usersApiSlice.middleware
       );
     },
   });

@@ -4,7 +4,8 @@
     "verify": "Verificar",
     "quotes": "Citas",
     "questionnaires": "Cuestionarios",
-    "errorTest": "Probar Errores"
+    "errorTest": "Probar Errores",
+    "users": "Usuarios"
   },
   "footer": {
     "learn": "Aprender",
@@ -43,11 +44,27 @@
     "show": "Mostrar",
     "save": "Guardar",
     "apply": "Aplicar",
-    "reset": "Restablecer"
+    "reset": "Restablecer",
+    "cancel": "Cancelar",
+    "create": "Crear",
+    "edit": "Editar",
+    "delete": "Eliminar"
   },
   "settings": {
     "profile": "Perfil",
     "account": "Cuenta",
     "logout": "Cerrar sesión"
+  },
+  "users": {
+    "title": "Usuarios",
+    "createUser": "Crear Usuario",
+    "editUser": "Editar Usuario",
+    "username": "Nombre de Usuario",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "roles": "Roles",
+    "actions": "Acciones"
   }
 }
