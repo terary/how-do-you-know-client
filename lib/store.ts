@@ -5,6 +5,7 @@ import { userResponseSlice } from "./features/user-response/userResponseSlice";
 import { authApiSlice } from "./features/auth/authApiSlice";
 import { questionFilterSlice } from "./features/question-filter/questionFilterSlice";
 import { usersApiSlice } from "./features/users/usersApiSlice";
+import { fodderPoolsApiSlice } from "./features/fodder-pools/fodderPoolsApiSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -13,13 +14,15 @@ export const makeStore = () => {
       [userAnswersApiSlice.reducerPath]: userAnswersApiSlice.reducer,
       [authApiSlice.reducerPath]: authApiSlice.reducer,
       [usersApiSlice.reducerPath]: usersApiSlice.reducer,
+      [fodderPoolsApiSlice.reducerPath]: fodderPoolsApiSlice.reducer,
       questionFilter: questionFilterSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => {
       return getDefaultMiddleware().concat(
         userAnswersApiSlice.middleware,
         authApiSlice.middleware,
-        usersApiSlice.middleware
+        usersApiSlice.middleware,
+        fodderPoolsApiSlice.middleware
       );
     },
   });

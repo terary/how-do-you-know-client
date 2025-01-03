@@ -24,6 +24,7 @@ import {
   ChevronLeft,
   AccountCircle,
   Group as GroupIcon,
+  Storage as StorageIcon,
 } from "@mui/icons-material";
 
 const DRAWER_WIDTH = 240;
@@ -43,6 +44,11 @@ export const Sidebar = () => {
       icon: <QuestionAnswer />,
     },
     { path: "/users", label: t("nav.users"), icon: <GroupIcon /> },
+    {
+      path: "/fodder-pools",
+      label: t("nav.fodderPools"),
+      icon: <StorageIcon />,
+    },
     { path: "/error-test", label: t("nav.errorTest"), icon: <BugReport /> },
     { path: "/profile", label: t("settings.profile"), icon: <AccountCircle /> },
   ];

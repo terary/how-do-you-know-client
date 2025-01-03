@@ -389,50 +389,17 @@ paths:
       parameters: []
       responses:
         "200":
-          description: List of all fodder pools
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/FodderPool"
-      summary: Get all fodder pools
+          description: ""
       tags:
-        - fodder-pools
+        - FodderPools
     post:
       operationId: FodderPoolsController_create
       parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: Historical Events
-                description:
-                  type: string
-                  example: Important dates in history
-                items:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      text:
-                        type: string
-                        example: July 4, 1776
       responses:
         "201":
-          description: The fodder pool has been created
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FodderPool"
-      summary: Create a new fodder pool
+          description: ""
       tags:
-        - fodder-pools
+        - FodderPools
   /fodder-pools/{id}:
     get:
       operationId: FodderPoolsController_findOne
@@ -440,34 +407,26 @@ paths:
         - name: id
           required: true
           in: path
-          description: ID of the fodder pool
           schema:
             type: string
       responses:
         "200":
-          description: The fodder pool
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FodderPool"
-      summary: Get a fodder pool by ID
+          description: ""
       tags:
-        - fodder-pools
+        - FodderPools
     delete:
       operationId: FodderPoolsController_remove
       parameters:
         - name: id
           required: true
           in: path
-          description: ID of the fodder pool
           schema:
             type: string
       responses:
         "200":
-          description: The fodder pool has been deleted
-      summary: Delete a fodder pool
+          description: ""
       tags:
-        - fodder-pools
+        - FodderPools
   /fodder-pools/{id}/items:
     post:
       operationId: FodderPoolsController_addItems
@@ -475,35 +434,21 @@ paths:
         - name: id
           required: true
           in: path
-          description: ID of the fodder pool
           schema:
             type: string
       requestBody:
         required: true
-        description: Array of fodder items to add
         content:
           application/json:
             schema:
               type: array
               items:
-                $ref: "#/components/schemas/FodderItemDto"
-            examples:
-              items:
-                value:
-                  - text: July 4, 1776
-                  - text: December 7, 1941
+                type: string
       responses:
         "201":
-          description: The items have been added to the fodder pool
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/FodderItem"
-      summary: Add items to a fodder pool
+          description: ""
       tags:
-        - fodder-pools
+        - FodderPools
   /fodder-pools/{poolId}/items:
     delete:
       operationId: FodderPoolsController_removeItems
@@ -511,29 +456,13 @@ paths:
         - name: poolId
           required: true
           in: path
-          description: ID of the fodder pool
           schema:
             type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                itemIds:
-                  type: array
-                  items:
-                    type: string
-                  example:
-                    - item-id-1
-                    - item-id-2
       responses:
         "200":
-          description: The items have been removed from the fodder pool
-      summary: Remove items from a fodder pool
+          description: ""
       tags:
-        - fodder-pools
+        - FodderPools
 info:
   title: How Do You Know API
   description: The How Do You Know API description
@@ -707,20 +636,5 @@ components:
         - examType
         - sectionPosition
     QuestionActual:
-      type: object
-      properties: {}
-    FodderPool:
-      type: object
-      properties: {}
-    FodderItemDto:
-      type: object
-      properties:
-        text:
-          type: string
-          description: The text content of the fodder item
-          example: July 4, 1776
-      required:
-        - text
-    FodderItem:
       type: object
       properties: {}

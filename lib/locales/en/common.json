@@ -5,7 +5,8 @@
     "quotes": "Quotes",
     "questionnaires": "Questionnaires",
     "errorTest": "Test Errors",
-    "users": "Users"
+    "users": "Users",
+    "fodderPools": "Fodder Pools"
   },
   "footer": {
     "learn": "Learn",
@@ -47,7 +48,8 @@
     "cancel": "Cancel",
     "create": "Create",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "add": "Add"
   },
   "settings": {
     "profile": "Profile",
@@ -64,6 +66,14 @@
     "email": "Email",
     "password": "Password",
     "roles": "Roles",
+    "actions": "Actions"
+  },
+  "fodderPools": {
+    "title": "Fodder Pools",
+    "createPool": "Create Pool",
+    "manageItems": "Manage Items",
+    "newItem": "New Item",
+    "items": "Items",
     "actions": "Actions"
   }
 }
