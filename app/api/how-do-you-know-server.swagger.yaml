@@ -639,9 +639,29 @@ components:
         mediaContentType:
           type: string
           enum:
+            - application/octet-stream
+            - image/jpeg
+            - image/png
+            - image/gif
+            - image/webp
+            - image/svg+xml
+            - image/*
             - audio/mpeg
+            - audio/wav
+            - audio/ogg
+            - audio/aac
+            - audio/webm
+            - audio/*
             - video/mp4
-          description: Content type of the media
+            - video/webm
+            - video/ogg
+            - video/avi
+            - video/quicktime
+            - video/*
+          description: >-
+            Content type of the media. Use */* types for iframe/embedded
+            content.
+          example: video/mp4
         height:
           type: number
           description: Height of the media in pixels

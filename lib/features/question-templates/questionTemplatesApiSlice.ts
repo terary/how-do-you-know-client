@@ -16,6 +16,36 @@ export type ExclusivityType =
   | "practice-only"
   | "exam-practice-both";
 
+export interface MediaDto {
+  mediaContentType:
+    | "application/octet-stream"
+    | "image/jpeg"
+    | "image/png"
+    | "image/gif"
+    | "image/webp"
+    | "image/svg+xml"
+    | "image/*"
+    | "audio/mpeg"
+    | "audio/wav"
+    | "audio/ogg"
+    | "audio/aac"
+    | "audio/webm"
+    | "audio/*"
+    | "video/mp4"
+    | "video/webm"
+    | "video/ogg"
+    | "video/avi"
+    | "video/quicktime"
+    | "video/*";
+  height: number;
+  width: number;
+  url: string;
+  specialInstructionText?: string;
+  duration?: number;
+  fileSize?: number;
+  thumbnailUrl?: string;
+}
+
 export interface ValidAnswerDto {
   text?: string;
   booleanValue?: boolean;
@@ -30,6 +60,7 @@ export interface QuestionTemplate {
   userPromptText: string;
   instructionText: string;
   validAnswers: ValidAnswerDto[];
+  media?: MediaDto[];
   createdAt: string;
   updatedAt: string;
 }
@@ -41,6 +72,7 @@ export interface CreateTemplateDto {
   userPromptText: string;
   instructionText: string;
   validAnswers: ValidAnswerDto[];
+  media?: MediaDto[];
 }
 
 export interface UpdateTemplateDto extends Partial<CreateTemplateDto> {}

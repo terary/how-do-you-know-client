@@ -20,6 +20,11 @@ import {
   Snackbar,
   Alert,
   SelectChangeEvent,
+  ListSubheader,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  IconButton,
 } from "@mui/material";
 import {
   DataGrid,
@@ -32,6 +37,7 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Add as AddIcon,
+  ExpandMore as ExpandMoreIcon,
 } from "@mui/icons-material";
 import { ProtectedRoute } from "../components/auth/ProtectedRoute";
 import {
@@ -45,8 +51,13 @@ import {
   type UserPromptType,
   type UserResponseType,
   type ExclusivityType,
+  type MediaDto,
 } from "@/lib/features/question-templates/questionTemplatesApiSlice";
 import { useGetFodderPoolsQuery } from "@/lib/features/fodder-pools/fodderPoolsApiSlice";
+
+interface ExtendedCreateTemplateDto extends CreateTemplateDto {
+  media?: MediaDto[];
+}
 
 interface TemplateDialogProps {
   open: boolean;
@@ -67,6 +78,142 @@ const EXCLUSIVITY_TYPES: ExclusivityType[] = [
   "exam-practice-both",
 ];
 
+interface QuestionPreviewProps {
+  template: CreateTemplateDto;
+}
+
+const TextPrompt: React.FC<{ text: string }> = ({ text }) => {
+  if (!text) return null;
+
+  return (
+    <Box sx={{ mb: 2 }}>
+      <Typography variant="body1">{text}</Typography>
+    </Box>
+  );
+};
+
+const MultimediaPrompt: React.FC<{ text: string; media?: MediaDto[] }> = ({
+  text,
+  media,
+}) => {
+  const renderMediaItem = (mediaItem: MediaDto, index: number) => {
+    return (
+      <Box
+        key={index}
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 1,
+        }}
+      >
+        {/* Media content */}
+        {mediaItem.mediaContentType.startsWith("image/") ? (
+          <img
+            src={mediaItem.url}
+            alt={`${text} - media ${index + 1}`}
+            width={mediaItem.width || undefined}
+            height={mediaItem.height || undefined}
+            style={{
+              maxWidth: "100%",
+              maxHeight: "400px",
+              objectFit: "contain",
+            }}
+          />
+        ) : (
+          <Typography variant="body2" color="text.secondary">
+            {mediaItem.mediaContentType} Content Placeholder
+          </Typography>
+        )}
+
+        {/* Special instructions */}
+        {mediaItem.specialInstructionText && (
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              fontStyle: "italic",
+              bgcolor: "background.paper",
+              p: 1,
+              borderRadius: 1,
+              width: "100%",
+              textAlign: "center",
+            }}
+          >
+            {mediaItem.specialInstructionText}
+          </Typography>
+        )}
+      </Box>
+    );
+  };
+
+  return (
+    <Box sx={{ mb: 2 }}>
+      <Paper
+        sx={{
+          p: 2,
+          bgcolor: "action.hover",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 2,
+        }}
+      >
+        {media?.map((item, index) => renderMediaItem(item, index))}
+        <Typography variant="body1">{text}</Typography>
+      </Paper>
+    </Box>
+  );
+};
+
+const QuestionActualDemo: React.FC<QuestionPreviewProps> = ({ template }) => {
+  const renderPrompt = () => {
+    switch (template.userPromptType) {
+      case "text":
+        return <TextPrompt text={template.userPromptText} />;
+      case "multimedia":
+        return (
+          <MultimediaPrompt
+            text={template.userPromptText}
+            media={template.media}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <Box sx={{ height: "100%", p: 2, bgcolor: "background.paper" }}>
+      <Typography variant="h6" gutterBottom>
+        Question Preview
+      </Typography>
+
+      {/* Instruction text if present */}
+      {template.instructionText && (
+        <Typography
+          variant="body2"
+          sx={{
+            mb: 2,
+            p: 1,
+            bgcolor: "info.main",
+            color: "info.contrastText",
+            borderRadius: 1,
+          }}
+        >
+          {template.instructionText}
+        </Typography>
+      )}
+
+      {/* Question prompt with visual container */}
+      <Paper sx={{ p: 2, mb: 2, border: 1, borderColor: "primary.main" }}>
+        {renderPrompt()}
+      </Paper>
+    </Box>
+  );
+};
+
 const TemplateDialog = ({
   open,
   onClose,
@@ -75,13 +222,14 @@ const TemplateDialog = ({
 }: TemplateDialogProps) => {
   const { t } = useTranslation();
   const { data: fodderPools = [] } = useGetFodderPoolsQuery();
-  const [formData, setFormData] = useState<CreateTemplateDto>({
+  const [formData, setFormData] = useState<ExtendedCreateTemplateDto>({
     userPromptType: "text",
     userResponseType: "free-text-255",
     exclusivityType: "practice-only",
     userPromptText: "",
     instructionText: "",
     validAnswers: [],
+    media: [],
   });
 
   // Update form data when dialog opens or initialData changes
@@ -94,6 +242,7 @@ const TemplateDialog = ({
         userPromptText: initialData?.userPromptText || "",
         instructionText: initialData?.instructionText || "",
         validAnswers: initialData?.validAnswers || [],
+        media: initialData?.media || [],
       });
     }
   }, [open, initialData]);
@@ -145,127 +294,509 @@ const TemplateDialog = ({
     }));
   };
 
+  const guessMediaType = (url: string): MediaDto["mediaContentType"] | null => {
+    // Convert to lowercase for case-insensitive matching
+    const lowercaseUrl = url.toLowerCase();
+
+    // Extract the filename part before any query parameters
+    const urlWithoutQuery = lowercaseUrl.split("?")[0];
+
+    // Helper function to check file extension
+    const hasExtension = (ext: string): boolean => {
+      const pattern = new RegExp(`\\.${ext}(?:\\?|$)`);
+      return pattern.test(lowercaseUrl);
+    };
+
+    // Image types
+    if (hasExtension("jpe?g")) return "image/jpeg";
+    if (hasExtension("png")) return "image/png";
+    if (hasExtension("gif")) return "image/gif";
+    if (hasExtension("webp")) return "image/webp";
+    if (hasExtension("svg")) return "image/svg+xml";
+
+    // Audio types
+    if (hasExtension("mp3")) return "audio/mpeg";
+    if (hasExtension("wav")) return "audio/wav";
+    if (hasExtension("ogg")) return "audio/ogg";
+    if (hasExtension("aac")) return "audio/aac";
+    if (hasExtension("weba")) return "audio/webm";
+
+    // Video types
+    if (hasExtension("mp4")) return "video/mp4";
+    if (hasExtension("webm")) return "video/webm";
+    if (hasExtension("ogv")) return "video/ogg";
+    if (hasExtension("avi")) return "video/avi";
+    if (hasExtension("mov|qt")) return "video/quicktime";
+
+    return null;
+  };
+
+  const handleAddMedia = () => {
+    setFormData((prev) => ({
+      ...prev,
+      media: [
+        ...(prev.media || []),
+        {
+          mediaContentType: "application/octet-stream",
+          height: 0,
+          width: 0,
+          url: "",
+        },
+      ],
+    }));
+  };
+
+  const handleRemoveMedia = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      media: prev.media?.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleMediaChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+
+    // If URL is being changed, try to guess the media type
+    if (name === "url") {
+      const guessedType = guessMediaType(value);
+      if (guessedType) {
+        console.log("Guessed media type:", guessedType, "for URL:", value);
+      } else {
+        console.log("Could not guess media type for URL:", value);
+      }
+
+      setFormData((prev) => {
+        const newMedia = [...(prev.media || [])];
+        newMedia[index] = {
+          ...newMedia[index],
+          mediaContentType:
+            guessedType ||
+            newMedia[index]?.mediaContentType ||
+            "application/octet-stream",
+          height: newMedia[index]?.height || 0,
+          width: newMedia[index]?.width || 0,
+          url: value,
+        };
+        return {
+          ...prev,
+          media: newMedia,
+        };
+      });
+      return;
+    }
+
+    setFormData((prev) => {
+      const newMedia = [...(prev.media || [])];
+      newMedia[index] = {
+        ...newMedia[index],
+        mediaContentType:
+          newMedia[index]?.mediaContentType || "application/octet-stream",
+        height: newMedia[index]?.height || 0,
+        width: newMedia[index]?.width || 0,
+        url: newMedia[index]?.url || "",
+        [name]:
+          name === "height" ||
+          name === "width" ||
+          name === "duration" ||
+          name === "fileSize"
+            ? Number(value) || 0
+            : value,
+      };
+
+      return {
+        ...prev,
+        media: newMedia,
+      };
+    });
+  };
+
+  const handleMediaTypeChange = (index: number, e: SelectChangeEvent) => {
+    setFormData((prev) => {
+      const newMedia = [...(prev.media || [])];
+      newMedia[index] = {
+        ...newMedia[index],
+        mediaContentType: e.target.value as MediaDto["mediaContentType"],
+        height: newMedia[index]?.height || 0,
+        width: newMedia[index]?.width || 0,
+        url: newMedia[index]?.url || "",
+      };
+
+      return {
+        ...prev,
+        media: newMedia,
+      };
+    });
+  };
+
   const handleSubmit = () => {
     onSubmit(formData);
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
       <DialogTitle>
         {initialData
           ? t("questionTemplates.editTemplate")
           : t("questionTemplates.createTemplate")}
       </DialogTitle>
       <DialogContent>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
-          <FormControl fullWidth>
-            <InputLabel>{t("questionTemplates.userPromptType")}</InputLabel>
-            <Select
-              name="userPromptType"
-              value={formData.userPromptType}
-              onChange={handlePromptTypeChange}
-              label={t("questionTemplates.userPromptType")}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 3, mt: 2 }}>
+          {/* Top section: Question Editor and Preview side by side */}
+          <Box sx={{ display: "flex", gap: 2 }}>
+            {/* Left panel - Question Editor */}
+            <Box
+              sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}
             >
-              {USER_PROMPT_TYPES.map((type) => (
-                <MenuItem key={type} value={type}>
-                  {t(`questionTemplates.promptTypes.${type}`)}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl fullWidth>
-            <InputLabel>{t("questionTemplates.userResponseType")}</InputLabel>
-            <Select
-              name="userResponseType"
-              value={formData.userResponseType}
-              onChange={handleResponseTypeChange}
-              label={t("questionTemplates.userResponseType")}
-            >
-              {USER_RESPONSE_TYPES.map((type) => (
-                <MenuItem key={type} value={type}>
-                  {t(`questionTemplates.responseTypes.${type}`)}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl fullWidth>
-            <InputLabel>{t("questionTemplates.exclusivityType")}</InputLabel>
-            <Select
-              name="exclusivityType"
-              value={formData.exclusivityType}
-              onChange={handleExclusivityTypeChange}
-              label={t("questionTemplates.exclusivityType")}
-            >
-              {EXCLUSIVITY_TYPES.map((type) => (
-                <MenuItem key={type} value={type}>
-                  {t(`questionTemplates.exclusivityTypes.${type}`)}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {formData.userResponseType === "multiple-choice-4" && (
-            <>
               <FormControl fullWidth>
-                <InputLabel>{t("questionTemplates.fodderPool")}</InputLabel>
+                <InputLabel>{t("questionTemplates.userPromptType")}</InputLabel>
                 <Select
-                  name="fodderPool"
-                  value={formData.validAnswers[0]?.fodderPoolId || ""}
-                  onChange={handleFodderPoolChange}
-                  label={t("questionTemplates.fodderPool")}
+                  name="userPromptType"
+                  value={formData.userPromptType}
+                  onChange={handlePromptTypeChange}
+                  label={t("questionTemplates.userPromptType")}
                 >
-                  {fodderPools.map((pool) => (
-                    <MenuItem key={pool.id} value={pool.id}>
-                      {pool.name}
+                  {USER_PROMPT_TYPES.map((type) => (
+                    <MenuItem key={type} value={type}>
+                      {t(`questionTemplates.promptTypes.${type}`)}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
 
+              <FormControl fullWidth>
+                <InputLabel>
+                  {t("questionTemplates.userResponseType")}
+                </InputLabel>
+                <Select
+                  name="userResponseType"
+                  value={formData.userResponseType}
+                  onChange={handleResponseTypeChange}
+                  label={t("questionTemplates.userResponseType")}
+                >
+                  {USER_RESPONSE_TYPES.map((type) => (
+                    <MenuItem key={type} value={type}>
+                      {t(`questionTemplates.responseTypes.${type}`)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl fullWidth>
+                <InputLabel>
+                  {t("questionTemplates.exclusivityType")}
+                </InputLabel>
+                <Select
+                  name="exclusivityType"
+                  value={formData.exclusivityType}
+                  onChange={handleExclusivityTypeChange}
+                  label={t("questionTemplates.exclusivityType")}
+                >
+                  {EXCLUSIVITY_TYPES.map((type) => (
+                    <MenuItem key={type} value={type}>
+                      {t(`questionTemplates.exclusivityTypes.${type}`)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              {formData.userResponseType === "multiple-choice-4" && (
+                <>
+                  <FormControl fullWidth>
+                    <InputLabel>{t("questionTemplates.fodderPool")}</InputLabel>
+                    <Select
+                      name="fodderPool"
+                      value={formData.validAnswers[0]?.fodderPoolId || ""}
+                      onChange={handleFodderPoolChange}
+                      label={t("questionTemplates.fodderPool")}
+                    >
+                      {fodderPools.map((pool) => (
+                        <MenuItem key={pool.id} value={pool.id}>
+                          {pool.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  <TextField
+                    fullWidth
+                    label={t("questionTemplates.validAnswer")}
+                    name="validAnswer"
+                    value={formData.validAnswers[0]?.text || ""}
+                    onChange={(e) => {
+                      const text = e.target.value;
+                      setFormData((prev) => ({
+                        ...prev,
+                        validAnswers: [
+                          {
+                            ...prev.validAnswers[0],
+                            text,
+                          },
+                        ],
+                      }));
+                    }}
+                    required
+                  />
+                </>
+              )}
+
               <TextField
                 fullWidth
-                label={t("questionTemplates.validAnswer")}
-                name="validAnswer"
-                value={formData.validAnswers[0]?.text || ""}
-                onChange={(e) => {
-                  const text = e.target.value;
-                  setFormData((prev) => ({
-                    ...prev,
-                    validAnswers: [
-                      {
-                        ...prev.validAnswers[0],
-                        text,
-                      },
-                    ],
-                  }));
-                }}
+                label={t("questionTemplates.userPromptText")}
+                name="userPromptText"
+                value={formData.userPromptText}
+                onChange={handleTextChange}
+                multiline
+                rows={3}
                 required
               />
-            </>
+
+              <TextField
+                fullWidth
+                label={t("questionTemplates.instructionText")}
+                name="instructionText"
+                value={formData.instructionText}
+                onChange={handleTextChange}
+                multiline
+                rows={2}
+              />
+            </Box>
+
+            {/* Right panel - Preview */}
+            <Box
+              sx={{
+                flex: 1,
+                borderLeft: 1,
+                borderColor: "divider",
+                bgcolor: "background.default",
+              }}
+            >
+              <QuestionActualDemo template={formData} />
+            </Box>
+          </Box>
+
+          {/* Bottom section: Media Editor */}
+          {formData.userPromptType === "multimedia" && (
+            <Box
+              sx={{
+                borderTop: 1,
+                borderColor: "divider",
+                pt: 3,
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  mb: 2,
+                }}
+              >
+                <Typography variant="h6">Media Editor</Typography>
+                <Button
+                  startIcon={<AddIcon />}
+                  onClick={handleAddMedia}
+                  variant="outlined"
+                  size="small"
+                >
+                  Add Media
+                </Button>
+              </Box>
+
+              {formData.media?.map((mediaItem, index) => (
+                <Box key={index} sx={{ mb: 2 }}>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "flex-end", mb: 1 }}
+                  >
+                    <IconButton
+                      size="small"
+                      color="error"
+                      onClick={() => handleRemoveMedia(index)}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </Box>
+                  <Accordion defaultExpanded={!mediaItem.url}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                          width: "100%",
+                          minHeight: 50,
+                        }}
+                      >
+                        {mediaItem.url &&
+                          mediaItem.mediaContentType.startsWith("image/") && (
+                            <Box
+                              component="img"
+                              src={mediaItem.url}
+                              alt=""
+                              sx={{
+                                width: 50,
+                                height: 50,
+                                objectFit: "contain",
+                                borderRadius: 1,
+                                bgcolor: "background.paper",
+                              }}
+                            />
+                          )}
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            flexGrow: 1,
+                            minWidth: 0,
+                          }}
+                        >
+                          <Typography
+                            variant="subtitle2"
+                            sx={{ fontWeight: "medium" }}
+                          >
+                            Media {index + 1}
+                          </Typography>
+                          {mediaItem.specialInstructionText && (
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              noWrap
+                            >
+                              {mediaItem.specialInstructionText}
+                            </Typography>
+                          )}
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 2,
+                        }}
+                      >
+                        <TextField
+                          fullWidth
+                          label={t("questionTemplates.mediaUrl")}
+                          name="url"
+                          value={mediaItem.url}
+                          onChange={(e) =>
+                            handleMediaChange(
+                              index,
+                              e as React.ChangeEvent<HTMLInputElement>
+                            )
+                          }
+                          required
+                        />
+
+                        <FormControl fullWidth>
+                          <InputLabel>
+                            {t("questionTemplates.mediaContentType")}
+                          </InputLabel>
+                          <Select
+                            name="mediaContentType"
+                            value={mediaItem.mediaContentType}
+                            onChange={(e) => handleMediaTypeChange(index, e)}
+                            label={t("questionTemplates.mediaContentType")}
+                            required
+                          >
+                            <MenuItem value="application/octet-stream">
+                              Generic Binary
+                            </MenuItem>
+                            <ListSubheader>Images</ListSubheader>
+                            <MenuItem value="image/jpeg">JPEG Image</MenuItem>
+                            <MenuItem value="image/png">PNG Image</MenuItem>
+                            <MenuItem value="image/gif">GIF Image</MenuItem>
+                            <MenuItem value="image/webp">WebP Image</MenuItem>
+                            <MenuItem value="image/svg+xml">SVG Image</MenuItem>
+                            <MenuItem value="image/*">Any Image</MenuItem>
+                            <ListSubheader>Audio</ListSubheader>
+                            <MenuItem value="audio/mpeg">MP3 Audio</MenuItem>
+                            <MenuItem value="audio/wav">WAV Audio</MenuItem>
+                            <MenuItem value="audio/ogg">OGG Audio</MenuItem>
+                            <MenuItem value="audio/aac">AAC Audio</MenuItem>
+                            <MenuItem value="audio/webm">WebM Audio</MenuItem>
+                            <MenuItem value="audio/*">Any Audio</MenuItem>
+                            <ListSubheader>Video</ListSubheader>
+                            <MenuItem value="video/mp4">MP4 Video</MenuItem>
+                            <MenuItem value="video/webm">WebM Video</MenuItem>
+                            <MenuItem value="video/ogg">OGG Video</MenuItem>
+                            <MenuItem value="video/avi">AVI Video</MenuItem>
+                            <MenuItem value="video/quicktime">
+                              QuickTime Video
+                            </MenuItem>
+                            <MenuItem value="video/*">Any Video</MenuItem>
+                          </Select>
+                        </FormControl>
+
+                        <Box sx={{ display: "flex", gap: 2 }}>
+                          <TextField
+                            fullWidth
+                            type="number"
+                            label={t("questionTemplates.mediaWidth")}
+                            name="width"
+                            value={mediaItem.width}
+                            onChange={(e) =>
+                              handleMediaChange(
+                                index,
+                                e as React.ChangeEvent<HTMLInputElement>
+                              )
+                            }
+                          />
+                          <TextField
+                            fullWidth
+                            type="number"
+                            label={t("questionTemplates.mediaHeight")}
+                            name="height"
+                            value={mediaItem.height}
+                            onChange={(e) =>
+                              handleMediaChange(
+                                index,
+                                e as React.ChangeEvent<HTMLInputElement>
+                              )
+                            }
+                          />
+                        </Box>
+
+                        <TextField
+                          fullWidth
+                          label={t("questionTemplates.mediaInstructions")}
+                          name="specialInstructionText"
+                          value={mediaItem.specialInstructionText || ""}
+                          onChange={(e) =>
+                            handleMediaChange(
+                              index,
+                              e as React.ChangeEvent<HTMLInputElement>
+                            )
+                          }
+                          multiline
+                          rows={2}
+                        />
+
+                        {mediaItem.mediaContentType.startsWith("video/") && (
+                          <TextField
+                            fullWidth
+                            label={t("questionTemplates.thumbnailUrl")}
+                            name="thumbnailUrl"
+                            value={mediaItem.thumbnailUrl || ""}
+                            onChange={(e) =>
+                              handleMediaChange(
+                                index,
+                                e as React.ChangeEvent<HTMLInputElement>
+                              )
+                            }
+                          />
+                        )}
+                      </Box>
+                    </AccordionDetails>
+                  </Accordion>
+                </Box>
+              ))}
+            </Box>
           )}
-
-          <TextField
-            fullWidth
-            label={t("questionTemplates.userPromptText")}
-            name="userPromptText"
-            value={formData.userPromptText}
-            onChange={handleTextChange}
-            multiline
-            rows={3}
-            required
-          />
-
-          <TextField
-            fullWidth
-            label={t("questionTemplates.instructionText")}
-            name="instructionText"
-            value={formData.instructionText}
-            onChange={handleTextChange}
-            multiline
-            rows={2}
-          />
         </Box>
       </DialogContent>
       <DialogActions>
@@ -446,6 +977,9 @@ export default function QuestionTemplatesPage() {
                   userPromptText: selectedTemplate.userPromptText,
                   instructionText: selectedTemplate.instructionText,
                   validAnswers: selectedTemplate.validAnswers,
+                  ...((selectedTemplate as any).media && {
+                    media: (selectedTemplate as any).media,
+                  }),
                 }
               : undefined
           }
