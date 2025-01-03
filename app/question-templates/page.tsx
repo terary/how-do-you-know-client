@@ -82,6 +82,8 @@ interface QuestionPreviewProps {
   template: CreateTemplateDto;
 }
 
+const PREVIEW_UNAVAILABLE_IMAGE = "/assets/images/preview-unavailable.svg";
+
 const TextPrompt: React.FC<{ text: string }> = ({ text }) => {
   if (!text) return null;
 
@@ -109,23 +111,22 @@ const MultimediaPrompt: React.FC<{ text: string; media?: MediaDto[] }> = ({
         }}
       >
         {/* Media content */}
-        {mediaItem.mediaContentType.startsWith("image/") ? (
-          <img
-            src={mediaItem.url}
-            alt={`${text} - media ${index + 1}`}
-            width={mediaItem.width || undefined}
-            height={mediaItem.height || undefined}
-            style={{
-              maxWidth: "100%",
-              maxHeight: "400px",
-              objectFit: "contain",
-            }}
-          />
-        ) : (
-          <Typography variant="body2" color="text.secondary">
-            {mediaItem.mediaContentType} Content Placeholder
-          </Typography>
-        )}
+        <Box
+          component="img"
+          src={
+            mediaItem.mediaContentType.startsWith("image/")
+              ? mediaItem.url
+              : PREVIEW_UNAVAILABLE_IMAGE
+          }
+          alt={`${text} - media ${index + 1}`}
+          width={mediaItem.width || undefined}
+          height={mediaItem.height || undefined}
+          sx={{
+            maxWidth: "100%",
+            maxHeight: "400px",
+            objectFit: "contain",
+          }}
+        />
 
         {/* Special instructions */}
         {mediaItem.specialInstructionText && (
@@ -368,6 +369,12 @@ const TemplateDialog = ({
         console.log("Could not guess media type for URL:", value);
       }
 
+      // Keep the panel expanded
+      setExpandedPanels((prev) => ({
+        ...prev,
+        [index]: true,
+      }));
+
       setFormData((prev) => {
         const newMedia = [...(prev.media || [])];
         newMedia[index] = {
@@ -434,6 +441,18 @@ const TemplateDialog = ({
   const handleSubmit = () => {
     onSubmit(formData);
   };
+
+  const [expandedPanels, setExpandedPanels] = useState<{
+    [key: number]: boolean;
+  }>({});
+
+  const handleAccordionChange =
+    (index: number) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpandedPanels((prev) => ({
+        ...prev,
+        [index]: isExpanded,
+      }));
+    };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
@@ -618,7 +637,10 @@ const TemplateDialog = ({
                       <DeleteIcon fontSize="small" />
                     </IconButton>
                   </Box>
-                  <Accordion defaultExpanded={!mediaItem.url}>
+                  <Accordion
+                    expanded={expandedPanels[index] ?? !mediaItem.url}
+                    onChange={handleAccordionChange(index)}
+                  >
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                       <Box
                         sx={{
@@ -629,21 +651,24 @@ const TemplateDialog = ({
                           minHeight: 50,
                         }}
                       >
-                        {mediaItem.url &&
-                          mediaItem.mediaContentType.startsWith("image/") && (
-                            <Box
-                              component="img"
-                              src={mediaItem.url}
-                              alt=""
-                              sx={{
-                                width: 50,
-                                height: 50,
-                                objectFit: "contain",
-                                borderRadius: 1,
-                                bgcolor: "background.paper",
-                              }}
-                            />
-                          )}
+                        {mediaItem.url && (
+                          <Box
+                            component="img"
+                            src={
+                              mediaItem.mediaContentType.startsWith("image/")
+                                ? mediaItem.url
+                                : PREVIEW_UNAVAILABLE_IMAGE
+                            }
+                            alt=""
+                            sx={{
+                              width: 50,
+                              height: 50,
+                              objectFit: "contain",
+                              borderRadius: 1,
+                              bgcolor: "background.paper",
+                            }}
+                          />
+                        )}
                         <Box
                           sx={{
                             display: "flex",
