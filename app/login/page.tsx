@@ -15,8 +15,8 @@ import {
 export default function LoginPage() {
   const router = useRouter();
   const [login, { isLoading, error }] = useLoginMutation();
-  const [username, setUsername] = useState("username");
-  const [password, setPassword] = useState("password");
+  const [username, setUsername] = useState("admin");
+  const [password, setPassword] = useState("admin123");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

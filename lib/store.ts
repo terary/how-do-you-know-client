@@ -6,6 +6,7 @@ import { authApiSlice } from "./features/auth/authApiSlice";
 import { questionFilterSlice } from "./features/question-filter/questionFilterSlice";
 import { usersApiSlice } from "./features/users/usersApiSlice";
 import { fodderPoolsApiSlice } from "./features/fodder-pools/fodderPoolsApiSlice";
+import { apiSlice } from "./features/api/apiSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -15,6 +16,7 @@ export const makeStore = () => {
       [authApiSlice.reducerPath]: authApiSlice.reducer,
       [usersApiSlice.reducerPath]: usersApiSlice.reducer,
       [fodderPoolsApiSlice.reducerPath]: fodderPoolsApiSlice.reducer,
+      [apiSlice.reducerPath]: apiSlice.reducer,
       questionFilter: questionFilterSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => {
@@ -22,7 +24,8 @@ export const makeStore = () => {
         userAnswersApiSlice.middleware,
         authApiSlice.middleware,
         usersApiSlice.middleware,
-        fodderPoolsApiSlice.middleware
+        fodderPoolsApiSlice.middleware,
+        apiSlice.middleware
       );
     },
   });

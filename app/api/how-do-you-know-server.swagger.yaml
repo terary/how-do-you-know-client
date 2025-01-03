@@ -327,6 +327,37 @@ paths:
       summary: Get a question template by ID
       tags:
         - questions
+    patch:
+      operationId: QuestionsController_updateTemplate
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the question template to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTemplateDto"
+      responses:
+        "200":
+          description: The question template has been updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionTemplate"
+        "400":
+          description: Invalid input
+        "404":
+          description: Template not found
+      security:
+        - bearer: []
+      summary: Update a question template
+      tags:
+        - questions
   /questions/templates/{id}/generate:
     post:
       operationId: QuestionsController_generateActual
@@ -709,6 +740,43 @@ components:
     QuestionActual:
       type: object
       properties: {}
+    UpdateTemplateDto:
+      type: object
+      properties:
+        userPromptType:
+          type: string
+          enum:
+            - text
+            - multimedia
+          description: Type of user prompt
+        userResponseType:
+          type: string
+          enum:
+            - free-text-255
+            - multiple-choice-4
+            - true-false
+          description: Type of user response
+        exclusivityType:
+          type: string
+          enum:
+            - exam-only
+            - practice-only
+            - exam-practice-both
+          description: Question exclusivity type
+        userPromptText:
+          type: string
+          description: Text of the user prompt
+        instructionText:
+          type: string
+          description: Instruction text
+        media:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaDto"
+        validAnswers:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidAnswerDto"
     FodderPool:
       type: object
       properties: {}

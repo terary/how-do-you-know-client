@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -15,155 +16,82 @@ import {
   ListItemButton,
 } from "@mui/material";
 import {
-  Menu as MenuIcon,
-  Home,
-  QuestionAnswer,
-  FormatQuote,
-  Verified,
-  BugReport,
-  ChevronLeft,
-  AccountCircle,
-  Group as GroupIcon,
-  Storage as StorageIcon,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
 } from "@mui/icons-material";
+import { navigation } from "@/lib/config/navigation";
 
 const DRAWER_WIDTH = 240;
-const MINI_DRAWER_WIDTH = 65;
 
 export const Sidebar = () => {
-  const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
   const { t } = useTranslation();
 
-  const menuItems = [
-    { path: "/", label: t("nav.home"), icon: <Home /> },
-    { path: "/verify", label: t("nav.verify"), icon: <Verified /> },
-    {
-      path: "/questionnaires",
-      label: t("nav.questionnaires"),
-      icon: <QuestionAnswer />,
-    },
-    { path: "/users", label: t("nav.users"), icon: <GroupIcon /> },
-    {
-      path: "/fodder-pools",
-      label: t("nav.fodderPools"),
-      icon: <StorageIcon />,
-    },
-    { path: "/error-test", label: t("nav.errorTest"), icon: <BugReport /> },
-    { path: "/profile", label: t("settings.profile"), icon: <AccountCircle /> },
-  ];
+  const handleToggleDrawer = () => {
+    setCollapsed(!collapsed);
+  };
 
   return (
-    <>
-      {/* Mini permanent drawer */}
-      <Drawer
-        variant="permanent"
+    <Drawer
+      variant="permanent"
+      sx={{
+        width: collapsed ? 65 : DRAWER_WIDTH,
+        flexShrink: 0,
+        "& .MuiDrawer-paper": {
+          width: collapsed ? 65 : DRAWER_WIDTH,
+          boxSizing: "border-box",
+          overflowX: "hidden",
+          transition: "width 0.2s",
+        },
+      }}
+    >
+      <Box
         sx={{
-          width: MINI_DRAWER_WIDTH,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: {
-            width: MINI_DRAWER_WIDTH,
-            overflowX: "hidden",
-          },
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          p: 1,
+          minHeight: 64,
         }}
       >
-        <List sx={{ mt: 7 }}>
-          {menuItems.map(({ path, icon, label }) => (
-            <ListItem key={path} disablePadding>
-              <ListItemButton
-                component={Link}
-                href={path}
-                selected={pathname === path}
+        <IconButton onClick={handleToggleDrawer}>
+          {collapsed ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+        </IconButton>
+      </Box>
+      <Divider />
+      <List>
+        {navigation.map(({ href, name, icon: Icon }) => (
+          <ListItem key={href} disablePadding>
+            <ListItemButton
+              component={Link}
+              href={href}
+              selected={pathname === href}
+              sx={{
+                minHeight: 48,
+                px: 2.5,
+                "&.Mui-selected": {
+                  backgroundColor: "action.selected",
+                },
+                "&:hover": {
+                  backgroundColor: "action.hover",
+                },
+              }}
+            >
+              <ListItemIcon
                 sx={{
-                  minHeight: 48,
+                  minWidth: 0,
+                  mr: collapsed ? 0 : 2,
                   justifyContent: "center",
-                  px: 2.5,
-                  "&.Mui-selected": {
-                    backgroundColor: "action.selected",
-                  },
-                  "&:hover": {
-                    backgroundColor: "action.hover",
-                  },
                 }}
               >
-                <ListItemIcon sx={{ minWidth: 0, justifyContent: "center" }}>
-                  {icon}
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-
-      {/* Hamburger menu button */}
-      <IconButton
-        color="inherit"
-        aria-label="open drawer"
-        onClick={() => setOpen(true)}
-        edge="start"
-        sx={{
-          position: "fixed",
-          left: "1rem",
-          top: "1rem",
-          display: open ? "none" : "flex",
-          zIndex: 1000,
-        }}
-      >
-        <MenuIcon />
-      </IconButton>
-
-      {/* Full-width temporary drawer */}
-      <Drawer
-        sx={{
-          width: DRAWER_WIDTH,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: DRAWER_WIDTH,
-            boxSizing: "border-box",
-          },
-        }}
-        variant="temporary"
-        anchor="left"
-        open={open}
-        onClose={() => setOpen(false)}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            p: 1,
-          }}
-        >
-          <IconButton onClick={() => setOpen(false)}>
-            <ChevronLeft />
-          </IconButton>
-        </Box>
-        <Divider />
-        <List>
-          {menuItems.map(({ path, label, icon }) => (
-            <ListItem key={path} disablePadding>
-              <ListItemButton
-                component={Link}
-                href={path}
-                onClick={() => setOpen(false)}
-                selected={pathname === path}
-                sx={{
-                  "&.Mui-selected": {
-                    backgroundColor: "action.selected",
-                  },
-                  "&:hover": {
-                    backgroundColor: "action.hover",
-                  },
-                }}
-              >
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText primary={label} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-    </>
+                <Icon />
+              </ListItemIcon>
+              {!collapsed && <ListItemText primary={t(`navigation.${name}`)} />}
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Drawer>
   );
 };
