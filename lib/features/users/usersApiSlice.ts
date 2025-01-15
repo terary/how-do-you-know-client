@@ -6,7 +6,7 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
-  roles: string[];
+  roles: ("admin:exams" | "admin:users" | "user" | "public")[];
 }
 
 export interface CreateUserDto {

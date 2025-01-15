@@ -5,7 +5,7 @@ export interface ProfileResponseDto {
   email: string;
   createdAt: string;
   updatedAt: string;
-  roles: string[];
+  roles: ("admin:exams" | "admin:users" | "user" | "public")[];
 }
 
 export interface UpdateProfileDto {

@@ -44,7 +44,7 @@ import {
   type UpdateUserDto,
 } from "@/lib/features/users/usersApiSlice";
 
-const AVAILABLE_ROLES = ["student", "teacher", "admin"];
+const AVAILABLE_ROLES = ["admin:exams", "admin:users", "user", "public"];
 
 type DialogMode = "create" | "edit";
 
