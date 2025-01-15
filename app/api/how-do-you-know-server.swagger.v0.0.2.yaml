@@ -1,0 +1,2163 @@
+openapi: 3.0.0
+paths:
+  /:
+    get:
+      operationId: AppController_getHello
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - App
+  /users:
+    post:
+      operationId: UsersController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserDto"
+      responses:
+        "201":
+          description: The user has been successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateUserDto"
+        "400":
+          description: Bad request - invalid data.
+      summary: Create a new user
+      tags:
+        - users
+    get:
+      operationId: UsersController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: List of all users.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CreateUserDto"
+      security:
+        - bearer: []
+      summary: Get all users
+      tags:
+        - users
+  /users/{username}:
+    get:
+      operationId: UsersController_findOne
+      parameters:
+        - name: username
+          required: true
+          in: path
+          description: Username of the user to find
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The found user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateUserDto"
+        "404":
+          description: User not found.
+      security:
+        - bearer: []
+      summary: Get a user by username
+      tags:
+        - users
+    patch:
+      operationId: UsersController_update
+      parameters:
+        - name: username
+          required: true
+          in: path
+          description: Username of the user to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserDto"
+      responses:
+        "200":
+          description: The user has been successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateUserDto"
+        "400":
+          description: Bad request - invalid data.
+        "404":
+          description: User not found.
+      security:
+        - bearer: []
+      summary: Update a user
+      tags:
+        - users
+    delete:
+      operationId: UsersController_remove
+      parameters:
+        - name: username
+          required: true
+          in: path
+          description: Username of the user to delete
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The user has been successfully deleted.
+        "404":
+          description: User not found.
+      security:
+        - bearer: []
+      summary: Delete a user
+      tags:
+        - users
+  /auth/login:
+    post:
+      operationId: AuthController_login
+      parameters: []
+      responses:
+        "201":
+          description: ""
+      tags:
+        - Auth
+  /auth/profile:
+    get:
+      operationId: AuthController_getProfile
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - Auth
+  /dev-debug/test-database:
+    get:
+      operationId: DevDebugController_testDatabase
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+  /dev-debug:
+    post:
+      operationId: DevDebugController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDevDebugDto"
+      responses:
+        "201":
+          description: ""
+      tags:
+        - DevDebug
+    get:
+      operationId: DevDebugController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+  /dev-debug/questions:
+    get:
+      operationId: DevDebugController_getQuestions
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+  /dev-debug/user-answers:
+    get:
+      operationId: DevDebugController_getUserAnswers
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+    post:
+      operationId: DevDebugController_setUserAnswers
+      parameters: []
+      responses:
+        "201":
+          description: ""
+      tags:
+        - DevDebug
+  /dev-debug/auth/user-answers/questionnaire:
+    get:
+      operationId: DevDebugController_getQuestionnaireAuth
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+  /dev-debug/user-answers/questionnaire:
+    get:
+      operationId: DevDebugController_getQuestionnaire
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+  /dev-debug/{id}:
+    get:
+      operationId: DevDebugController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+    patch:
+      operationId: DevDebugController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateDevDebugDto"
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+    delete:
+      operationId: DevDebugController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+  /questions/templates:
+    get:
+      operationId: QuestionsController_findAllTemplates
+      parameters: []
+      responses:
+        "200":
+          description: List of all question templates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuestionTemplate"
+      security:
+        - bearer: []
+      summary: Get all question templates
+      tags:
+        - questions
+    post:
+      operationId: QuestionsController_createTemplate
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTemplateDto"
+      responses:
+        "201":
+          description: The question template has been created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionTemplate"
+        "400":
+          description: Invalid input
+      security:
+        - bearer: []
+      summary: Create a new question template
+      tags:
+        - questions
+  /questions/templates/{id}:
+    get:
+      operationId: QuestionsController_findTemplateById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the question template
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The question template
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionTemplate"
+        "404":
+          description: Template not found
+      security:
+        - bearer: []
+      summary: Get a question template by ID
+      tags:
+        - questions
+    patch:
+      operationId: QuestionsController_updateTemplate
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the question template to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTemplateDto"
+      responses:
+        "200":
+          description: The question template has been updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionTemplate"
+        "400":
+          description: Invalid input
+        "404":
+          description: Template not found
+      security:
+        - bearer: []
+      summary: Update a question template
+      tags:
+        - questions
+  /questions/templates/{id}/generate:
+    post:
+      operationId: QuestionsController_generateActual
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the question template
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateActualDto"
+      responses:
+        "201":
+          description: The actual question has been generated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionActual"
+        "400":
+          description: Invalid input
+        "404":
+          description: Template not found
+      security:
+        - bearer: []
+      summary: Generate an actual question from a template
+      tags:
+        - questions
+  /questions/actuals/{id}:
+    get:
+      operationId: QuestionsController_findActualById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the actual question
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The actual question
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionActual"
+        "404":
+          description: Question not found
+      security:
+        - bearer: []
+      summary: Get an actual question by ID
+      tags:
+        - questions
+  /questions/search:
+    get:
+      operationId: QuestionsController_searchQuestions
+      parameters:
+        - name: query
+          required: false
+          in: query
+          description: Search query
+          schema:
+            type: string
+        - name: userPromptType
+          required: false
+          in: query
+          description: Filter by user prompt type
+          schema:
+            type: string
+        - name: userResponseType
+          required: false
+          in: query
+          description: Filter by user response type
+          schema:
+            type: string
+        - name: exclusivityType
+          required: false
+          in: query
+          description: Filter by exclusivity type
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns filtered question templates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuestionTemplate"
+      security:
+        - bearer: []
+      summary: Search and filter questions
+      tags:
+        - questions
+  /fodder-pools:
+    get:
+      operationId: FodderPoolsController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: List of all fodder pools
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FodderPool"
+      summary: Get all fodder pools
+      tags:
+        - fodder-pools
+    post:
+      operationId: FodderPoolsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Historical Events
+                description:
+                  type: string
+                  example: Important dates in history
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      text:
+                        type: string
+                        example: July 4, 1776
+      responses:
+        "201":
+          description: The fodder pool has been created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FodderPool"
+      summary: Create a new fodder pool
+      tags:
+        - fodder-pools
+  /fodder-pools/{id}:
+    get:
+      operationId: FodderPoolsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the fodder pool
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The fodder pool
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FodderPool"
+      summary: Get a fodder pool by ID
+      tags:
+        - fodder-pools
+    delete:
+      operationId: FodderPoolsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the fodder pool
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The fodder pool has been deleted
+      summary: Delete a fodder pool
+      tags:
+        - fodder-pools
+  /fodder-pools/{id}/items:
+    post:
+      operationId: FodderPoolsController_addItems
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the fodder pool
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: Array of fodder items to add
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/FodderItemDto"
+            examples:
+              items:
+                value:
+                  - text: July 4, 1776
+                  - text: December 7, 1941
+      responses:
+        "201":
+          description: The items have been added to the fodder pool
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FodderItem"
+      summary: Add items to a fodder pool
+      tags:
+        - fodder-pools
+  /fodder-pools/{poolId}/items:
+    delete:
+      operationId: FodderPoolsController_removeItems
+      parameters:
+        - name: poolId
+          required: true
+          in: path
+          description: ID of the fodder pool
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                itemIds:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                    - item-id-1
+                    - item-id-2
+      responses:
+        "200":
+          description: The items have been removed from the fodder pool
+      summary: Remove items from a fodder pool
+      tags:
+        - fodder-pools
+  /learning-institutions:
+    post:
+      operationId: LearningInstitutionsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLearningInstitutionDto"
+      responses:
+        "201":
+          description: The learning institution has been created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LearningInstitutionDto"
+      security:
+        - bearer: []
+      summary: Create a new learning institution
+      tags:
+        - learning-institutions
+    get:
+      operationId: LearningInstitutionsController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: List of all learning institutions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LearningInstitutionDto"
+      security:
+        - bearer: []
+      summary: Get all learning institutions
+      tags:
+        - learning-institutions
+  /learning-institutions/{id}:
+    get:
+      operationId: LearningInstitutionsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The learning institution
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LearningInstitutionDto"
+      security:
+        - bearer: []
+      summary: Get a learning institution by ID
+      tags:
+        - learning-institutions
+    patch:
+      operationId: LearningInstitutionsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateLearningInstitutionDto"
+      responses:
+        "200":
+          description: The learning institution has been updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LearningInstitutionDto"
+      security:
+        - bearer: []
+      summary: Update a learning institution
+      tags:
+        - learning-institutions
+    delete:
+      operationId: LearningInstitutionsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The learning institution has been deleted
+      security:
+        - bearer: []
+      summary: Delete a learning institution
+      tags:
+        - learning-institutions
+  /instructional-courses:
+    post:
+      operationId: InstructionalCoursesController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateInstructionalCourseDto"
+      responses:
+        "201":
+          description: The instructional course has been created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstructionalCourseDto"
+      security:
+        - bearer: []
+      summary: Create a new instructional course
+      tags:
+        - instructional-courses
+    get:
+      operationId: InstructionalCoursesController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: List of all instructional courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InstructionalCourseDto"
+      security:
+        - bearer: []
+      summary: Get all instructional courses
+      tags:
+        - instructional-courses
+  /instructional-courses/{id}:
+    get:
+      operationId: InstructionalCoursesController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The instructional course
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstructionalCourseDto"
+      security:
+        - bearer: []
+      summary: Get a specific instructional course
+      tags:
+        - instructional-courses
+    patch:
+      operationId: InstructionalCoursesController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateInstructionalCourseDto"
+      responses:
+        "200":
+          description: The instructional course has been updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstructionalCourseDto"
+      security:
+        - bearer: []
+      summary: Update an instructional course
+      tags:
+        - instructional-courses
+    delete:
+      operationId: InstructionalCoursesController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The instructional course has been deleted
+      security:
+        - bearer: []
+      summary: Delete an instructional course
+      tags:
+        - instructional-courses
+  /exam-templates:
+    post:
+      operationId: ExamTemplatesController_createTemplate
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateExamTemplateDto"
+      responses:
+        "201":
+          description: The exam template has been created
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+      security:
+        - bearer: []
+      summary: Create a new exam template
+      tags:
+        - exam-templates
+    get:
+      operationId: ExamTemplatesController_findAllTemplates
+      parameters: []
+      responses:
+        "200":
+          description: List of exam templates
+        "401":
+          description: Unauthorized
+      security:
+        - bearer: []
+      summary: Get all exam templates
+      tags:
+        - exam-templates
+  /exam-templates/{id}:
+    get:
+      operationId: ExamTemplatesController_findTemplateById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The exam template
+        "401":
+          description: Unauthorized
+        "404":
+          description: Exam template not found
+      security:
+        - bearer: []
+      summary: Get an exam template by ID
+      tags:
+        - exam-templates
+    put:
+      operationId: ExamTemplatesController_updateTemplate
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateExamTemplateDto"
+      responses:
+        "200":
+          description: The exam template has been updated
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+        "404":
+          description: Exam template not found
+      security:
+        - bearer: []
+      summary: Update an exam template
+      tags:
+        - exam-templates
+    delete:
+      operationId: ExamTemplatesController_removeTemplate
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The exam template has been deleted
+        "401":
+          description: Unauthorized
+        "404":
+          description: Exam template not found
+      security:
+        - bearer: []
+      summary: Delete an exam template
+      tags:
+        - exam-templates
+  /exam-templates/sections:
+    post:
+      operationId: ExamTemplatesController_createSection
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateExamTemplateSectionDto"
+      responses:
+        "201":
+          description: The section has been created
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+      security:
+        - bearer: []
+      summary: Create a new exam template section
+      tags:
+        - exam-templates
+  /exam-templates/sections/{id}:
+    get:
+      operationId: ExamTemplatesController_findSectionById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template section
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The section
+        "401":
+          description: Unauthorized
+        "404":
+          description: Section not found
+      security:
+        - bearer: []
+      summary: Get an exam template section by ID
+      tags:
+        - exam-templates
+    put:
+      operationId: ExamTemplatesController_updateSection
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template section
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateExamTemplateSectionDto"
+      responses:
+        "200":
+          description: The section has been updated
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+        "404":
+          description: Section not found
+      security:
+        - bearer: []
+      summary: Update an exam template section
+      tags:
+        - exam-templates
+    delete:
+      operationId: ExamTemplatesController_removeSection
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template section
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The section has been deleted
+        "401":
+          description: Unauthorized
+        "404":
+          description: Section not found
+      security:
+        - bearer: []
+      summary: Delete an exam template section
+      tags:
+        - exam-templates
+  /exam-templates/sections/{id}/questions:
+    post:
+      operationId: ExamTemplatesController_addQuestionToSection
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template section
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddQuestionToSectionDto"
+      responses:
+        "201":
+          description: The question has been added to the section
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+        "404":
+          description: Section not found
+      security:
+        - bearer: []
+      summary: Add a question to a section
+      tags:
+        - exam-templates
+    delete:
+      operationId: ExamTemplatesController_removeQuestionFromSection
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template section
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RemoveQuestionFromSectionDto"
+      responses:
+        "200":
+          description: The question has been removed from the section
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+        "404":
+          description: Question or section not found
+      security:
+        - bearer: []
+      summary: Remove a question from a section
+      tags:
+        - exam-templates
+    get:
+      operationId: ExamTemplatesController_getQuestionsForSection
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template section
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of questions in the section
+        "401":
+          description: Unauthorized
+        "404":
+          description: Section not found
+      security:
+        - bearer: []
+      summary: Get all questions in a section
+      tags:
+        - exam-templates
+  /exam-templates/sections/{id}/questions/bulk:
+    post:
+      operationId: ExamTemplatesController_bulkAddQuestionsToSection
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template section
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BulkAddQuestionsDto"
+      responses:
+        "201":
+          description: The questions have been added to the section
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+        "404":
+          description: Section not found
+      security:
+        - bearer: []
+      summary: Add multiple questions to a section
+      tags:
+        - exam-templates
+    delete:
+      operationId: ExamTemplatesController_bulkRemoveQuestionsFromSection
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template section
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BulkRemoveQuestionsDto"
+      responses:
+        "200":
+          description: The questions have been removed from the section
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+        "404":
+          description: Section not found
+      security:
+        - bearer: []
+      summary: Remove multiple questions from a section
+      tags:
+        - exam-templates
+  /exam-templates/sections/{id}/questions/reorder:
+    put:
+      operationId: ExamTemplatesController_reorderSectionQuestions
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template section
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReorderQuestionsDto"
+      responses:
+        "200":
+          description: The questions have been reordered
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+        "404":
+          description: Section not found
+      security:
+        - bearer: []
+      summary: Reorder questions within a section
+      tags:
+        - exam-templates
+  /exam-templates/{id}/validate:
+    post:
+      operationId: ExamTemplatesController_validateTemplate
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The template is valid
+        "400":
+          description: Template validation failed
+        "401":
+          description: Unauthorized
+        "404":
+          description: Template not found
+      security:
+        - bearer: []
+      summary: Validate an exam template
+      tags:
+        - exam-templates
+  /exam-templates/{id}/versions:
+    post:
+      operationId: ExamTemplatesController_createNewVersion
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template
+          schema:
+            type: string
+      responses:
+        "201":
+          description: New version created
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+        "404":
+          description: Template not found
+      security:
+        - bearer: []
+      summary: Create a new version of an exam template
+      tags:
+        - exam-templates
+  /exam-templates/{id}/publish:
+    post:
+      operationId: ExamTemplatesController_publishTemplate
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Template published
+        "400":
+          description: Invalid template
+        "401":
+          description: Unauthorized
+        "404":
+          description: Template not found
+      security:
+        - bearer: []
+      summary: Publish an exam template
+      tags:
+        - exam-templates
+  /exam-templates/{id}/history:
+    get:
+      operationId: ExamTemplatesController_getTemplateHistory
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Template version history
+        "401":
+          description: Unauthorized
+        "404":
+          description: Template not found
+      security:
+        - bearer: []
+      summary: Get version history of an exam template
+      tags:
+        - exam-templates
+  /exam-templates/{id}/preview:
+    post:
+      operationId: ExamTemplatesController_previewTemplate
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the exam template
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PreviewTemplateDto"
+      responses:
+        "200":
+          description: Template preview
+        "400":
+          description: Invalid format
+        "401":
+          description: Unauthorized
+        "404":
+          description: Template not found
+      security:
+        - bearer: []
+      summary: Preview an exam template
+      tags:
+        - exam-templates
+  /exam-templates/{examId}/sections:
+    post:
+      operationId: ExamTemplateSectionsController_create
+      parameters:
+        - name: examId
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateExamTemplateSectionDto"
+      responses:
+        "201":
+          description: The exam template section has been created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExamTemplateSectionDto"
+      security:
+        - bearer: []
+      summary: Create a new exam template section
+      tags:
+        - exam-template-sections
+    get:
+      operationId: ExamTemplateSectionsController_findAll
+      parameters:
+        - name: examId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of all sections for the exam template
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ExamTemplateSectionDto"
+      security:
+        - bearer: []
+      summary: Get all sections for an exam template
+      tags:
+        - exam-template-sections
+  /exam-templates/{examId}/sections/{id}:
+    get:
+      operationId: ExamTemplateSectionsController_findOne
+      parameters:
+        - name: examId
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The exam template section
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExamTemplateSectionDto"
+      security:
+        - bearer: []
+      summary: Get a specific exam template section
+      tags:
+        - exam-template-sections
+    patch:
+      operationId: ExamTemplateSectionsController_update
+      parameters:
+        - name: examId
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateExamTemplateSectionDto"
+      responses:
+        "200":
+          description: The exam template section has been updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExamTemplateSectionDto"
+      security:
+        - bearer: []
+      summary: Update an exam template section
+      tags:
+        - exam-template-sections
+    delete:
+      operationId: ExamTemplateSectionsController_remove
+      parameters:
+        - name: examId
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The exam template section has been deleted
+      security:
+        - bearer: []
+      summary: Delete an exam template section
+      tags:
+        - exam-template-sections
+info:
+  title: How Do You Know API
+  description: The How Do You Know API description
+  version: "0.0.2"
+  contact: {}
+tags: []
+servers: []
+components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+  schemas:
+    CreateUserDto:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Unique username for the user
+          example: johndoe
+        firstName:
+          type: string
+          description: First name of the user
+          example: John
+        lastName:
+          type: string
+          description: Last name of the user
+          example: Doe
+        email:
+          type: string
+          description: Email address of the user
+          example: john.doe@example.com
+        password:
+          type: string
+          description: Password for the user account
+          example: strongPassword123
+        roles:
+          type: array
+          description: User roles
+          example:
+            - student
+            - teacher
+          items:
+            type: string
+            enum:
+              - student
+              - teacher
+              - admin
+      required:
+        - username
+        - firstName
+        - lastName
+        - email
+        - password
+        - roles
+    UpdateUserDto:
+      type: object
+      properties: {}
+    CreateDevDebugDto:
+      type: object
+      properties: {}
+    UpdateDevDebugDto:
+      type: object
+      properties: {}
+    QuestionTemplate:
+      type: object
+      properties: {}
+    MediaDto:
+      type: object
+      properties:
+        mediaContentType:
+          type: string
+          enum:
+            - application/octet-stream
+            - image/jpeg
+            - image/png
+            - image/gif
+            - image/webp
+            - image/svg+xml
+            - image/*
+            - audio/mpeg
+            - audio/wav
+            - audio/ogg
+            - audio/aac
+            - audio/webm
+            - audio/*
+            - video/mp4
+            - video/webm
+            - video/ogg
+            - video/avi
+            - video/quicktime
+            - video/*
+          description: >-
+            Content type of the media. Use */* types for iframe/embedded
+            content.
+          example: video/mp4
+        height:
+          type: number
+          description: Height of the media in pixels
+        width:
+          type: number
+          description: Width of the media in pixels
+        url:
+          type: string
+          description: URL of the media content
+        specialInstructionText:
+          type: string
+          description: Special instructions for the media
+        duration:
+          type: number
+          description: Duration in seconds
+        fileSize:
+          type: number
+          description: File size in bytes
+        thumbnailUrl:
+          type: string
+          description: Thumbnail URL for video content
+      required:
+        - mediaContentType
+        - height
+        - width
+        - url
+    ValidAnswerDto:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Text answer
+        booleanValue:
+          type: boolean
+          description: Boolean answer
+        fodderPoolId:
+          type: string
+          description: ID of the fodder pool
+    CreateTemplateDto:
+      type: object
+      properties:
+        userPromptType:
+          type: string
+          enum:
+            - text
+            - multimedia
+          description: Type of user prompt
+        userResponseType:
+          type: string
+          enum:
+            - free-text-255
+            - multiple-choice-4
+            - true-false
+          description: Type of user response
+        exclusivityType:
+          type: string
+          enum:
+            - exam-only
+            - practice-only
+            - exam-practice-both
+          description: Question exclusivity type
+        userPromptText:
+          type: string
+          description: Text of the user prompt
+        instructionText:
+          type: string
+          description: Instruction text
+        media:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaDto"
+        validAnswers:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidAnswerDto"
+      required:
+        - userPromptType
+        - userResponseType
+        - exclusivityType
+        - validAnswers
+    GenerateActualDto:
+      type: object
+      properties:
+        examType:
+          type: string
+          enum:
+            - practice
+            - live
+          description: Type of exam
+        sectionPosition:
+          type: number
+          description: Position in the section
+      required:
+        - examType
+        - sectionPosition
+    QuestionActual:
+      type: object
+      properties: {}
+    UpdateTemplateDto:
+      type: object
+      properties:
+        userPromptType:
+          type: string
+          enum:
+            - text
+            - multimedia
+          description: Type of user prompt
+        userResponseType:
+          type: string
+          enum:
+            - free-text-255
+            - multiple-choice-4
+            - true-false
+          description: Type of user response
+        exclusivityType:
+          type: string
+          enum:
+            - exam-only
+            - practice-only
+            - exam-practice-both
+          description: Question exclusivity type
+        userPromptText:
+          type: string
+          description: Text of the user prompt
+        instructionText:
+          type: string
+          description: Instruction text
+        media:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaDto"
+        validAnswers:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidAnswerDto"
+    FodderPool:
+      type: object
+      properties: {}
+    FodderItemDto:
+      type: object
+      properties:
+        text:
+          type: string
+          description: The text content of the fodder item
+          example: July 4, 1776
+      required:
+        - text
+    FodderItem:
+      type: object
+      properties: {}
+    CreateLearningInstitutionDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the learning institution
+          example: University of Example
+        description:
+          type: string
+          description: A detailed description of the learning institution
+          example: A leading institution in computer science education...
+        website:
+          type: string
+          description: The website URL of the learning institution
+          example: https://www.example-university.edu
+        email:
+          type: string
+          description: The contact email for the learning institution
+          example: contact@example-university.edu
+        phone:
+          type: string
+          description: The contact phone number for the learning institution
+          example: +1-234-567-8900
+        address:
+          type: string
+          description: The physical address of the learning institution
+          example: 123 University Ave, Example City, EX 12345
+      required:
+        - name
+        - description
+        - website
+        - email
+        - phone
+    InstructionalCourse:
+      type: object
+      properties: {}
+    LearningInstitutionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the learning institution
+          example: 123e4567-e89b-12d3-a456-426614174000
+        name:
+          type: string
+          description: The name of the learning institution
+          example: University of Example
+        description:
+          type: string
+          description: A detailed description of the learning institution
+          example: A leading institution in computer science education...
+        website:
+          type: string
+          description: The website URL of the learning institution
+          example: https://www.example-university.edu
+        email:
+          type: string
+          description: The contact email for the learning institution
+          example: contact@example-university.edu
+        phone:
+          type: string
+          description: The contact phone number for the learning institution
+          example: +1-234-567-8900
+        address:
+          type: string
+          description: The physical address of the learning institution
+          example: 123 University Ave, Example City, EX 12345
+        created_by:
+          type: string
+          description: The ID of the user who created this institution
+          example: 123e4567-e89b-12d3-a456-426614174000
+        created_at:
+          format: date-time
+          type: string
+          description: The timestamp when this institution was created
+          example: "2024-01-20T12:00:00Z"
+        updated_at:
+          format: date-time
+          type: string
+          description: The timestamp when this institution was last updated
+          example: "2024-01-20T12:00:00Z"
+        courses:
+          description: The courses associated with this institution
+          type: array
+          items:
+            $ref: "#/components/schemas/InstructionalCourse"
+      required:
+        - id
+        - name
+        - description
+        - website
+        - email
+        - phone
+        - created_by
+        - created_at
+        - updated_at
+        - courses
+    UpdateLearningInstitutionDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the learning institution
+          example: University of Example
+        description:
+          type: string
+          description: A detailed description of the learning institution
+          example: A leading institution in computer science education...
+        website:
+          type: string
+          description: The website URL of the learning institution
+          example: https://www.example-university.edu
+        email:
+          type: string
+          description: The contact email for the learning institution
+          example: contact@example-university.edu
+        phone:
+          type: string
+          description: The contact phone number for the learning institution
+          example: +1-234-567-8900
+        address:
+          type: string
+          description: The physical address of the learning institution
+          example: 123 University Ave, Example City, EX 12345
+    CreateInstructionalCourseDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        start_date:
+          format: date-time
+          type: string
+        finish_date:
+          format: date-time
+          type: string
+        start_time_utc:
+          type: string
+        duration_minutes:
+          type: number
+        days_of_week:
+          type: array
+          items:
+            type: string
+            enum:
+              - MONDAY
+              - TUESDAY
+              - WEDNESDAY
+              - THURSDAY
+              - FRIDAY
+              - SATURDAY
+              - SUNDAY
+        institution_id:
+          type: string
+        instructor_id:
+          type: string
+        proctor_ids:
+          type: array
+          items:
+            type: string
+      required:
+        - name
+        - description
+        - start_date
+        - finish_date
+        - start_time_utc
+        - duration_minutes
+        - days_of_week
+        - institution_id
+        - instructor_id
+        - proctor_ids
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+            enum:
+              - admin:exams
+              - admin:users
+              - user
+              - public
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+      required:
+        - id
+        - username
+        - firstName
+        - lastName
+        - email
+        - roles
+        - createdAt
+        - updatedAt
+    InstructionalCourseDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        start_date:
+          format: date-time
+          type: string
+        finish_date:
+          format: date-time
+          type: string
+        start_time_utc:
+          type: string
+        duration_minutes:
+          type: number
+        days_of_week:
+          type: array
+          items:
+            type: string
+            enum:
+              - MONDAY
+              - TUESDAY
+              - WEDNESDAY
+              - THURSDAY
+              - FRIDAY
+              - SATURDAY
+              - SUNDAY
+        institution_id:
+          type: string
+        instructor_id:
+          type: string
+        proctor_ids:
+          type: array
+          items:
+            type: string
+        created_by:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+        institution:
+          $ref: "#/components/schemas/LearningInstitutionDto"
+        instructor:
+          $ref: "#/components/schemas/UserDto"
+      required:
+        - id
+        - name
+        - description
+        - start_date
+        - finish_date
+        - start_time_utc
+        - duration_minutes
+        - days_of_week
+        - institution_id
+        - instructor_id
+        - proctor_ids
+        - created_by
+        - created_at
+        - updated_at
+        - institution
+        - instructor
+    UpdateInstructionalCourseDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        start_date:
+          format: date-time
+          type: string
+        finish_date:
+          format: date-time
+          type: string
+        start_time_utc:
+          type: string
+        duration_minutes:
+          type: number
+        days_of_week:
+          type: array
+          items:
+            type: string
+            enum:
+              - MONDAY
+              - TUESDAY
+              - WEDNESDAY
+              - THURSDAY
+              - FRIDAY
+              - SATURDAY
+              - SUNDAY
+        institution_id:
+          type: string
+        instructor_id:
+          type: string
+        proctor_ids:
+          type: array
+          items:
+            type: string
+    CreateExamTemplateDto:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        course_id:
+          type: string
+        availability_start_date:
+          format: date-time
+          type: string
+        availability_end_date:
+          format: date-time
+          type: string
+      required:
+        - title
+        - description
+        - course_id
+        - availability_start_date
+        - availability_end_date
+    UpdateExamTemplateDto:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        course_id:
+          type: string
+        availability_start_date:
+          format: date-time
+          type: string
+        availability_end_date:
+          format: date-time
+          type: string
+    CreateExamTemplateSectionDto:
+      type: object
+      properties:
+        title:
+          type: string
+        instructions:
+          type: string
+        position:
+          type: number
+        timeLimitSeconds:
+          type: number
+      required:
+        - title
+        - instructions
+        - position
+        - timeLimitSeconds
+    UpdateExamTemplateSectionDto:
+      type: object
+      properties:
+        title:
+          type: string
+        instructions:
+          type: string
+        position:
+          type: number
+        timeLimitSeconds:
+          type: number
+    AddQuestionToSectionDto:
+      type: object
+      properties:
+        question_template_id:
+          type: string
+          description: The ID of the question template to add to the section
+          example: 123e4567-e89b-12d3-a456-426614174000
+      required:
+        - question_template_id
+    RemoveQuestionFromSectionDto:
+      type: object
+      properties:
+        question_template_id:
+          type: string
+          description: The ID of the question template to remove from the section
+          example: 123e4567-e89b-12d3-a456-426614174000
+      required:
+        - question_template_id
+    BulkAddQuestionsDto:
+      type: object
+      properties:
+        sectionId:
+          type: string
+        questionIds:
+          type: array
+          items:
+            type: string
+      required:
+        - sectionId
+        - questionIds
+    BulkRemoveQuestionsDto:
+      type: object
+      properties:
+        sectionId:
+          type: string
+        questionIds:
+          type: array
+          items:
+            type: string
+      required:
+        - sectionId
+        - questionIds
+    QuestionPositionDto:
+      type: object
+      properties:
+        questionId:
+          type: string
+        position:
+          type: number
+      required:
+        - questionId
+        - position
+    ReorderQuestionsDto:
+      type: object
+      properties:
+        sectionId:
+          type: string
+        questionPositions:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionPositionDto"
+      required:
+        - sectionId
+        - questionPositions
+    PreviewTemplateDto:
+      type: object
+      properties:
+        format:
+          type: string
+          enum:
+            - html
+            - pdf
+            - json
+      required:
+        - format
+    ExamTemplateSectionDto:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        instructions:
+          type: string
+        position:
+          type: number
+        timeLimitSeconds:
+          type: number
+        exam_template_id:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+        - id
+        - title
+        - instructions
+        - position
+        - timeLimitSeconds
+        - exam_template_id
+        - created_at
+        - updated_at

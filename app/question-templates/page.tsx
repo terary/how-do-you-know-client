@@ -54,6 +54,7 @@ import {
   type MediaDto,
 } from "@/lib/features/question-templates/questionTemplatesApiSlice";
 import { useGetFodderPoolsQuery } from "@/lib/features/fodder-pools/fodderPoolsApiSlice";
+import { QuestionPreview } from "../components/question-preview/QuestionPreview";
 
 interface ExtendedCreateTemplateDto extends CreateTemplateDto {
   media?: MediaDto[];
@@ -168,51 +169,8 @@ const MultimediaPrompt: React.FC<{ text: string; media?: MediaDto[] }> = ({
   );
 };
 
-const QuestionActualDemo: React.FC<QuestionPreviewProps> = ({ template }) => {
-  const renderPrompt = () => {
-    switch (template.userPromptType) {
-      case "text":
-        return <TextPrompt text={template.userPromptText} />;
-      case "multimedia":
-        return (
-          <MultimediaPrompt
-            text={template.userPromptText}
-            media={template.media}
-          />
-        );
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <Box sx={{ height: "100%", p: 2, bgcolor: "background.paper" }}>
-      <Typography variant="h6" gutterBottom>
-        Question Preview
-      </Typography>
-
-      {/* Instruction text if present */}
-      {template.instructionText && (
-        <Typography
-          variant="body2"
-          sx={{
-            mb: 2,
-            p: 1,
-            bgcolor: "info.main",
-            color: "info.contrastText",
-            borderRadius: 1,
-          }}
-        >
-          {template.instructionText}
-        </Typography>
-      )}
-
-      {/* Question prompt with visual container */}
-      <Paper sx={{ p: 2, mb: 2, border: 1, borderColor: "primary.main" }}>
-        {renderPrompt()}
-      </Paper>
-    </Box>
-  );
+const QuestionActualDemo = ({ template }: { template: CreateTemplateDto }) => {
+  return <QuestionPreview template={template} />;
 };
 
 const TemplateDialog = ({
@@ -242,7 +200,11 @@ const TemplateDialog = ({
         exclusivityType: initialData?.exclusivityType || "practice-only",
         userPromptText: initialData?.userPromptText || "",
         instructionText: initialData?.instructionText || "",
-        validAnswers: initialData?.validAnswers || [],
+        validAnswers:
+          initialData?.validAnswers ||
+          (initialData?.userResponseType === "multiple-choice-4"
+            ? [{ text: "", fodderPoolId: "" }]
+            : []),
         media: initialData?.media || [],
       });
     }
@@ -264,12 +226,26 @@ const TemplateDialog = ({
   };
 
   const handleResponseTypeChange = (e: SelectChangeEvent<UserResponseType>) => {
-    setFormData((prev) => ({
-      ...prev,
-      userResponseType: e.target.value as UserResponseType,
-      // Reset validAnswers when changing response type
-      validAnswers: [],
-    }));
+    const newResponseType = e.target.value as UserResponseType;
+    setFormData((prev) => {
+      // If switching to multiple-choice-4, try to restore previous validAnswers if they exist
+      if (newResponseType === "multiple-choice-4") {
+        return {
+          ...prev,
+          userResponseType: newResponseType,
+          // Keep existing validAnswers if they exist, otherwise initialize with empty
+          validAnswers: prev.validAnswers?.length
+            ? prev.validAnswers
+            : [{ text: "", fodderPoolId: "" }],
+        };
+      }
+
+      // For other types, keep the validAnswers in state but don't show them
+      return {
+        ...prev,
+        userResponseType: newResponseType,
+      };
+    });
   };
 
   const handleExclusivityTypeChange = (
@@ -465,146 +441,141 @@ const TemplateDialog = ({
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3, mt: 2 }}>
           {/* Top section: Question Editor and Preview side by side */}
           <Box sx={{ display: "flex", gap: 2 }}>
-            {/* Left panel - Question Editor */}
-            <Box
-              sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}
-            >
-              <FormControl fullWidth>
-                <InputLabel>{t("questionTemplates.userPromptType")}</InputLabel>
-                <Select
-                  name="userPromptType"
-                  value={formData.userPromptType}
-                  onChange={handlePromptTypeChange}
-                  label={t("questionTemplates.userPromptType")}
-                >
-                  {USER_PROMPT_TYPES.map((type) => (
-                    <MenuItem key={type} value={type}>
-                      {t(`questionTemplates.promptTypes.${type}`)}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <FormControl fullWidth>
-                <InputLabel>
-                  {t("questionTemplates.userResponseType")}
-                </InputLabel>
-                <Select
-                  name="userResponseType"
-                  value={formData.userResponseType}
-                  onChange={handleResponseTypeChange}
-                  label={t("questionTemplates.userResponseType")}
-                >
-                  {USER_RESPONSE_TYPES.map((type) => (
-                    <MenuItem key={type} value={type}>
-                      {t(`questionTemplates.responseTypes.${type}`)}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <FormControl fullWidth>
-                <InputLabel>
-                  {t("questionTemplates.exclusivityType")}
-                </InputLabel>
-                <Select
-                  name="exclusivityType"
-                  value={formData.exclusivityType}
-                  onChange={handleExclusivityTypeChange}
-                  label={t("questionTemplates.exclusivityType")}
-                >
-                  {EXCLUSIVITY_TYPES.map((type) => (
-                    <MenuItem key={type} value={type}>
-                      {t(`questionTemplates.exclusivityTypes.${type}`)}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              {formData.userResponseType === "multiple-choice-4" && (
-                <>
-                  <FormControl fullWidth>
-                    <InputLabel>{t("questionTemplates.fodderPool")}</InputLabel>
-                    <Select
-                      name="fodderPool"
-                      value={formData.validAnswers[0]?.fodderPoolId || ""}
-                      onChange={handleFodderPoolChange}
-                      label={t("questionTemplates.fodderPool")}
-                    >
-                      {fodderPools.map((pool) => (
-                        <MenuItem key={pool.id} value={pool.id}>
-                          {pool.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-
-                  <TextField
-                    fullWidth
-                    label={t("questionTemplates.validAnswer")}
-                    name="validAnswer"
-                    value={formData.validAnswers[0]?.text || ""}
-                    onChange={(e) => {
-                      const text = e.target.value;
-                      setFormData((prev) => ({
-                        ...prev,
-                        validAnswers: [
-                          {
-                            ...prev.validAnswers[0],
-                            text,
-                          },
-                        ],
-                      }));
-                    }}
+            {/* Left side: Question Editor */}
+            <Box sx={{ flex: 1 }}>
+              <Typography variant="h6" gutterBottom>
+                Question Editor
+              </Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <FormControl fullWidth>
+                  <InputLabel>{t("questionTemplates.promptType")}</InputLabel>
+                  <Select
+                    value={formData.userPromptType}
+                    onChange={handlePromptTypeChange}
+                    label={t("questionTemplates.promptType")}
                     required
-                  />
-                </>
-              )}
+                  >
+                    {USER_PROMPT_TYPES.map((type) => (
+                      <MenuItem key={type} value={type}>
+                        {t(`questionTemplates.promptTypes.${type}`)}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
 
-              <TextField
-                fullWidth
-                label={t("questionTemplates.userPromptText")}
-                name="userPromptText"
-                value={formData.userPromptText}
-                onChange={handleTextChange}
-                multiline
-                rows={3}
-                required
-              />
+                <FormControl fullWidth>
+                  <InputLabel>{t("questionTemplates.responseType")}</InputLabel>
+                  <Select
+                    value={formData.userResponseType}
+                    onChange={handleResponseTypeChange}
+                    label={t("questionTemplates.responseType")}
+                    required
+                  >
+                    {USER_RESPONSE_TYPES.map((type) => (
+                      <MenuItem key={type} value={type}>
+                        {t(`questionTemplates.responseTypes.${type}`)}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
 
-              <TextField
-                fullWidth
-                label={t("questionTemplates.instructionText")}
-                name="instructionText"
-                value={formData.instructionText}
-                onChange={handleTextChange}
-                multiline
-                rows={2}
-              />
+                <FormControl fullWidth>
+                  <InputLabel>
+                    {t("questionTemplates.exclusivityType")}
+                  </InputLabel>
+                  <Select
+                    value={formData.exclusivityType}
+                    onChange={handleExclusivityTypeChange}
+                    label={t("questionTemplates.exclusivityType")}
+                    required
+                  >
+                    {EXCLUSIVITY_TYPES.map((type) => (
+                      <MenuItem key={type} value={type}>
+                        {t(`questionTemplates.exclusivityTypes.${type}`)}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <TextField
+                  fullWidth
+                  label={t("questionTemplates.promptText")}
+                  value={formData.userPromptText}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      userPromptText: e.target.value,
+                    }))
+                  }
+                  required
+                  multiline
+                  rows={3}
+                />
+
+                <TextField
+                  fullWidth
+                  label={t("questionTemplates.instructionText")}
+                  value={formData.instructionText}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      instructionText: e.target.value,
+                    }))
+                  }
+                  multiline
+                  rows={2}
+                />
+
+                {formData.userResponseType === "multiple-choice-4" && (
+                  <>
+                    <FormControl fullWidth>
+                      <InputLabel>
+                        {t("questionTemplates.fodderPool")}
+                      </InputLabel>
+                      <Select
+                        value={formData.validAnswers[0]?.fodderPoolId || ""}
+                        onChange={handleFodderPoolChange}
+                        label={t("questionTemplates.fodderPool")}
+                      >
+                        {fodderPools.map((pool) => (
+                          <MenuItem key={pool.id} value={pool.id}>
+                            {pool.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                    <TextField
+                      fullWidth
+                      label={t("questionTemplates.validAnswerText")}
+                      value={formData.validAnswers[0]?.text || ""}
+                      onChange={(e) => {
+                        const poolId = formData.validAnswers[0]?.fodderPoolId;
+                        setFormData((prev) => ({
+                          ...prev,
+                          validAnswers: [
+                            {
+                              fodderPoolId: poolId,
+                              text: e.target.value,
+                            },
+                          ],
+                        }));
+                      }}
+                      sx={{ mt: 2 }}
+                    />
+                  </>
+                )}
+              </Box>
             </Box>
 
-            {/* Right panel - Preview */}
-            <Box
-              sx={{
-                flex: 1,
-                borderLeft: 1,
-                borderColor: "divider",
-                bgcolor: "background.default",
-              }}
-            >
-              <QuestionActualDemo template={formData} />
+            {/* Right side: Question Preview */}
+            <Box sx={{ flex: 1 }}>
+              <QuestionPreview template={formData} />
             </Box>
           </Box>
 
           {/* Bottom section: Media Editor */}
           {formData.userPromptType === "multimedia" && (
-            <Box
-              sx={{
-                borderTop: 1,
-                borderColor: "divider",
-                pt: 3,
-              }}
-            >
+            <Box>
               <Box
                 sx={{
                   display: "flex",
@@ -620,7 +591,7 @@ const TemplateDialog = ({
                   variant="outlined"
                   size="small"
                 >
-                  Add Media
+                  {t("questionTemplates.addMedia")}
                 </Button>
               </Box>
 
@@ -826,11 +797,7 @@ const TemplateDialog = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{t("singleword.cancel")}</Button>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          disabled={!formData.userPromptText.trim()}
-        >
+        <Button onClick={handleSubmit} variant="contained">
           {t("singleword.save")}
         </Button>
       </DialogActions>
