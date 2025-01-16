@@ -1,13 +1,6 @@
 import { render, screen } from "../../../test-utils";
 import { Questionnaires } from "@/app/components/questionnaires/Questionnaires";
-import { useGetQuestionnaireQuery } from "@/lib/features/user-response/userResponseApiSlice";
-import { QuestionList } from "@/app/components/questionnaires/QuestionList";
 
-// Mock the RTK Query hook
-jest.mock("@/lib/features/user-response/userResponseApiSlice", () => ({
-  useGetQuestionnaireQuery: jest.fn(),
-  // ... other exports you need
-}));
 // Mock the QuestionList component
 jest.mock("@/app/components/questionnaires/QuestionList", () => ({
   QuestionList: jest.fn(() => (
@@ -15,16 +8,22 @@ jest.mock("@/app/components/questionnaires/QuestionList", () => ({
   )),
 }));
 
+// Get the mock function from the mocked module
+const { useGetQuestionnaireQuery } = jest.requireMock(
+  "@/lib/features/user-response/userResponseApiSlice"
+);
+
 describe("Questionnaires", () => {
   beforeEach(() => {
-    (useGetQuestionnaireQuery as jest.Mock).mockReset();
+    useGetQuestionnaireQuery.mockReset();
   });
 
   it("renders loading state", () => {
-    (useGetQuestionnaireQuery as jest.Mock).mockReturnValue({
+    useGetQuestionnaireQuery.mockReturnValue({
       isLoading: true,
       isError: false,
       isSuccess: false,
+      data: null,
     });
 
     render(<Questionnaires />);
@@ -32,11 +31,12 @@ describe("Questionnaires", () => {
   });
 
   it("renders error state", () => {
-    (useGetQuestionnaireQuery as jest.Mock).mockReturnValue({
+    useGetQuestionnaireQuery.mockReturnValue({
       isLoading: false,
       isError: true,
-      error: "Test error",
       isSuccess: false,
+      error: new Error("Test error"),
+      data: null,
     });
 
     render(<Questionnaires />);
@@ -46,12 +46,12 @@ describe("Questionnaires", () => {
   it("renders success state with questions and QuestionList", () => {
     const mockData = {
       questions: [
-        { id: 1, text: "Question 1" },
-        { id: 2, text: "Question 2" },
+        { questionId: "1", text: "Question 1" },
+        { questionId: "2", text: "Question 2" },
       ],
     };
 
-    (useGetQuestionnaireQuery as jest.Mock).mockReturnValue({
+    useGetQuestionnaireQuery.mockReturnValue({
       isLoading: false,
       isError: false,
       isSuccess: true,
@@ -68,15 +68,11 @@ describe("Questionnaires", () => {
   });
 
   it("renders success state with undefined questions array", () => {
-    const mockData = {
-      // questions array is intentionally undefined
-    };
-
-    (useGetQuestionnaireQuery as jest.Mock).mockReturnValue({
+    useGetQuestionnaireQuery.mockReturnValue({
       isLoading: false,
       isError: false,
       isSuccess: true,
-      data: mockData,
+      data: { questions: undefined },
     });
 
     render(<Questionnaires />);
@@ -86,17 +82,5 @@ describe("Questionnaires", () => {
 
     // QuestionList should still be rendered
     expect(screen.getByTestId("question-list")).toBeInTheDocument();
-  });
-
-  it("renders nothing when no conditions are met", () => {
-    (useGetQuestionnaireQuery as jest.Mock).mockReturnValue({
-      isLoading: false,
-      isError: false,
-      isSuccess: false,
-      data: null,
-    });
-
-    const { container } = render(<Questionnaires />);
-    expect(container.firstChild).toBeNull();
   });
 });

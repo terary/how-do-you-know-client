@@ -17,6 +17,7 @@ const config: Config = {
     "^@/(.*)$": "<rootDir>/$1",
   },
   testMatch: ["**/__tests__/**/*.test.[jt]s?(x)"],
+  moduleDirectories: ["node_modules", "<rootDir>"],
 };
 
 export default createJestConfig(config);

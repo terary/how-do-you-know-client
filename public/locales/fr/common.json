@@ -1,0 +1,22 @@
+{
+  "questionnaire": {
+    "advanced": "Avancé",
+    "skipQuestion": "Sauter la Question",
+    "userTags": "Balises Utilisateur",
+    "sortPosition": "Position de Tri",
+    "filterAndSort": "Filtrer et Trier",
+    "filterByTag": "Filtrer par Tag",
+    "showSkipped": "Afficher Ignorées",
+    "showAll": "Afficher Tout",
+    "clearAllMeta": "Effacer Tout Meta",
+    "enterTagsSpaceSeparated": "Entrez des tags pour filtrer...",
+    "useSpacesToSeparateTags": "Utilisez des espaces pour séparer plusieurs tags"
+  },
+  "singleword": {
+    "hide": "Masquer",
+    "show": "Afficher",
+    "save": "Enregistrer",
+    "apply": "Appliquer",
+    "reset": "Réinitialiser"
+  }
+}

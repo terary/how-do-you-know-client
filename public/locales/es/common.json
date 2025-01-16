@@ -1,0 +1,80 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "verify": "Verificar",
+    "quotes": "Citas",
+    "questionnaires": "Cuestionarios",
+    "errorTest": "Probar Errores",
+    "users": "Usuarios",
+    "fodderPools": "Grupos de Elementos"
+  },
+  "footer": {
+    "learn": "Aprender",
+    "and": "y"
+  },
+  "counter": {
+    "increment": "Incrementar",
+    "decrement": "Disminuir",
+    "addAmount": "Agregar Cantidad",
+    "addAsync": "Agregar Asíncrono",
+    "addIfOdd": "Agregar Si Es Impar"
+  },
+  "questionnairePage": {
+    "title": "Página de Cuestionarios",
+    "description": "Esta página está destinada a mostrar Cuestionarios."
+  },
+  "questionnaires": {
+    "changeAnswer": "Cambiar Respuesta",
+    "cancelEdit": "Cancelar Edición"
+  },
+  "questionnaire": {
+    "skipQuestion": "Saltar Pregunta",
+    "userTags": "Etiquetas de Usuario",
+    "advanced": "Avanzado",
+    "sortPosition": "Posición de Clasificación",
+    "filterAndSort": "Filtrar y Ordenar",
+    "filterByTag": "Filtrar por Etiqueta",
+    "showSkipped": "Mostrar Omitidas",
+    "showAll": "Mostrar Todo",
+    "clearAllMeta": "Borrar Todo Meta",
+    "enterTagsSpaceSeparated": "Ingrese etiquetas para filtrar...",
+    "useSpacesToSeparateTags": "Use espacios para separar múltiples etiquetas"
+  },
+  "singleword": {
+    "hide": "Ocultar",
+    "show": "Mostrar",
+    "save": "Guardar",
+    "apply": "Aplicar",
+    "reset": "Restablecer",
+    "cancel": "Cancelar",
+    "create": "Crear",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "add": "Agregar"
+  },
+  "settings": {
+    "profile": "Perfil",
+    "account": "Cuenta",
+    "logout": "Cerrar sesión"
+  },
+  "users": {
+    "title": "Usuarios",
+    "createUser": "Crear Usuario",
+    "editUser": "Editar Usuario",
+    "username": "Nombre de Usuario",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "roles": "Roles",
+    "actions": "Acciones"
+  },
+  "fodderPools": {
+    "title": "Grupos de Elementos",
+    "createPool": "Crear Grupo",
+    "manageItems": "Administrar Elementos",
+    "newItem": "Nuevo Elemento",
+    "items": "Elementos",
+    "actions": "Acciones"
+  }
+}

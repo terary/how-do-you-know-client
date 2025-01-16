@@ -1,0 +1,45 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "verify": "تحقق",
+    "quotes": "اقتباسات",
+    "questionnaires": "استبيانات",
+    "errorTest": "اختبار الأخطاء"
+  },
+  "footer": {
+    "learn": "تعلم",
+    "and": "و"
+  },
+  "counter": {
+    "increment": "زيادة",
+    "decrement": "إنقاص",
+    "addAmount": "إضافة كمية",
+    "addAsync": "إضافة غير متزامنة",
+    "addIfOdd": "إضف إذا كان فردياً"
+  },
+  "questionnairePage": {
+    "title": "صفحة الاستبيان",
+    "description": "هذه الصفحة مخصصة لعرض الاستبيانات"
+  },
+  "questionnaires": {
+    "changeAnswer": "تغيير الإجابة",
+    "cancelEdit": "إلغاء التعديل"
+  },
+  "questionnaire": {
+    "advanced": "متقدم",
+    "skipQuestion": "تخطي السؤال",
+    "flagQuestion": "تعليم السؤال",
+    "userNotes": "ملاحظات المستخدم",
+    "sortPosition": "موضع الترتيب"
+  },
+  "singleword": {
+    "hide": "إخفاء",
+    "show": "عرض",
+    "save": "حفظ"
+  },
+  "settings": {
+    "profile": "الملف الشخصي",
+    "account": "الحساب",
+    "logout": "تسجيل الخروج"
+  }
+}

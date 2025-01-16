@@ -1,25 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
+import type { TQuestionAny, IQuestionFEMeta } from "@/app/questionnaires/types";
+import type {
+  ISetUserResponseResponse,
+  IGetQuestionnaireResponse,
+  UserResponseTextType,
+  UserResponseArraySelectType,
+  AcceptedUserResponse,
+} from "./types";
 import { userAnswersApiSlice } from "./userResponseApiSlice";
-import { TQuestionAny, IQuestionFEMeta } from "@/app/questionnaires/types";
 
 const notIn = (key: string, obj: Object) => !(key in obj);
-
-export type UserResponseTextType = {
-  text?: string;
-};
-export type UserResponseArraySelectType = {
-  selectedOptions?: string[];
-};
-
-export interface AcceptedUserResponse<
-  T extends UserResponseTextType | UserResponseArraySelectType
-> {
-  systemUserResponseId: string;
-  systemAcceptTime: number;
-  questionId: string;
-  userResponse: T;
-}
 
 type TQuestionIdMap = { [questionId: string]: TQuestionAny };
 
@@ -47,7 +37,7 @@ const initializeFEMeta = (
     feMeta: {
       isSkipped: false,
       userFlags: "",
-      userSortPosition: index, // Initialize with array index position
+      userSortPosition: index,
     },
   };
 };
@@ -70,30 +60,17 @@ export const userResponseSlice = createSlice({
         selectedOptions: string[];
       }>
     ) => {
-      if (notIn(action.payload.questionId, state.draftResponses)) {
-        // @ts-ignore
-        state.draftResponses[action.payload.questionId] = {};
-      }
-
-      if (
-        notIn(
-          "selectedOptions",
-          state.draftResponses[action.payload.questionId]
-        )
-      ) {
-        // @ts-ignore
+      const draftResponse = state.draftResponses[
+        action.payload.questionId
+      ] as UserResponseArraySelectType;
+      if (!draftResponse) {
         state.draftResponses[action.payload.questionId] = {
-          selectedOptions: [],
+          selectedOptions: action.payload.selectedOptions,
         };
+      } else {
+        draftResponse.selectedOptions = action.payload.selectedOptions;
       }
-      // @ts-ignore state.draftResponse doesn't like being 'selectedValues'
-      state.draftResponses[action.payload.questionId].selectedOptions =
-        action.payload.selectedOptions;
-
-      // @ts-ignore 'text' is not a property
-      delete state.draftResponses[action.payload.questionId]["text"];
     },
-
     clearDraftResponse: (state, action: PayloadAction<string>) => {
       delete state.draftResponses[action.payload];
     },
@@ -141,7 +118,6 @@ export const userResponseSlice = createSlice({
       });
     },
   },
-  // Handle API states using extraReducers
   extraReducers: (builder) => {
     builder
       .addMatcher(
@@ -152,22 +128,36 @@ export const userResponseSlice = createSlice({
       )
       .addMatcher(
         userAnswersApiSlice.endpoints.setUserResponse.matchFulfilled,
-        (state, action) => {
+        (state, action: PayloadAction<ISetUserResponseResponse>) => {
           state.isEditing = false;
           const question = state.questionMap[action.payload.questionId];
-          question.userResponseHistory?.push(action.payload);
-          // Clear draft after successful submission
+          if (question) {
+            if (!question.userResponseHistory) {
+              question.userResponseHistory = [];
+            }
+            question.userResponseHistory.push({
+              questionId: action.payload.questionId,
+              userResponse: action.payload.userResponse,
+              systemUserResponseId: action.payload.systemUserResponseId,
+              systemAcceptTime: new Date(
+                action.payload.systemAcceptTimeUtc
+              ).getTime(),
+            });
+          }
           delete state.draftResponses[action.payload.questionId];
         }
       )
       .addMatcher(
         userAnswersApiSlice.endpoints.getQuestionnaire.matchFulfilled,
-        (state, action) => {
+        (state, action: PayloadAction<IGetQuestionnaireResponse>) => {
           const questions = action.payload.questions || [];
-          state.questionMap = questions.reduce((acc, question, index) => {
-            acc[question.questionId] = initializeFEMeta(question, index);
-            return acc;
-          }, {} as TQuestionIdMap);
+          state.questionMap = questions.reduce(
+            (acc: TQuestionIdMap, question: TQuestionAny, index: number) => {
+              acc[question.questionId] = initializeFEMeta(question, index);
+              return acc;
+            },
+            {} as TQuestionIdMap
+          );
         }
       );
   },
@@ -184,4 +174,5 @@ export const {
   unSkipAllQuestions,
   resetAllFEMeta,
 } = userResponseSlice.actions;
+
 export default userResponseSlice.reducer;

@@ -1,12 +1,43 @@
-import type { TUserResponseType } from "@/app/questionnaires/types";
+import type { TQuestionAny } from "@/app/questionnaires/types";
 
-export type TUserResponse = {
+export interface IGetQuestionnaireRequestParameters {
+  questionnaireId?: string;
+}
+
+export interface IGetQuestionnaireResponse {
+  questions: TQuestionAny[];
+}
+
+export interface ISetUserResponseRequest {
   questionId: string;
-  systemAcceptTimeUtc?: number; // this is backend generated so it's not available when FE creates the update request
-  systemUserResponseId?: string; // this is backend generated so it's not available when FE creates the update request
-
-  userResponseType: TUserResponseType;
+  userResponseType: string;
   userResponse: {
     text: string;
   };
+}
+
+export interface ISetUserResponseResponse {
+  questionId: string;
+  userResponse: {
+    text: string;
+  };
+  systemUserResponseId: string;
+  systemAcceptTimeUtc: string;
+}
+
+export type UserResponseTextType = {
+  text?: string;
 };
+
+export type UserResponseArraySelectType = {
+  selectedOptions?: string[];
+};
+
+export interface AcceptedUserResponse<
+  T extends UserResponseTextType | UserResponseArraySelectType
+> {
+  systemUserResponseId: string;
+  systemAcceptTime: number;
+  questionId: string;
+  userResponse: T;
+}
