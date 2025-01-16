@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import { StoreProvider } from "./StoreProvider";
 import { Sidebar } from "./components/layout/Sidebar";
 import { TopBar } from "./components/layout/TopBar";
-import { ErrorBoundary } from "./components/ErrorBoundary";
+import { ErrorBoundary } from "./components/shared/ErrorBoundary";
 import { useTranslation } from "react-i18next";
 import "../lib/i18n";
 import "./styles/globals.css";

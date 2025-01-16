@@ -1,10 +1,13 @@
 import { FC } from "react";
-import { TUserResponse } from "@/lib/features/user-response/types";
+import {
+  AcceptedUserResponse,
+  UserResponseTextType,
+} from "@/lib/features/user-response/types";
 import { Typography, Paper, Box } from "@mui/material";
-import { DateOver24HoursTimeLessThan } from "../common/format/DateOver24HoursTimeLessThan";
+import { DateOver24HoursTimeLessThan } from "../shared/format/DateOver24HoursTimeLessThan";
 
 interface AcceptedAnswerProps {
-  answer: TUserResponse;
+  answer: AcceptedUserResponse<UserResponseTextType>;
 }
 
 export const AcceptedAnswer: FC<AcceptedAnswerProps> = ({ answer }) => {
@@ -70,16 +73,16 @@ export const AcceptedAnswer: FC<AcceptedAnswerProps> = ({ answer }) => {
   };
 
   return (
-    <>
-      <Typography variant="subtitle2" color="textSecondary">
-        Accepted Answer (submitted{" "}
-        <DateOver24HoursTimeLessThan
-          inputDate={new Date(answer.systemAcceptTimeUtc || 0)}
-        />
-        )
-        {/* {new Date(answer.systemAcceptTimeUtc || 0).toLocaleDateString()}): */}
-      </Typography>
-      <AcceptedAnswerUserResponse answer={answer} />
-    </>
+    <Paper elevation={3}>
+      <Box p={2}>
+        <Typography variant="body2" color="textSecondary">
+          Accepted at:{" "}
+          <DateOver24HoursTimeLessThan
+            inputDate={new Date(answer.systemAcceptTime)}
+          />
+        </Typography>
+        <Typography variant="body1">{answer.userResponse.text}</Typography>
+      </Box>
+    </Paper>
   );
 };

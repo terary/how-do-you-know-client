@@ -5,7 +5,7 @@ import { AcceptedAnswer } from "./AcceptedAnswer";
 import { PreviousAnswers } from "./PreviousAnswers";
 import { Button, Box, Stack } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { StackItem } from "../common/layout/StackItem";
+import { StackItem } from "../shared/layout/StackItem";
 
 interface UserResponseContainerProps {
   question: TQuestionAny;

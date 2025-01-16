@@ -4,7 +4,7 @@ import {
   FetchArgs,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
-import { apiSlice } from "../api/apiSlice";
+import { apiSlice } from "@/lib/store/api/base";
 
 export type UserPromptType = "text" | "multimedia";
 export type UserResponseType =

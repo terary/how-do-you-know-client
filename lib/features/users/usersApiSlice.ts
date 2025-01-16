@@ -1,5 +1,4 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { authService } from "@/lib/services/authService";
+import { apiSlice } from "@/lib/store/api/base";
 
 export interface User {
   username: string;
@@ -25,33 +24,21 @@ export interface UpdateUserDto {
   roles?: string[];
 }
 
-export const usersApiSlice = createApi({
-  reducerPath: "usersApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3001/users",
-    prepareHeaders: (headers) => {
-      const token = authService.getToken();
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
-  tagTypes: ["Users"],
+export const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getUsers: builder.query<User[], void>({
-      query: () => "/",
+      query: () => "/users",
       providesTags: ["Users"],
     }),
     getUser: builder.query<User, string>({
-      query: (username) => `/${username}`,
+      query: (username) => `/users/${username}`,
       providesTags: (result, error, username) => [
         { type: "Users", id: username },
       ],
     }),
     createUser: builder.mutation<User, CreateUserDto>({
       query: (userData) => ({
-        url: "/",
+        url: "/users",
         method: "POST",
         body: userData,
       }),
@@ -62,7 +49,7 @@ export const usersApiSlice = createApi({
       { username: string; data: UpdateUserDto }
     >({
       query: ({ username, data }) => ({
-        url: `/${username}`,
+        url: `/users/${username}`,
         method: "PATCH",
         body: data,
       }),
@@ -73,7 +60,7 @@ export const usersApiSlice = createApi({
     }),
     deleteUser: builder.mutation<void, string>({
       query: (username) => ({
-        url: `/${username}`,
+        url: `/users/${username}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Users"],

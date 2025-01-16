@@ -1,5 +1,4 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { authService } from "@/lib/services/authService";
+import { apiSlice } from "@/lib/store/api/base";
 
 export interface CreateFodderPoolDto {
   name: string;
@@ -22,32 +21,19 @@ export interface FodderPool {
   items: FodderPoolItem[];
 }
 
-export const fodderPoolsApiSlice = createApi({
-  reducerPath: "fodderPoolsApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3001/fodder-pools",
-    prepareHeaders: (headers) => {
-      const token = authService.getToken();
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
-      }
-      headers.set("Content-Type", "application/json");
-      return headers;
-    },
-  }),
-  tagTypes: ["FodderPools"],
+export const fodderPoolsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getFodderPools: builder.query<FodderPool[], void>({
-      query: () => "/",
+      query: () => "/fodder-pools",
       providesTags: ["FodderPools"],
     }),
     getFodderPool: builder.query<FodderPool, string>({
-      query: (id) => `/${id}`,
+      query: (id) => `/fodder-pools/${id}`,
       providesTags: (result, error, id) => [{ type: "FodderPools", id }],
     }),
     createFodderPool: builder.mutation<FodderPool, CreateFodderPoolDto>({
       query: (data) => ({
-        url: "/",
+        url: "/fodder-pools",
         method: "POST",
         body: data,
       }),
@@ -55,14 +41,14 @@ export const fodderPoolsApiSlice = createApi({
     }),
     deleteFodderPool: builder.mutation<void, string>({
       query: (id) => ({
-        url: `/${id}`,
+        url: `/fodder-pools/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["FodderPools"],
     }),
     updateItems: builder.mutation<void, { id: string; items: string[] }>({
       query: ({ id, items }) => ({
-        url: `/${id}/items`,
+        url: `/fodder-pools/${id}/items`,
         method: "POST",
         body: items.map((text) => ({ text })),
       }),

@@ -39,7 +39,7 @@ import {
   Add as AddIcon,
   ExpandMore as ExpandMoreIcon,
 } from "@mui/icons-material";
-import { ProtectedRoute } from "../components/auth/ProtectedRoute";
+import { ProtectedRoute } from "@/lib/features/auth/components/ProtectedRoute";
 import {
   useGetQuestionTemplatesQuery,
   useCreateQuestionTemplateMutation,
@@ -52,12 +52,14 @@ import {
   type UserResponseType,
   type ExclusivityType,
   type MediaDto,
+  type ValidAnswerDto,
 } from "@/lib/features/question-templates/questionTemplatesApiSlice";
 import { useGetFodderPoolsQuery } from "@/lib/features/fodder-pools/fodderPoolsApiSlice";
 import { QuestionPreview } from "../components/question-preview/QuestionPreview";
 
-interface ExtendedCreateTemplateDto extends CreateTemplateDto {
-  media?: MediaDto[];
+interface ExtendedCreateTemplateDto
+  extends Omit<CreateTemplateDto, "validAnswers"> {
+  validAnswers: { text: string; fodderPoolId: string }[];
 }
 
 interface TemplateDialogProps {
@@ -807,10 +809,12 @@ const TemplateDialog = ({
 
 export default function QuestionTemplatesPage() {
   const { t } = useTranslation();
-  const { data: templates = [], isLoading } = useGetQuestionTemplatesQuery();
+  const { data: templates = [], isLoading } =
+    useGetQuestionTemplatesQuery(undefined);
   const [createTemplate] = useCreateQuestionTemplateMutation();
   const [updateTemplate] = useUpdateQuestionTemplateMutation();
   const [deleteTemplate] = useDeleteQuestionTemplateMutation();
+  const { data: fodderPools = [] } = useGetFodderPoolsQuery(undefined);
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<

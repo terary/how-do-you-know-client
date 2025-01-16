@@ -33,7 +33,7 @@ import {
   Delete as DeleteIcon,
   Add as AddIcon,
 } from "@mui/icons-material";
-import { ProtectedRoute } from "../components/auth/ProtectedRoute";
+import { ProtectedRoute } from "@/lib/features/auth/components/ProtectedRoute";
 import {
   useGetUsersQuery,
   useCreateUserMutation,

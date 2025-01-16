@@ -1,0 +1,9 @@
+{
+  "questionnaire": {
+    "advanced": "Avanzado",
+    "skipQuestion": "Saltar pregunta",
+    "flagQuestion": "Marcar pregunta",
+    "userNotes": "Notas del usuario",
+    "sortPosition": "Posición de ordenamiento"
+  }
+}

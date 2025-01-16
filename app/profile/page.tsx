@@ -13,7 +13,7 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import { ProtectedRoute } from "../components/auth/ProtectedRoute";
+import { ProtectedRoute } from "@/lib/features/auth/components/ProtectedRoute";
 import {
   useGetProfileQuery,
   useUpdateProfileMutation,

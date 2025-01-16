@@ -1,50 +1,74 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { apiSlice } from "@/lib/store/api/base";
 import type {
-  IGetQuestionnaireRequestParameters,
-  IGetQuestionnaireResponse,
-  ISetUserResponseRequest,
-  ISetUserResponseResponse,
-} from "./types";
+  TQuestionAny,
+  TUserResponseType,
+} from "@/app/questionnaires/types";
 
-export const userAnswersApiSlice = createApi({
-  reducerPath: "userAnswersApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3001",
-  }),
-  tagTypes: ["Questionnaire"],
-  endpoints: (builder) => ({
-    getQuestionnaire: builder.query<
+type SetUserResponseRequest = {
+  questionId: string;
+  userResponseType: TUserResponseType;
+  userResponse: {
+    text?: string;
+    selectedOptions?: string[];
+  };
+};
+
+type TUserResponse = {
+  questionId: string;
+  userResponseType: TUserResponseType;
+  userResponse: {
+    text?: string;
+    selectedOptions?: string[];
+  };
+};
+
+interface UserAnswersApiResponse {
+  UserResponseHistory: TUserResponse[];
+  total: number;
+  skip: number;
+  limit: number;
+}
+
+interface IGetQuestionnaireResponse {
+  questionnaireId: string;
+  questions: TQuestionAny[];
+  examMetaData?: {
+    examId?: string;
+    proctorIds?: string[];
+  };
+}
+
+interface IGetQuestionnaireRequestParameters {
+  questionnaireId?: string;
+}
+
+export const userAnswersApiSlice = apiSlice.injectEndpoints({
+  endpoints: (build) => ({
+    getQuestionnaire: build.query<
       IGetQuestionnaireResponse,
       IGetQuestionnaireRequestParameters
     >({
-      query: ({ questionnaireId }: IGetQuestionnaireRequestParameters) => ({
-        url: questionnaireId
-          ? `/dev-debug/user-answers/questionnaire?questionnaireId=${questionnaireId}`
-          : "/dev-debug/user-answers/questionnaire",
-        method: "GET",
-        credentials: "same-origin",
-      }),
-      providesTags: ["Questionnaire"],
+      query: (params) => {
+        const END_POINT = "/dev-debug/user-answers/questionnaire";
+        if (params.questionnaireId) {
+          return END_POINT + "?questionnaireId=" + params.questionnaireId;
+        }
+        return END_POINT;
+      },
+      providesTags: (result, error, id) => {
+        return [
+          { type: "questionnaire", id: id.questionnaireId, error, result },
+        ];
+      },
     }),
-    setUserResponse: builder.mutation<
-      ISetUserResponseResponse,
-      ISetUserResponseRequest
-    >({
-      query: (body: ISetUserResponseRequest) => ({
+
+    setUserResponse: build.mutation<TUserResponse, SetUserResponseRequest>({
+      query: (userResponse) => ({
         url: "/dev-debug/user-answers",
         method: "POST",
-        body,
-        credentials: "same-origin",
+        body: userResponse,
       }),
-      invalidatesTags: ["Questionnaire"],
+      invalidatesTags: ["UserAnswers"],
     }),
   }),
 });
-
-export const { useGetQuestionnaireQuery, useSetUserResponseMutation } =
-  userAnswersApiSlice;
-
-// Export the endpoint matchers for use in other slices
-export const {
-  endpoints: { getQuestionnaire, setUserResponse },
-} = userAnswersApiSlice;

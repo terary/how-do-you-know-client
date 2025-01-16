@@ -33,7 +33,7 @@ import {
   Add as AddIcon,
   Clear as ClearIcon,
 } from "@mui/icons-material";
-import { ProtectedRoute } from "../components/auth/ProtectedRoute";
+import { ProtectedRoute } from "@/lib/features/auth/components/ProtectedRoute";
 import {
   useGetFodderPoolsQuery,
   useCreateFodderPoolMutation,

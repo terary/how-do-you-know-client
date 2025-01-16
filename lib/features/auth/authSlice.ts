@@ -1,10 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { AuthState } from "@/features/auth/types";
+import type { AuthState } from "./types";
+import { authService } from "@/lib/services/authService";
+
+const token = typeof window !== "undefined" ? authService.getToken() : null;
 
 const initialState: AuthState = {
   user: null,
-  isAuthenticated: false,
-  token: null,
+  isAuthenticated: !!token,
+  token,
 };
 
 export const authSlice = createSlice({
