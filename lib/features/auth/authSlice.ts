@@ -1,13 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { AuthState } from "./types";
-import { authService } from "@/lib/services/authService";
-
-const token = typeof window !== "undefined" ? authService.getToken() : null;
 
 const initialState: AuthState = {
   user: null,
-  isAuthenticated: !!token,
-  token,
+  isAuthenticated: false,
+  token: null,
 };
 
 export const authSlice = createSlice({
@@ -27,6 +24,20 @@ export const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
+    },
+    initializeFromStorage: (state) => {
+      if (typeof window !== "undefined") {
+        const token =
+          localStorage.getItem("hdyk_token") ||
+          document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("hdyk_token="))
+            ?.split("=")[1] ||
+          null;
+
+        state.token = token;
+        state.isAuthenticated = !!token;
+      }
     },
   },
 });

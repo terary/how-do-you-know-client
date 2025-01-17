@@ -18,6 +18,11 @@ export const useAuth = () => {
   const { data: profile, refetch: refetchProfile } = useGetProfileQuery();
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
+  // Initialize auth state from storage on mount
+  useEffect(() => {
+    dispatch(authSlice.actions.initializeFromStorage());
+  }, [dispatch]);
+
   // Fetch profile on mount if we have a token
   useEffect(() => {
     const token = authService.getToken();
