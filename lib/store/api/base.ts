@@ -13,6 +13,13 @@ export const apiSlice = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Users", "QuestionTemplates", "FodderPools", "Profile"],
+  tagTypes: [
+    "Users",
+    "QuestionTemplates",
+    "FodderPools",
+    "Profile",
+    "Questionnaire",
+    "UserAnswers",
+  ],
   endpoints: () => ({}),
 });

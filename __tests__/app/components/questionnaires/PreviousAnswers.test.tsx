@@ -1,26 +1,30 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { PreviousAnswers } from "@/app/components/questionnaires/PreviousAnswers";
-// import { TUserResponse } from "@/app/questionnaires/types";
-import { TUserResponse } from "@/lib/features/user-response/types";
+import {
+  AcceptedUserResponse,
+  UserResponseTextType,
+  UserResponseArraySelectType,
+} from "@/lib/features/user-response/types";
+
 describe("PreviousAnswers", () => {
-  const mockAnswers: TUserResponse[] = [
+  const mockAnswers: AcceptedUserResponse<UserResponseTextType>[] = [
     {
       questionId: "123",
-      userResponseType: "one-of-4",
       userResponse: { text: "Option A" },
-      systemAcceptTimeUtc: 1710928800000,
+      systemAcceptTime: 1710928800000,
+      systemUserResponseId: "1",
     },
     {
       questionId: "123",
-      userResponseType: "one-of-4",
       userResponse: { text: "Option B" },
-      systemAcceptTimeUtc: 1711015200000,
+      systemAcceptTime: 1711015200000,
+      systemUserResponseId: "2",
     },
     {
       questionId: "123",
-      userResponseType: "one-of-4",
       userResponse: { text: "Option C" },
-      systemAcceptTimeUtc: 1711101600000,
+      systemAcceptTime: 1711101600000,
+      systemUserResponseId: "3",
     },
   ];
 
@@ -94,25 +98,26 @@ describe("PreviousAnswers", () => {
   });
 
   it("handles different response types", () => {
-    const mixedAnswers: TUserResponse[] = [
+    const mixedAnswers: AcceptedUserResponse<
+      UserResponseTextType | UserResponseArraySelectType
+    >[] = [
       {
         questionId: "123",
-        userResponseType: "free-text-255",
         userResponse: { text: "Text response" },
-        systemAcceptTimeUtc: 1710928800000,
+        systemAcceptTime: 1710928800000,
+        systemUserResponseId: "1",
       },
       {
         questionId: "123",
-        userResponseType: "any-of",
-        // @ts-ignore - 'selectedOptions' is not {'text': string}
         userResponse: { selectedOptions: ["A", "B"] },
-        systemAcceptTimeUtc: 1711015200000,
+        systemAcceptTime: 1711015200000,
+        systemUserResponseId: "2",
       },
       {
         questionId: "123",
-        userResponseType: "one-of-4",
         userResponse: { text: "Option C" },
-        systemAcceptTimeUtc: 1711101600000,
+        systemAcceptTime: 1711101600000,
+        systemUserResponseId: "3",
       },
     ];
 
@@ -129,23 +134,24 @@ describe("PreviousAnswers", () => {
     expect(screen.queryByText(/{"text":"Option C"}/)).not.toBeInTheDocument();
   });
 
-  it("handles undefined systemAcceptTimeUtc", () => {
-    const answersWithUndefinedTime = [
-      {
-        questionId: "123",
-        userResponseType: "one-of-4",
-        userResponse: { text: "Option A" },
-        systemAcceptTimeUtc: undefined,
-      },
-      {
-        questionId: "123",
-        userResponseType: "one-of-4",
-        userResponse: { text: "Option B" },
-        systemAcceptTimeUtc: undefined,
-      },
-    ];
+  it("handles undefined systemAcceptTime", () => {
+    const answersWithUndefinedTime: AcceptedUserResponse<UserResponseTextType>[] =
+      [
+        {
+          questionId: "123",
+          userResponse: { text: "Option A" },
+          systemAcceptTime: 0,
+          systemUserResponseId: "1",
+        },
+        {
+          questionId: "123",
+          userResponse: { text: "Option B" },
+          systemAcceptTime: 0,
+          systemUserResponseId: "2",
+        },
+      ];
 
-    render(<PreviousAnswers answers={answersWithUndefinedTime as any} />);
+    render(<PreviousAnswers answers={answersWithUndefinedTime} />);
     fireEvent.click(screen.getByText("Show"));
 
     expect(screen.getByText(/accepted at: 12\/31\/1969/)).toBeInTheDocument();

@@ -57,7 +57,7 @@ export const userAnswersApiSlice = apiSlice.injectEndpoints({
       },
       providesTags: (result, error, id) => {
         return [
-          { type: "questionnaire", id: id.questionnaireId, error, result },
+          { type: "Questionnaire", id: id.questionnaireId, error, result },
         ];
       },
     }),

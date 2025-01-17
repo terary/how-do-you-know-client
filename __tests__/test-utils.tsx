@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import type { RootState } from "@/lib/store";
 import { questionFilterSlice } from "@/lib/features/question-filter/questionFilterSlice";
-import { authSlice } from "@/lib/store/slices/authSlice";
+import { authSlice } from "@/lib/features/auth/authSlice";
 
 // First, mock the API slice module
 jest.mock("@/lib/features/user-response/userResponseApiSlice", () => {
