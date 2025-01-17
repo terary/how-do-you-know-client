@@ -5,6 +5,8 @@ import type { NextRequest } from "next/server";
 const protectedPaths = [
   "/question-templates",
   "/profile",
+  "/learning-institutions",
+  "/instructional-courses",
   // Add other protected routes here
 ];
 

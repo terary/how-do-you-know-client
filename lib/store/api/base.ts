@@ -21,6 +21,7 @@ export const apiSlice = createApi({
     "Questionnaire",
     "UserAnswers",
     "LearningInstitutions",
+    "InstructionalCourses",
   ],
   endpoints: () => ({}),
 });

@@ -7,7 +7,8 @@
     "errorTest": "Probar Errores",
     "users": "Usuarios",
     "fodderPools": "Grupos de Elementos",
-    "learningInstitutions": "Instituciones Educativas"
+    "learningInstitutions": "Instituciones Educativas",
+    "instructionalCourses": "Cursos Educativos"
   },
   "footer": {
     "learn": "Aprender",
@@ -78,20 +79,24 @@
     "items": "Elementos",
     "actions": "Acciones"
   },
-  "learningInstitutions": {
-    "title": "Instituciones Educativas",
-    "addInstitution": "Agregar Institución",
-    "editInstitution": "Editar Institución",
+  "instructionalCourses": {
+    "title": "Cursos Educativos",
+    "addCourse": "Agregar Curso",
+    "editCourse": "Editar Curso",
     "name": "Nombre",
     "description": "Descripción",
-    "website": "Sitio Web",
-    "email": "Correo Electrónico",
-    "phone": "Teléfono",
-    "address": "Dirección",
+    "startDate": "Fecha de Inicio",
+    "finishDate": "Fecha de Finalización",
+    "startTime": "Hora de Inicio",
+    "duration": "Duración (minutos)",
+    "daysOfWeek": "Días de la Semana",
+    "institution": "Institución",
+    "instructor": "Instructor",
+    "proctors": "Supervisores",
     "loading": "Cargando...",
-    "errorLoading": "Error al cargar instituciones",
-    "errorCreating": "Error al crear institución",
-    "errorUpdating": "Error al actualizar institución",
-    "errorDeleting": "Error al eliminar institución"
+    "errorLoading": "Error al cargar los cursos",
+    "errorCreating": "Error al crear el curso",
+    "errorUpdating": "Error al actualizar el curso",
+    "errorDeleting": "Error al eliminar el curso"
   }
 }
