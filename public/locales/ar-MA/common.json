@@ -4,7 +4,8 @@
     "verify": "تحقق",
     "quotes": "اقتباسات",
     "questionnaires": "استبيانات",
-    "errorTest": "اختبار الأخطاء"
+    "errorTest": "اختبار الأخطاء",
+    "learningInstitutions": "المؤسسات التعليمية"
   },
   "footer": {
     "learn": "تعلم",
@@ -43,11 +44,31 @@
     "show": "عرض",
     "save": "حفظ",
     "apply": "تطبيق",
-    "reset": "إعادة تعيين"
+    "reset": "إعادة تعيين",
+    "cancel": "إلغاء",
+    "create": "إنشاء",
+    "edit": "تعديل",
+    "delete": "حذف"
   },
   "settings": {
     "profile": "الملف الشخصي",
     "account": "الحساب",
     "logout": "تسجيل الخروج"
+  },
+  "learningInstitutions": {
+    "title": "المؤسسات التعليمية",
+    "addInstitution": "إضافة مؤسسة",
+    "editInstitution": "تعديل المؤسسة",
+    "name": "الاسم",
+    "description": "الوصف",
+    "website": "الموقع الإلكتروني",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "address": "العنوان",
+    "loading": "جاري التحميل...",
+    "errorLoading": "خطأ في تحميل المؤسسات",
+    "errorCreating": "خطأ في إنشاء المؤسسة",
+    "errorUpdating": "خطأ في تحديث المؤسسة",
+    "errorDeleting": "خطأ في حذف المؤسسة"
   }
 }

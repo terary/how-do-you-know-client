@@ -6,7 +6,8 @@
     "questionnaires": "Cuestionarios",
     "errorTest": "Probar Errores",
     "users": "Usuarios",
-    "fodderPools": "Grupos de Elementos"
+    "fodderPools": "Grupos de Elementos",
+    "learningInstitutions": "Instituciones Educativas"
   },
   "footer": {
     "learn": "Aprender",
@@ -76,5 +77,21 @@
     "newItem": "Nuevo Elemento",
     "items": "Elementos",
     "actions": "Acciones"
+  },
+  "learningInstitutions": {
+    "title": "Instituciones Educativas",
+    "addInstitution": "Agregar Institución",
+    "editInstitution": "Editar Institución",
+    "name": "Nombre",
+    "description": "Descripción",
+    "website": "Sitio Web",
+    "email": "Correo Electrónico",
+    "phone": "Teléfono",
+    "address": "Dirección",
+    "loading": "Cargando...",
+    "errorLoading": "Error al cargar instituciones",
+    "errorCreating": "Error al crear institución",
+    "errorUpdating": "Error al actualizar institución",
+    "errorDeleting": "Error al eliminar institución"
   }
 }

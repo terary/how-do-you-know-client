@@ -7,7 +7,8 @@
     "verify": "Verify",
     "questionnaires": "Questionnaires",
     "errorTest": "Error Test",
-    "profile": "Profile"
+    "profile": "Profile",
+    "learningInstitutions": "Learning Institutions"
   },
   "singleword": {
     "save": "Save",
@@ -41,5 +42,21 @@
       "practice-only": "Practice Only",
       "exam-practice-both": "Exam & Practice"
     }
+  },
+  "learningInstitutions": {
+    "title": "Learning Institutions",
+    "addInstitution": "Add Institution",
+    "editInstitution": "Edit Institution",
+    "name": "Name",
+    "description": "Description",
+    "website": "Website",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "loading": "Loading...",
+    "errorLoading": "Error loading institutions",
+    "errorCreating": "Failed to create institution",
+    "errorUpdating": "Failed to update institution",
+    "errorDeleting": "Failed to delete institution"
   }
 }
