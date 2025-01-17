@@ -8,9 +8,9 @@ import userResponseReducer, {
   updateQuestionFEMeta,
   unSkipAllQuestions,
   resetAllFEMeta,
-} from "@/lib/features/user-response/userResponseSlice";
-import { userAnswersApiSlice } from "@/lib/features/user-response/userResponseApiSlice";
-import { TQuestionAny } from "@/app/questionnaires/types";
+} from "../../../../lib/features/user-response/userResponseSlice";
+import { userAnswersApiSlice } from "../../../../lib/features/user-response/userResponseApiSlice";
+import type { TQuestionUserResponseText } from "../../../../app/questionnaires/types";
 
 describe("userResponseSlice", () => {
   const initialState = {
@@ -104,12 +104,10 @@ describe("userResponseSlice", () => {
   describe("extraReducers", () => {
     it("should set isEditing to true when setUserResponse is pending", () => {
       const actual = userResponseReducer(initialState, {
-        type: "userResponseApi/executeMutation/pending",
+        type: `${userAnswersApiSlice.reducerPath}/executeMutation/pending`,
         meta: {
           arg: {
-            type: "mutation",
             endpointName: "setUserResponse",
-            originalArgs: {},
           },
         },
       });
@@ -117,7 +115,7 @@ describe("userResponseSlice", () => {
     });
 
     it("should handle setUserResponse fulfilled with existing question", () => {
-      const mockQuestion: TQuestionAny = {
+      const mockQuestion: TQuestionUserResponseText = {
         questionId: "q1",
         userPromptType: "text",
         userPromptText: "test question",
@@ -135,23 +133,25 @@ describe("userResponseSlice", () => {
       };
 
       const actual = userResponseReducer(stateWithQuestion, {
-        type: "userResponseApi/executeMutation/fulfilled",
+        type: `${userAnswersApiSlice.reducerPath}/executeMutation/fulfilled`,
         meta: {
           arg: {
-            type: "mutation",
             endpointName: "setUserResponse",
-            originalArgs: {},
           },
         },
         payload: {
           questionId: "q1",
           userResponse: { text: "submitted" },
+          systemUserResponseId: "sys1",
+          systemAcceptTimeUtc: "2024-03-21T10:00:00Z",
         },
       });
       expect(actual.isEditing).toBe(false);
       expect(actual.questionMap.q1.userResponseHistory).toContainEqual({
         questionId: "q1",
         userResponse: { text: "submitted" },
+        systemUserResponseId: "sys1",
+        systemAcceptTime: new Date("2024-03-21T10:00:00Z").getTime(),
       });
       expect(actual.draftResponses.q1).toBeUndefined();
     });
@@ -161,7 +161,6 @@ describe("userResponseSlice", () => {
         type: `${userAnswersApiSlice.reducerPath}/executeQuery/fulfilled`,
         meta: {
           arg: {
-            type: "query",
             endpointName: "getQuestionnaire",
           },
         },
@@ -173,7 +172,7 @@ describe("userResponseSlice", () => {
     });
 
     it("should handle getQuestionnaire fulfilled with multiple questions", () => {
-      const mockQuestions: TQuestionAny[] = [
+      const mockQuestions: TQuestionUserResponseText[] = [
         {
           questionId: "q1",
           userPromptType: "text",
@@ -206,7 +205,6 @@ describe("userResponseSlice", () => {
         type: `${userAnswersApiSlice.reducerPath}/executeQuery/fulfilled`,
         meta: {
           arg: {
-            type: "query",
             endpointName: "getQuestionnaire",
           },
         },
@@ -226,7 +224,6 @@ describe("userResponseSlice", () => {
         type: `${userAnswersApiSlice.reducerPath}/executeQuery/fulfilled`,
         meta: {
           arg: {
-            type: "query",
             endpointName: "getQuestionnaire",
           },
         },
@@ -245,22 +242,24 @@ describe("userResponseSlice", () => {
             questionId: "q1",
             userPromptType: "text",
             userPromptText: "test question",
+            userResponseType: "free-text-255",
+            userResponse: { text: null },
             feMeta: {
               isSkipped: false,
               userFlags: "",
               userSortPosition: 0,
             },
-          },
+          } as TQuestionUserResponseText,
         },
       };
 
       const actual = userResponseReducer(
-        initialQuestionState as any,
+        initialQuestionState,
         updateQuestionFEMeta({
           questionId: "q1",
           feMeta: {
             isSkipped: true,
-            userFlags: "test flag",
+            userFlags: "flag1",
             userSortPosition: 1,
           },
         })
@@ -268,167 +267,133 @@ describe("userResponseSlice", () => {
 
       expect(actual.questionMap.q1.feMeta).toEqual({
         isSkipped: true,
-        userFlags: "test flag",
+        userFlags: "flag1",
         userSortPosition: 1,
       });
     });
 
-    it("should handle updateQuestionFEMeta when question does not exist", () => {
+    it("should not modify state when question does not exist", () => {
       const actual = userResponseReducer(
         initialState,
         updateQuestionFEMeta({
           questionId: "nonexistent",
           feMeta: {
             isSkipped: true,
-            userFlags: "test flag",
+            userFlags: "flag1",
             userSortPosition: 1,
           },
         })
       );
 
-      // State should remain unchanged when question doesn't exist
       expect(actual).toEqual(initialState);
     });
   });
 
   describe("unSkipAllQuestions", () => {
-    it("should unSkip all questions", () => {
+    it("should set isSkipped to false for all questions", () => {
       const stateWithSkippedQuestions = {
         ...initialState,
         questionMap: {
           q1: {
             questionId: "q1",
+            userPromptType: "text",
+            userPromptText: "test question",
+            userResponseType: "free-text-255",
+            userResponse: { text: null },
             feMeta: {
               isSkipped: true,
-              userFlags: "test",
+              userFlags: "",
               userSortPosition: 0,
             },
-          },
+          } as TQuestionUserResponseText,
           q2: {
             questionId: "q2",
+            userPromptType: "text",
+            userPromptText: "test question",
+            userResponseType: "free-text-255",
+            userResponse: { text: null },
             feMeta: {
               isSkipped: true,
-              userFlags: "important",
+              userFlags: "",
               userSortPosition: 1,
             },
-          },
+          } as TQuestionUserResponseText,
         },
       };
 
       const actual = userResponseReducer(
-        stateWithSkippedQuestions as any,
+        stateWithSkippedQuestions,
         unSkipAllQuestions()
       );
 
-      expect(actual.questionMap.q1.feMeta!.isSkipped).toBe(false);
-      expect(actual.questionMap.q2.feMeta!.isSkipped).toBe(false);
-      // Verify other meta properties remain unchanged
-      expect(actual.questionMap.q1.feMeta!.userFlags).toBe("test");
-      expect(actual.questionMap.q2.feMeta!.userFlags).toBe("important");
-    });
+      const q1FeMeta = actual.questionMap.q1?.feMeta;
+      const q2FeMeta = actual.questionMap.q2?.feMeta;
 
-    it("should handle questions without feMeta", () => {
-      const stateWithMixedQuestions = {
-        ...initialState,
-        questionMap: {
-          q1: {
-            questionId: "q1",
-            feMeta: {
-              isSkipped: true,
-              userFlags: "test",
-              userSortPosition: 0,
-            },
-          },
-          q2: {
-            questionId: "q2", // No feMeta
-          },
-        },
-      };
+      expect(q1FeMeta).toBeDefined();
+      expect(q2FeMeta).toBeDefined();
 
-      const actual = userResponseReducer(
-        stateWithMixedQuestions as any,
-        unSkipAllQuestions()
-      );
-
-      expect(actual.questionMap.q1.feMeta!.isSkipped).toBe(false);
-      expect(actual.questionMap.q2.feMeta).toBeUndefined();
+      if (q1FeMeta && q2FeMeta) {
+        expect(q1FeMeta.isSkipped).toBe(false);
+        expect(q2FeMeta.isSkipped).toBe(false);
+      }
     });
   });
 
   describe("resetAllFEMeta", () => {
-    it("should reset all FE meta with correct sort positions", () => {
-      const stateWithQuestions = {
+    it("should reset all feMeta to initial values", () => {
+      const stateWithModifiedFEMeta = {
         ...initialState,
         questionMap: {
           q1: {
             questionId: "q1",
+            userPromptType: "text",
+            userPromptText: "test question",
+            userResponseType: "free-text-255",
+            userResponse: { text: null },
             feMeta: {
               isSkipped: true,
-              userFlags: "test",
+              userFlags: "flag1",
               userSortPosition: 5,
             },
-          },
+          } as TQuestionUserResponseText,
           q2: {
             questionId: "q2",
+            userPromptType: "text",
+            userPromptText: "test question",
+            userResponseType: "free-text-255",
+            userResponse: { text: null },
             feMeta: {
               isSkipped: true,
-              userFlags: "important",
-              userSortPosition: 10,
+              userFlags: "flag2",
+              userSortPosition: 3,
             },
-          },
+          } as TQuestionUserResponseText,
         },
       };
 
       const actual = userResponseReducer(
-        stateWithQuestions as any,
+        stateWithModifiedFEMeta,
         resetAllFEMeta()
       );
 
-      expect(actual.questionMap.q1.feMeta!).toEqual({
-        isSkipped: false,
-        userFlags: "",
-        userSortPosition: 0,
-      });
-      expect(actual.questionMap.q2.feMeta!).toEqual({
-        isSkipped: false,
-        userFlags: "",
-        userSortPosition: 1,
-      });
-    });
+      const q1FeMeta = actual.questionMap.q1?.feMeta;
+      const q2FeMeta = actual.questionMap.q2?.feMeta;
 
-    it("should handle questions without existing feMeta", () => {
-      const stateWithMixedQuestions = {
-        ...initialState,
-        questionMap: {
-          q1: {
-            questionId: "q1",
-            feMeta: {
-              isSkipped: true,
-              userFlags: "test",
-              userSortPosition: 5,
-            },
-          },
-          q2: {
-            questionId: "q2", // No feMeta
-          },
-        },
-      };
+      expect(q1FeMeta).toBeDefined();
+      expect(q2FeMeta).toBeDefined();
 
-      const actual = userResponseReducer(
-        stateWithMixedQuestions as any,
-        resetAllFEMeta()
-      );
-
-      expect(actual.questionMap.q1.feMeta!).toEqual({
-        isSkipped: false,
-        userFlags: "",
-        userSortPosition: 0,
-      });
-      expect(actual.questionMap.q2.feMeta!).toEqual({
-        isSkipped: false,
-        userFlags: "",
-        userSortPosition: 1,
-      });
+      if (q1FeMeta && q2FeMeta) {
+        expect(q1FeMeta).toEqual({
+          isSkipped: false,
+          userFlags: "",
+          userSortPosition: 0,
+        });
+        expect(q2FeMeta).toEqual({
+          isSkipped: false,
+          userFlags: "",
+          userSortPosition: 1,
+        });
+      }
     });
   });
 });

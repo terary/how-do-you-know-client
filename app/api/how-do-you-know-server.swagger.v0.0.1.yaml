@@ -1,0 +1,814 @@
+openapi: 3.0.0
+paths:
+  /:
+    get:
+      operationId: AppController_getHello
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - App
+  /users:
+    post:
+      operationId: UsersController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserDto"
+      responses:
+        "201":
+          description: The user has been successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateUserDto"
+        "400":
+          description: Bad request - invalid data.
+      summary: Create a new user
+      tags:
+        - users
+    get:
+      operationId: UsersController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: List of all users.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CreateUserDto"
+      security:
+        - bearer: []
+      summary: Get all users
+      tags:
+        - users
+  /users/{username}:
+    get:
+      operationId: UsersController_findOne
+      parameters:
+        - name: username
+          required: true
+          in: path
+          description: Username of the user to find
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The found user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateUserDto"
+        "404":
+          description: User not found.
+      security:
+        - bearer: []
+      summary: Get a user by username
+      tags:
+        - users
+    patch:
+      operationId: UsersController_update
+      parameters:
+        - name: username
+          required: true
+          in: path
+          description: Username of the user to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserDto"
+      responses:
+        "200":
+          description: The user has been successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateUserDto"
+        "400":
+          description: Bad request - invalid data.
+        "404":
+          description: User not found.
+      security:
+        - bearer: []
+      summary: Update a user
+      tags:
+        - users
+    delete:
+      operationId: UsersController_remove
+      parameters:
+        - name: username
+          required: true
+          in: path
+          description: Username of the user to delete
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The user has been successfully deleted.
+        "404":
+          description: User not found.
+      security:
+        - bearer: []
+      summary: Delete a user
+      tags:
+        - users
+  /auth/login:
+    post:
+      operationId: AuthController_login
+      parameters: []
+      responses:
+        "201":
+          description: ""
+      tags:
+        - Auth
+  /auth/profile:
+    get:
+      operationId: AuthController_getProfile
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - Auth
+  /dev-debug/test-database:
+    get:
+      operationId: DevDebugController_testDatabase
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+  /dev-debug:
+    post:
+      operationId: DevDebugController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDevDebugDto"
+      responses:
+        "201":
+          description: ""
+      tags:
+        - DevDebug
+    get:
+      operationId: DevDebugController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+  /dev-debug/questions:
+    get:
+      operationId: DevDebugController_getQuestions
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+  /dev-debug/user-answers:
+    get:
+      operationId: DevDebugController_getUserAnswers
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+    post:
+      operationId: DevDebugController_setUserAnswers
+      parameters: []
+      responses:
+        "201":
+          description: ""
+      tags:
+        - DevDebug
+  /dev-debug/auth/user-answers/questionnaire:
+    get:
+      operationId: DevDebugController_getQuestionnaireAuth
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+  /dev-debug/user-answers/questionnaire:
+    get:
+      operationId: DevDebugController_getQuestionnaire
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+  /dev-debug/{id}:
+    get:
+      operationId: DevDebugController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+    patch:
+      operationId: DevDebugController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateDevDebugDto"
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+    delete:
+      operationId: DevDebugController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags:
+        - DevDebug
+  /questions/templates:
+    get:
+      operationId: QuestionsController_findAllTemplates
+      parameters: []
+      responses:
+        "200":
+          description: List of all question templates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuestionTemplate"
+      security:
+        - bearer: []
+      summary: Get all question templates
+      tags:
+        - questions
+    post:
+      operationId: QuestionsController_createTemplate
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTemplateDto"
+      responses:
+        "201":
+          description: The question template has been created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionTemplate"
+        "400":
+          description: Invalid input
+      security:
+        - bearer: []
+      summary: Create a new question template
+      tags:
+        - questions
+  /questions/templates/{id}:
+    get:
+      operationId: QuestionsController_findTemplateById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the question template
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The question template
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionTemplate"
+        "404":
+          description: Template not found
+      security:
+        - bearer: []
+      summary: Get a question template by ID
+      tags:
+        - questions
+    patch:
+      operationId: QuestionsController_updateTemplate
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the question template to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTemplateDto"
+      responses:
+        "200":
+          description: The question template has been updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionTemplate"
+        "400":
+          description: Invalid input
+        "404":
+          description: Template not found
+      security:
+        - bearer: []
+      summary: Update a question template
+      tags:
+        - questions
+  /questions/templates/{id}/generate:
+    post:
+      operationId: QuestionsController_generateActual
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the question template
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateActualDto"
+      responses:
+        "201":
+          description: The actual question has been generated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionActual"
+        "400":
+          description: Invalid input
+        "404":
+          description: Template not found
+      security:
+        - bearer: []
+      summary: Generate an actual question from a template
+      tags:
+        - questions
+  /questions/actuals/{id}:
+    get:
+      operationId: QuestionsController_findActualById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the actual question
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The actual question
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionActual"
+        "404":
+          description: Question not found
+      security:
+        - bearer: []
+      summary: Get an actual question by ID
+      tags:
+        - questions
+  /fodder-pools:
+    get:
+      operationId: FodderPoolsController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: List of all fodder pools
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FodderPool"
+      summary: Get all fodder pools
+      tags:
+        - fodder-pools
+    post:
+      operationId: FodderPoolsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Historical Events
+                description:
+                  type: string
+                  example: Important dates in history
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      text:
+                        type: string
+                        example: July 4, 1776
+      responses:
+        "201":
+          description: The fodder pool has been created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FodderPool"
+      summary: Create a new fodder pool
+      tags:
+        - fodder-pools
+  /fodder-pools/{id}:
+    get:
+      operationId: FodderPoolsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the fodder pool
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The fodder pool
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FodderPool"
+      summary: Get a fodder pool by ID
+      tags:
+        - fodder-pools
+    delete:
+      operationId: FodderPoolsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the fodder pool
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The fodder pool has been deleted
+      summary: Delete a fodder pool
+      tags:
+        - fodder-pools
+  /fodder-pools/{id}/items:
+    post:
+      operationId: FodderPoolsController_addItems
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: ID of the fodder pool
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: Array of fodder items to add
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/FodderItemDto"
+            examples:
+              items:
+                value:
+                  - text: July 4, 1776
+                  - text: December 7, 1941
+      responses:
+        "201":
+          description: The items have been added to the fodder pool
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FodderItem"
+      summary: Add items to a fodder pool
+      tags:
+        - fodder-pools
+  /fodder-pools/{poolId}/items:
+    delete:
+      operationId: FodderPoolsController_removeItems
+      parameters:
+        - name: poolId
+          required: true
+          in: path
+          description: ID of the fodder pool
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                itemIds:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                    - item-id-1
+                    - item-id-2
+      responses:
+        "200":
+          description: The items have been removed from the fodder pool
+      summary: Remove items from a fodder pool
+      tags:
+        - fodder-pools
+info:
+  title: How Do You Know API
+  description: The How Do You Know API description
+  version: "1.0"
+  contact: {}
+tags: []
+servers: []
+components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+  schemas:
+    CreateUserDto:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Unique username for the user
+          example: johndoe
+        firstName:
+          type: string
+          description: First name of the user
+          example: John
+        lastName:
+          type: string
+          description: Last name of the user
+          example: Doe
+        email:
+          type: string
+          description: Email address of the user
+          example: john.doe@example.com
+        password:
+          type: string
+          description: Password for the user account
+          example: strongPassword123
+        roles:
+          type: array
+          description: User roles
+          example:
+            - student
+            - teacher
+          items:
+            type: string
+            enum:
+              - student
+              - teacher
+              - admin
+      required:
+        - username
+        - firstName
+        - lastName
+        - email
+        - password
+        - roles
+    UpdateUserDto:
+      type: object
+      properties: {}
+    CreateDevDebugDto:
+      type: object
+      properties: {}
+    UpdateDevDebugDto:
+      type: object
+      properties: {}
+    QuestionTemplate:
+      type: object
+      properties: {}
+    MediaDto:
+      type: object
+      properties:
+        mediaContentType:
+          type: string
+          enum:
+            - application/octet-stream
+            - image/jpeg
+            - image/png
+            - image/gif
+            - image/webp
+            - image/svg+xml
+            - image/*
+            - audio/mpeg
+            - audio/wav
+            - audio/ogg
+            - audio/aac
+            - audio/webm
+            - audio/*
+            - video/mp4
+            - video/webm
+            - video/ogg
+            - video/avi
+            - video/quicktime
+            - video/*
+          description: >-
+            Content type of the media. Use */* types for iframe/embedded
+            content.
+          example: video/mp4
+        height:
+          type: number
+          description: Height of the media in pixels
+        width:
+          type: number
+          description: Width of the media in pixels
+        url:
+          type: string
+          description: URL of the media content
+        specialInstructionText:
+          type: string
+          description: Special instructions for the media
+        duration:
+          type: number
+          description: Duration in seconds
+        fileSize:
+          type: number
+          description: File size in bytes
+        thumbnailUrl:
+          type: string
+          description: Thumbnail URL for video content
+      required:
+        - mediaContentType
+        - height
+        - width
+        - url
+    ValidAnswerDto:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Text answer
+        booleanValue:
+          type: boolean
+          description: Boolean answer
+        fodderPoolId:
+          type: string
+          description: ID of the fodder pool
+    CreateTemplateDto:
+      type: object
+      properties:
+        userPromptType:
+          type: string
+          enum:
+            - text
+            - multimedia
+          description: Type of user prompt
+        userResponseType:
+          type: string
+          enum:
+            - free-text-255
+            - multiple-choice-4
+            - true-false
+          description: Type of user response
+        exclusivityType:
+          type: string
+          enum:
+            - exam-only
+            - practice-only
+            - exam-practice-both
+          description: Question exclusivity type
+        userPromptText:
+          type: string
+          description: Text of the user prompt
+        instructionText:
+          type: string
+          description: Instruction text
+        media:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaDto"
+        validAnswers:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidAnswerDto"
+      required:
+        - userPromptType
+        - userResponseType
+        - exclusivityType
+        - validAnswers
+    GenerateActualDto:
+      type: object
+      properties:
+        examType:
+          type: string
+          enum:
+            - practice
+            - live
+          description: Type of exam
+        sectionPosition:
+          type: number
+          description: Position in the section
+      required:
+        - examType
+        - sectionPosition
+    QuestionActual:
+      type: object
+      properties: {}
+    UpdateTemplateDto:
+      type: object
+      properties:
+        userPromptType:
+          type: string
+          enum:
+            - text
+            - multimedia
+          description: Type of user prompt
+        userResponseType:
+          type: string
+          enum:
+            - free-text-255
+            - multiple-choice-4
+            - true-false
+          description: Type of user response
+        exclusivityType:
+          type: string
+          enum:
+            - exam-only
+            - practice-only
+            - exam-practice-both
+          description: Question exclusivity type
+        userPromptText:
+          type: string
+          description: Text of the user prompt
+        instructionText:
+          type: string
+          description: Instruction text
+        media:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaDto"
+        validAnswers:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidAnswerDto"
+    FodderPool:
+      type: object
+      properties: {}
+    FodderItemDto:
+      type: object
+      properties:
+        text:
+          type: string
+          description: The text content of the fodder item
+          example: July 4, 1776
+      required:
+        - text
+    FodderItem:
+      type: object
+      properties: {}

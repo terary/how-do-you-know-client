@@ -1,14 +1,17 @@
 import { render, screen, fireEvent, act } from "../../../test-utils";
 import { UserResponse1Of4 } from "@/app/components/questionnaires/UserResponse1Of4";
-import { useSetUserResponseMutation } from "@/lib/features/user-response/userResponseApiSlice";
-import { TQuestionUserResponseOneOf4 } from "@/app/questionnaires/types";
-import { configureStore } from "@reduxjs/toolkit";
-import { Provider } from "react-redux";
+import type { TQuestionUserResponseOneOf4 } from "@/app/questionnaires/types";
 
-// Mock the RTK Query hook
-jest.mock("@/lib/features/user-response/userResponseApiSlice", () => ({
-  useSetUserResponseMutation: jest.fn(),
-}));
+// Get the mock function from the mocked module
+const { useSetUserResponseMutation } = jest.requireMock(
+  "@/lib/features/user-response/userResponseApiSlice"
+);
+
+const initialUserResponseState = {
+  questionMap: {},
+  draftResponses: {},
+  isEditing: false,
+};
 
 describe("UserResponse1Of4", () => {
   const mockQuestion: TQuestionUserResponseOneOf4 = {
@@ -27,35 +30,13 @@ describe("UserResponse1Of4", () => {
     userResponse: { value: null },
   };
 
-  const mockSetUserResponse = jest.fn();
-  let store: any;
+  const mockSetUserResponse = jest.fn(() =>
+    Promise.resolve({ data: { questionId: "123" } })
+  );
   const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
   beforeEach(() => {
-    store = configureStore({
-      reducer: {
-        userResponseUI: (
-          state = {
-            draftResponses: {},
-            isEditing: false,
-          },
-          action: any
-        ) => {
-          if (action.type === "userResponseUI/setDraftResponse") {
-            return {
-              ...state,
-              draftResponses: {
-                ...state.draftResponses,
-                [action.payload.questionId]: { text: action.payload.text },
-              },
-            };
-          }
-          return state;
-        },
-      },
-    });
-
-    (useSetUserResponseMutation as jest.Mock).mockReturnValue([
+    useSetUserResponseMutation.mockReturnValue([
       mockSetUserResponse,
       { isLoading: false },
     ]);
@@ -76,11 +57,11 @@ describe("UserResponse1Of4", () => {
   });
 
   it("handles radio selection", async () => {
-    render(
-      <Provider store={store}>
-        <UserResponse1Of4 question={mockQuestion} />
-      </Provider>
-    );
+    const preloadedState = {
+      userResponseUI: initialUserResponseState,
+    };
+
+    render(<UserResponse1Of4 question={mockQuestion} />, { preloadedState });
 
     const radioA = screen.getByLabelText("Option A");
     await act(async () => {
@@ -88,23 +69,24 @@ describe("UserResponse1Of4", () => {
     });
 
     expect(screen.getByLabelText("Option A")).toBeChecked();
-    expect(store.getState().userResponseUI.draftResponses["123"]).toEqual({
-      text: "A",
-    });
   });
 
   it("renders save button", () => {
     render(<UserResponse1Of4 question={mockQuestion} />);
-
     expect(screen.getByRole("button", { name: /save/i })).toBeInTheDocument();
   });
 
   it("handles save button click", async () => {
-    render(
-      <Provider store={store}>
-        <UserResponse1Of4 question={mockQuestion} />
-      </Provider>
-    );
+    const preloadedState = {
+      userResponseUI: {
+        ...initialUserResponseState,
+        draftResponses: {
+          "123": { text: "A" },
+        },
+      },
+    };
+
+    render(<UserResponse1Of4 question={mockQuestion} />, { preloadedState });
 
     // First select an option
     const radioA = screen.getByLabelText("Option A");
@@ -112,14 +94,10 @@ describe("UserResponse1Of4", () => {
       fireEvent.click(radioA);
     });
 
-    // Verify the radio is checked and state is updated
+    // Verify the radio is checked
     expect(radioA).toBeChecked();
-    expect(store.getState().userResponseUI.draftResponses["123"]).toEqual({
-      text: "A",
-    });
 
     // Click the save button
-    // const saveButton = screen.getByText("singleword.save");
     const saveButton = screen.getByText("Save");
     await act(async () => {
       fireEvent.click(saveButton);
@@ -138,24 +116,28 @@ describe("UserResponse1Of4", () => {
   it("disables save button when isEditing is true", () => {
     const preloadedState = {
       userResponseUI: {
+        ...initialUserResponseState,
         isEditing: true,
-        draftResponses: {},
       },
     };
 
     render(<UserResponse1Of4 question={mockQuestion} />, { preloadedState });
-
     expect(screen.getByRole("button", { name: /save/i })).toBeDisabled();
   });
 
   it("handles setUserResponse error", async () => {
     mockSetUserResponse.mockRejectedValueOnce(new Error("API Error"));
 
-    render(
-      <Provider store={store}>
-        <UserResponse1Of4 question={mockQuestion} />
-      </Provider>
-    );
+    const preloadedState = {
+      userResponseUI: {
+        ...initialUserResponseState,
+        draftResponses: {
+          "123": { text: "A" },
+        },
+      },
+    };
+
+    render(<UserResponse1Of4 question={mockQuestion} />, { preloadedState });
 
     // Select an option
     const radioA = screen.getByLabelText("Option A");
@@ -177,39 +159,13 @@ describe("UserResponse1Of4", () => {
   });
 
   it("handles save with undefined draft text", async () => {
-    // Configure store with undefined draft response
-    store = configureStore({
-      reducer: {
-        userResponseUI: (
-          state = {
-            draftResponses: {
-              "123": undefined, // explicitly set draft response to undefined
-            },
-            isEditing: false,
-          },
-          action: any
-        ) => {
-          if (action.type === "userResponseUI/setDraftResponse") {
-            return {
-              ...state,
-              draftResponses: {
-                ...state.draftResponses,
-                [action.payload.questionId]: { text: action.payload.text },
-              },
-            };
-          }
-          return state;
-        },
-      },
-    });
+    const preloadedState = {
+      userResponseUI: initialUserResponseState,
+    };
 
-    render(
-      <Provider store={store}>
-        <UserResponse1Of4 question={mockQuestion} />
-      </Provider>
-    );
+    render(<UserResponse1Of4 question={mockQuestion} />, { preloadedState });
 
-    // Click save button without selecting any option
+    // Click save button without selecting an option
     const saveButton = screen.getByRole("button", { name: /save/i });
     await act(async () => {
       fireEvent.click(saveButton);

@@ -1,0 +1,45 @@
+{
+  "navigation": {
+    "home": "Home",
+    "users": "Users",
+    "questionTemplates": "Question Templates",
+    "fodderPools": "Fodder Pools",
+    "verify": "Verify",
+    "questionnaires": "Questionnaires",
+    "errorTest": "Error Test",
+    "profile": "Profile"
+  },
+  "singleword": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "loading": "Loading",
+    "error": "Error"
+  },
+  "questionTemplates": {
+    "title": "Question Templates",
+    "createTemplate": "Create Template",
+    "editTemplate": "Edit Template",
+    "userPromptType": "Prompt Type",
+    "userResponseType": "Response Type",
+    "exclusivityType": "Exclusivity",
+    "userPromptText": "Prompt Text",
+    "instructionText": "Instructions",
+    "actions": "Actions",
+    "promptTypes": {
+      "text": "Text",
+      "multimedia": "Multimedia"
+    },
+    "responseTypes": {
+      "free-text-255": "Free Text (255)",
+      "multiple-choice-4": "Multiple Choice (4)",
+      "true-false": "True/False"
+    },
+    "exclusivityTypes": {
+      "exam-only": "Exam Only",
+      "practice-only": "Practice Only",
+      "exam-practice-both": "Exam & Practice"
+    }
+  }
+}

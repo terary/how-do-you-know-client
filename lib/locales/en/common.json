@@ -4,7 +4,9 @@
     "verify": "Verify",
     "quotes": "Quotes",
     "questionnaires": "Questionnaires",
-    "errorTest": "Test Errors"
+    "errorTest": "Test Errors",
+    "users": "Users",
+    "fodderPools": "Fodder Pools"
   },
   "footer": {
     "learn": "Learn",
@@ -42,11 +44,36 @@
     "show": "Show",
     "save": "Save",
     "apply": "Apply",
-    "reset": "Reset"
+    "reset": "Reset",
+    "cancel": "Cancel",
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+    "add": "Add"
   },
   "settings": {
     "profile": "Profile",
     "account": "Account",
     "logout": "Logout"
+  },
+  "users": {
+    "title": "Users",
+    "createUser": "Create User",
+    "editUser": "Edit User",
+    "username": "Username",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "roles": "Roles",
+    "actions": "Actions"
+  },
+  "fodderPools": {
+    "title": "Fodder Pools",
+    "createPool": "Create Pool",
+    "manageItems": "Manage Items",
+    "newItem": "New Item",
+    "items": "Items",
+    "actions": "Actions"
   }
 }

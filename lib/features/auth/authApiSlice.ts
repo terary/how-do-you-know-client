@@ -1,5 +1,4 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { authService } from "@/lib/services/authService";
+import { apiSlice } from "@/lib/store/api/base";
 import { ProfileResponseDto, UpdateProfileDto } from "@/lib/types/profile";
 
 interface LoginRequest {
@@ -11,35 +10,23 @@ interface LoginResponse {
   access_token: string;
 }
 
-export const authApiSlice = createApi({
-  reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3001/auth",
-    prepareHeaders: (headers) => {
-      const token = authService.getToken();
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
-  tagTypes: ["Profile"],
+export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
-        url: "/login",
+        url: "/auth/login",
         method: "POST",
         body: credentials,
       }),
     }),
     logout: builder.mutation<void, void>({
       query: () => ({
-        url: "/logout",
+        url: "/auth/logout",
         method: "POST",
       }),
     }),
     getProfile: builder.query<ProfileResponseDto, void>({
-      query: () => "/profile",
+      query: () => "/auth/profile",
       transformResponse: (response: ProfileResponseDto) => response,
       async onQueryStarted(arg, { queryFulfilled }) {
         try {
@@ -54,7 +41,7 @@ export const authApiSlice = createApi({
     }),
     updateProfile: builder.mutation<ProfileResponseDto, UpdateProfileDto>({
       query: (profileData) => ({
-        url: "/profile",
+        url: "/auth/profile",
         method: "POST",
         body: profileData,
       }),

@@ -11,9 +11,9 @@ import {
   Typography,
 } from "@mui/material";
 import { Settings, AccountCircle } from "@mui/icons-material";
-import { LanguageSelector } from "../LanguageSelector";
+import { LanguageSelector } from "../shared/LanguageSelector";
 import { useTranslation } from "react-i18next";
-import { ThemeSwitcher } from "../common/ThemeSwitcher";
+import { ThemeSwitcher } from "../shared/ThemeSwitcher";
 
 export const TopBar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

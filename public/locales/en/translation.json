@@ -1,0 +1,9 @@
+{
+  "questionnaire": {
+    "advanced": "Advanced",
+    "skipQuestion": "Skip Question",
+    "flagQuestion": "Flag Question",
+    "userNotes": "User Notes",
+    "sortPosition": "Sort Position"
+  }
+}

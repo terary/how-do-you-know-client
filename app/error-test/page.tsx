@@ -1,5 +1,5 @@
-import { ErrorTest } from "../components/ErrorTest";
-import { RuntimeErrorTest } from "../components/RuntimeErrorTest";
+import { ErrorTest } from "../components/shared/ErrorTest";
+import { RuntimeErrorTest } from "../components/shared/RuntimeErrorTest";
 import { Typography, Box } from "@mui/material";
 
 export default function ErrorTestPage() {
