@@ -15,11 +15,11 @@ import {
 } from "@mui/material";
 import {
   DragDropContext,
-  Droppable,
-  Draggable,
-  DropResult,
-  DroppableProvided,
-  DraggableProvided,
+  Draggable as RBDDraggable,
+  type DropResult,
+  type DroppableProvided,
+  type DraggableProvided,
+  type DraggableStateSnapshot,
 } from "react-beautiful-dnd";
 import {
   DragIndicator as DragIndicatorIcon,
@@ -30,10 +30,39 @@ import {
   useGetSectionQuestionsQuery,
   useReorderSectionQuestionsMutation,
   useDeleteQuestionFromSectionMutation,
-  Question,
+  type Question,
 } from "@/lib/features/exam-templates/examTemplatesApiSlice";
 import { useToast } from "@/lib/hooks/useToast";
 import { QuestionPreview } from "./QuestionPreview";
+import { StrictModeDroppable } from "./StrictModeDroppable";
+
+const formatResponseType = (type: string): string => {
+  switch (type) {
+    case "one-of-4":
+      return "Multiple Choice (4 options)";
+    case "one-of-2":
+      return "True/False";
+    case "free-text-255":
+      return "Short Answer";
+    case "any-of":
+      return "Multiple Select";
+    default:
+      return type;
+  }
+};
+
+const formatExclusivityType = (type: string): string => {
+  switch (type) {
+    case "exam-only":
+      return "Exam Only";
+    case "practice-only":
+      return "Practice Only";
+    case "exam-practice-both":
+      return "Exam & Practice";
+    default:
+      return type;
+  }
+};
 
 interface ExamTemplateSectionQuestionsProps {
   examId: string;
@@ -113,68 +142,51 @@ export const ExamTemplateSectionQuestions = ({
         </Typography>
       ) : (
         <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId={`section-${sectionId}-questions`}>
+          <StrictModeDroppable
+            droppableId={`section-${sectionId}-questions`}
+            isDropDisabled={false}
+            isCombineEnabled={false}
+            ignoreContainerClipping={false}
+          >
             {(provided: DroppableProvided) => (
               <Box ref={provided.innerRef} {...provided.droppableProps}>
                 {questions.map((question, index) => (
-                  <Draggable
+                  <RBDDraggable
                     key={question.id}
                     draggableId={question.id}
                     index={index}
-                    isDragDisabled={false}
                   >
-                    {(provided: DraggableProvided) => (
+                    {(
+                      provided: DraggableProvided,
+                      snapshot: DraggableStateSnapshot
+                    ) => (
                       <Card
                         ref={provided.innerRef}
                         {...provided.draggableProps}
-                        sx={{ mb: 2 }}
+                        {...provided.dragHandleProps}
+                        sx={{
+                          mb: 2,
+                          opacity: snapshot.isDragging ? 0.5 : 1,
+                        }}
                       >
                         <CardContent>
-                          <Box display="flex" alignItems="center">
-                            <Box {...provided.dragHandleProps}>
-                              <DragIndicatorIcon />
-                            </Box>
-                            <Box ml={2} flexGrow={1}>
-                              <Typography>{question.text}</Typography>
-                              <Typography
-                                variant="body2"
-                                color="text.secondary"
-                                sx={{ mt: 1 }}
-                              >
-                                Difficulty: {question.difficulty}
-                              </Typography>
-                            </Box>
-                            <Box>
-                              <Tooltip title="Preview question">
-                                <IconButton
-                                  size="small"
-                                  onClick={() => setSelectedQuestion(question)}
-                                  sx={{ mr: 1 }}
-                                >
-                                  <PreviewIcon />
-                                </IconButton>
-                              </Tooltip>
-                              <Tooltip title="Remove from section">
-                                <IconButton
-                                  size="small"
-                                  onClick={() =>
-                                    handleDeleteQuestion(question.id)
-                                  }
-                                >
-                                  <DeleteIcon />
-                                </IconButton>
-                              </Tooltip>
-                            </Box>
-                          </Box>
+                          <Typography>
+                            {question.questionTemplate.userPromptType === "text"
+                              ? question.questionTemplate.userPromptText
+                              : question.questionTemplate.userPromptType}
+                          </Typography>
+                          <Typography>
+                            {question.questionTemplate.userResponseType}
+                          </Typography>
                         </CardContent>
                       </Card>
                     )}
-                  </Draggable>
+                  </RBDDraggable>
                 ))}
                 {provided.placeholder}
               </Box>
             )}
-          </Droppable>
+          </StrictModeDroppable>
         </DragDropContext>
       )}
 
