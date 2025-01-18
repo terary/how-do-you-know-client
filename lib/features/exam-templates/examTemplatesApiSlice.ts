@@ -66,13 +66,36 @@ export interface PreviewTemplateDto {
   format: "html" | "pdf" | "json";
 }
 
+export interface Question {
+  id: string;
+  text: string;
+  difficulty: "easy" | "medium" | "hard";
+  created_at: string;
+  updated_at: string;
+}
+
+export interface GetQuestionsParams {
+  search?: string;
+  difficulty?: "easy" | "medium" | "hard";
+}
+
+export interface BulkAddQuestionsDto {
+  questionIds: string[];
+}
+
+export interface ReorderQuestionsDto {
+  questionIds: string[];
+}
+
 type ApiTags =
   | "Users"
   | "QuestionTemplates"
   | "FodderPools"
   | "Profile"
   | "Questionnaire"
-  | "UserAnswers";
+  | "UserAnswers"
+  | "LearningInstitutions"
+  | "InstructionalCourses";
 
 type Builder = EndpointBuilder<
   BaseQueryFn<
@@ -251,6 +274,104 @@ const examTemplatesApiSlice = apiSlice.injectEndpoints({
         "QuestionTemplates",
       ],
     }),
+
+    // Question endpoints
+    getQuestions: builder.query<Question[], GetQuestionsParams>({
+      query: (params: GetQuestionsParams) => ({
+        url: "/questions",
+        params,
+      }),
+      providesTags: ["QuestionTemplates"],
+    }),
+
+    bulkAddQuestions: builder.mutation<
+      void,
+      { examId: string; sectionId: string; questionIds: string[] }
+    >({
+      query: ({
+        examId,
+        sectionId,
+        questionIds,
+      }: {
+        examId: string;
+        sectionId: string;
+        questionIds: string[];
+      }) => ({
+        url: `/exam-templates/${examId}/sections/${sectionId}/questions/bulk`,
+        method: "POST",
+        body: { questionIds },
+      }),
+      invalidatesTags: (
+        _result: unknown,
+        _error: unknown,
+        { examId, sectionId }: { examId: string; sectionId: string }
+      ) => [
+        { type: "QuestionTemplates", id: `${examId}-${sectionId}` },
+        { type: "QuestionTemplates", id: examId },
+        "QuestionTemplates",
+      ],
+    }),
+
+    deleteExamTemplateSection: builder.mutation<
+      void,
+      { examId: string; sectionId: string }
+    >({
+      query: ({
+        examId,
+        sectionId,
+      }: {
+        examId: string;
+        sectionId: string;
+      }) => ({
+        url: `/exam-templates/${examId}/sections/${sectionId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (
+        _result: unknown,
+        _error: unknown,
+        { examId, sectionId }: { examId: string; sectionId: string }
+      ) => [
+        { type: "QuestionTemplates", id: `${examId}-${sectionId}` },
+        { type: "QuestionTemplates", id: examId },
+        "QuestionTemplates",
+      ],
+    }),
+
+    reorderSectionQuestions: builder.mutation<
+      void,
+      { examId: string; sectionId: string; questionIds: string[] }
+    >({
+      query: ({
+        examId,
+        sectionId,
+        questionIds,
+      }: {
+        examId: string;
+        sectionId: string;
+        questionIds: string[];
+      }) => ({
+        url: `/exam-templates/sections/${sectionId}/questions/reorder`,
+        method: "PUT",
+        body: { questionIds },
+      }),
+      invalidatesTags: (
+        _result: unknown,
+        _error: unknown,
+        { examId, sectionId }: { examId: string; sectionId: string }
+      ) => [
+        { type: "QuestionTemplates", id: `${examId}-${sectionId}` },
+        { type: "QuestionTemplates", id: examId },
+        "QuestionTemplates",
+      ],
+    }),
+
+    getSectionQuestions: builder.query<Question[], string>({
+      query: (sectionId: string) =>
+        `/exam-templates/sections/${sectionId}/questions`,
+      providesTags: (_result: unknown, _error: unknown, sectionId: string) => [
+        { type: "QuestionTemplates", id: `section-${sectionId}-questions` },
+      ],
+    }),
   }),
 });
 
@@ -268,4 +389,9 @@ export const {
   useGetExamTemplateSectionQuery,
   useCreateExamTemplateSectionMutation,
   useUpdateExamTemplateSectionMutation,
+  useGetQuestionsQuery,
+  useGetSectionQuestionsQuery,
+  useBulkAddQuestionsMutation,
+  useDeleteExamTemplateSectionMutation,
+  useReorderSectionQuestionsMutation,
 } = examTemplatesApiSlice;

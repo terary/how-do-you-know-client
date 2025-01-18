@@ -9,6 +9,7 @@ import {
   AccountCircle as AccountCircleIcon,
   School as SchoolIcon,
   Class as ClassIcon,
+  Assignment as AssignmentIcon,
 } from "@mui/icons-material";
 
 export const navigation = [
@@ -36,6 +37,11 @@ export const navigation = [
     name: "questionTemplates",
     href: "/question-templates",
     icon: QuestionIcon,
+  },
+  {
+    name: "examTemplates",
+    href: "/exam-templates",
+    icon: AssignmentIcon,
   },
   {
     name: "fodderPools",

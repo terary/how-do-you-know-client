@@ -13,6 +13,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import "./styles/theme.css";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import { ToastProvider } from "./components/shared/ToastProvider";
 
 interface Props {
   readonly children: ReactNode;
@@ -33,17 +34,19 @@ export default function RootLayout({ children }: Props) {
               <ErrorBoundary>
                 <AppRouterCacheProvider>
                   <CssBaseline />
-                  <Box sx={{ display: "flex" }}>
-                    <Sidebar />
-                    <Box
-                      sx={{ flexGrow: 1, height: "100vh", overflow: "auto" }}
-                    >
-                      <TopBar />
-                      <Box component="main" sx={{ p: 3 }}>
-                        {children}
+                  <ToastProvider>
+                    <Box sx={{ display: "flex" }}>
+                      <Sidebar />
+                      <Box
+                        sx={{ flexGrow: 1, height: "100vh", overflow: "auto" }}
+                      >
+                        <TopBar />
+                        <Box component="main" sx={{ p: 3 }}>
+                          {children}
+                        </Box>
                       </Box>
                     </Box>
-                  </Box>
+                  </ToastProvider>
                 </AppRouterCacheProvider>
               </ErrorBoundary>
             </ThemeProvider>
