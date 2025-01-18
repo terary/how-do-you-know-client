@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -7,19 +7,21 @@ import {
   Button,
   Box,
   Typography,
-  TextField,
+  CircularProgress,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  CircularProgress,
+  Divider,
 } from "@mui/material";
 import {
   useGetQuestionsQuery,
+  useGetExamTemplateSectionsQuery,
   useBulkAddQuestionsMutation,
+  useDeleteQuestionFromSectionMutation,
   Question,
-  GetQuestionsParams,
 } from "@/lib/features/exam-templates/examTemplatesApiSlice";
+import { useToast } from "@/lib/hooks/useToast";
 
 interface BulkQuestionsDialogProps {
   examId: string;
@@ -28,66 +30,142 @@ interface BulkQuestionsDialogProps {
   onClose: () => void;
 }
 
-type Difficulty = "easy" | "medium" | "hard";
-type DifficultyFilter = Difficulty | "all";
-
 export const BulkQuestionsDialog = ({
   examId,
   sectionId,
   open,
   onClose,
 }: BulkQuestionsDialogProps) => {
+  const { data: questions = [], isLoading } = useGetQuestionsQuery({});
+  const { data: sections = [] } = useGetExamTemplateSectionsQuery(examId);
+  const [addQuestions] = useBulkAddQuestionsMutation();
+  const [deleteQuestion] = useDeleteQuestionFromSectionMutation();
   const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState<DifficultyFilter>("all");
+  const [targetSectionId, setTargetSectionId] = useState<string>("");
+  const toast = useToast();
 
-  const { data: questions = [], isLoading } = useGetQuestionsQuery({
-    search: searchTerm,
-    difficulty: filter === "all" ? undefined : (filter as Difficulty),
-  });
+  // Reset selections when dialog opens
+  useEffect(() => {
+    if (open) {
+      setSelectedQuestions([]);
+      setTargetSectionId("");
+    }
+  }, [open]);
 
-  const [bulkAddQuestions, { isLoading: isAdding }] =
-    useBulkAddQuestionsMutation();
+  const handleAddQuestions = async () => {
+    if (selectedQuestions.length === 0) {
+      toast.error("Please select questions to add");
+      return;
+    }
 
-  const handleSubmit = async () => {
     try {
-      await bulkAddQuestions({
+      await addQuestions({
         examId,
         sectionId,
         questionIds: selectedQuestions,
       }).unwrap();
+      toast.info(`Added ${selectedQuestions.length} questions to section`);
       onClose();
     } catch (error) {
       console.error("Failed to add questions:", error);
+      toast.error("Failed to add questions to section");
+    }
+  };
+
+  const handleMoveQuestions = async () => {
+    if (selectedQuestions.length === 0) {
+      toast.error("Please select questions to move");
+      return;
+    }
+
+    if (!targetSectionId) {
+      toast.error("Please select a target section");
+      return;
+    }
+
+    try {
+      // First, add questions to the target section
+      await addQuestions({
+        examId,
+        sectionId: targetSectionId,
+        questionIds: selectedQuestions,
+      }).unwrap();
+
+      // Then, delete them from the current section
+      await Promise.all(
+        selectedQuestions.map((questionId) =>
+          deleteQuestion({
+            examId,
+            sectionId,
+            questionId,
+          }).unwrap()
+        )
+      );
+
+      toast.info(
+        `Moved ${selectedQuestions.length} questions to selected section`
+      );
+      onClose();
+    } catch (error) {
+      console.error("Failed to move questions:", error);
+      toast.error("Failed to move questions between sections");
+    }
+  };
+
+  const handleDeleteQuestions = async () => {
+    if (selectedQuestions.length === 0) {
+      toast.error("Please select questions to remove");
+      return;
+    }
+
+    try {
+      await Promise.all(
+        selectedQuestions.map((questionId) =>
+          deleteQuestion({
+            examId,
+            sectionId,
+            questionId,
+          }).unwrap()
+        )
+      );
+      toast.info(`Removed ${selectedQuestions.length} questions from section`);
+      onClose();
+    } catch (error) {
+      console.error("Failed to remove questions:", error);
+      toast.error("Failed to remove questions from section");
     }
   };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>Add Questions</DialogTitle>
+      <DialogTitle>Manage Questions</DialogTitle>
       <DialogContent>
         <Box sx={{ mb: 2 }}>
-          <TextField
-            fullWidth
-            label="Search Questions"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            sx={{ mb: 2 }}
-          />
+          <Typography variant="subtitle1" gutterBottom>
+            Selected: {selectedQuestions.length} questions
+          </Typography>
+        </Box>
+
+        <Box sx={{ mb: 2 }}>
           <FormControl fullWidth>
-            <InputLabel>Difficulty</InputLabel>
+            <InputLabel>Move to Section</InputLabel>
             <Select
-              value={filter}
-              label="Difficulty"
-              onChange={(e) => setFilter(e.target.value as typeof filter)}
+              value={targetSectionId}
+              label="Move to Section"
+              onChange={(e) => setTargetSectionId(e.target.value)}
             >
-              <MenuItem value="all">All</MenuItem>
-              <MenuItem value="easy">Easy</MenuItem>
-              <MenuItem value="medium">Medium</MenuItem>
-              <MenuItem value="hard">Hard</MenuItem>
+              {sections
+                .filter((section) => section.id !== sectionId)
+                .map((section) => (
+                  <MenuItem key={section.id} value={section.id}>
+                    {section.name}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
         </Box>
+
+        <Divider sx={{ my: 2 }} />
 
         {isLoading ? (
           <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
@@ -128,15 +206,36 @@ export const BulkQuestionsDialog = ({
           </Box>
         )}
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          disabled={selectedQuestions.length === 0 || isAdding}
-        >
-          Add Selected Questions
-        </Button>
+      <DialogActions sx={{ justifyContent: "space-between", px: 3 }}>
+        <Box>
+          <Button
+            color="error"
+            onClick={handleDeleteQuestions}
+            disabled={selectedQuestions.length === 0}
+          >
+            Remove Selected
+          </Button>
+        </Box>
+        <Box>
+          <Button onClick={onClose} sx={{ mr: 1 }}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleAddQuestions}
+            disabled={selectedQuestions.length === 0}
+            sx={{ mr: 1 }}
+          >
+            Add Selected
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleMoveQuestions}
+            disabled={selectedQuestions.length === 0 || !targetSectionId}
+          >
+            Move Selected
+          </Button>
+        </Box>
       </DialogActions>
     </Dialog>
   );

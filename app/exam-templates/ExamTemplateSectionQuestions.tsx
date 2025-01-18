@@ -6,6 +6,12 @@ import {
   CircularProgress,
   Card,
   CardContent,
+  Tooltip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
 } from "@mui/material";
 import {
   DragDropContext,
@@ -18,12 +24,16 @@ import {
 import {
   DragIndicator as DragIndicatorIcon,
   Delete as DeleteIcon,
+  Preview as PreviewIcon,
 } from "@mui/icons-material";
 import {
   useGetSectionQuestionsQuery,
   useReorderSectionQuestionsMutation,
+  useDeleteQuestionFromSectionMutation,
   Question,
 } from "@/lib/features/exam-templates/examTemplatesApiSlice";
+import { useToast } from "@/lib/hooks/useToast";
+import { QuestionPreview } from "./QuestionPreview";
 
 interface ExamTemplateSectionQuestionsProps {
   examId: string;
@@ -37,6 +47,11 @@ export const ExamTemplateSectionQuestions = ({
   const { data: questions = [], isLoading } =
     useGetSectionQuestionsQuery(sectionId);
   const [reorderQuestions] = useReorderSectionQuestionsMutation();
+  const [deleteQuestion] = useDeleteQuestionFromSectionMutation();
+  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
+    null
+  );
+  const toast = useToast();
 
   const handleDragEnd = async (result: DropResult) => {
     if (!result.destination) return;
@@ -59,6 +74,21 @@ export const ExamTemplateSectionQuestions = ({
       }).unwrap();
     } catch (error) {
       console.error("Failed to reorder questions:", error);
+      toast.error("Failed to reorder questions");
+    }
+  };
+
+  const handleDeleteQuestion = async (questionId: string) => {
+    try {
+      await deleteQuestion({
+        examId,
+        sectionId,
+        questionId,
+      }).unwrap();
+      toast.info("Question removed from section");
+    } catch (error) {
+      console.error("Failed to delete question:", error);
+      toast.error("Failed to remove question from section");
     }
   };
 
@@ -91,6 +121,7 @@ export const ExamTemplateSectionQuestions = ({
                     key={question.id}
                     draggableId={question.id}
                     index={index}
+                    isDragDisabled={false}
                   >
                     {(provided: DraggableProvided) => (
                       <Card
@@ -113,9 +144,27 @@ export const ExamTemplateSectionQuestions = ({
                                 Difficulty: {question.difficulty}
                               </Typography>
                             </Box>
-                            <IconButton size="small">
-                              <DeleteIcon />
-                            </IconButton>
+                            <Box>
+                              <Tooltip title="Preview question">
+                                <IconButton
+                                  size="small"
+                                  onClick={() => setSelectedQuestion(question)}
+                                  sx={{ mr: 1 }}
+                                >
+                                  <PreviewIcon />
+                                </IconButton>
+                              </Tooltip>
+                              <Tooltip title="Remove from section">
+                                <IconButton
+                                  size="small"
+                                  onClick={() =>
+                                    handleDeleteQuestion(question.id)
+                                  }
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              </Tooltip>
+                            </Box>
                           </Box>
                         </CardContent>
                       </Card>
@@ -128,6 +177,21 @@ export const ExamTemplateSectionQuestions = ({
           </Droppable>
         </DragDropContext>
       )}
+
+      <Dialog
+        open={!!selectedQuestion}
+        onClose={() => setSelectedQuestion(null)}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>Question Preview</DialogTitle>
+        <DialogContent>
+          {selectedQuestion && <QuestionPreview question={selectedQuestion} />}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setSelectedQuestion(null)}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

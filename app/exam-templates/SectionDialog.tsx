@@ -28,7 +28,7 @@ export const SectionDialog = ({
   initialData,
 }: SectionDialogProps) => {
   const [formData, setFormData] = useState<CreateExamTemplateSectionDto>({
-    name: initialData?.name || "",
+    title: initialData?.title || "",
     instructions: initialData?.instructions || "",
     position: initialData?.position || 0,
     timeLimitSeconds: initialData?.timeLimitSeconds || 3600, // Default 1 hour
@@ -50,10 +50,10 @@ export const SectionDialog = ({
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
           <TextField
             fullWidth
-            label="Name"
-            value={formData.name}
+            label="Title"
+            value={formData.title}
             onChange={(e) =>
-              setFormData((prev) => ({ ...prev, name: e.target.value }))
+              setFormData((prev) => ({ ...prev, title: e.target.value }))
             }
             required
           />

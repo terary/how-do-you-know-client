@@ -38,14 +38,14 @@ export interface ExamTemplate {
 }
 
 export interface CreateExamTemplateSectionDto {
-  name: string;
+  title: string;
   instructions: string;
   position: number;
   timeLimitSeconds: number;
 }
 
 export interface UpdateExamTemplateSectionDto {
-  name?: string;
+  title?: string;
   instructions?: string;
   position?: number;
   timeLimitSeconds?: number;
@@ -53,7 +53,7 @@ export interface UpdateExamTemplateSectionDto {
 
 export interface ExamTemplateSection {
   id: string;
-  name: string;
+  title: string;
   instructions: string;
   position: number;
   timeLimitSeconds: number;
@@ -66,10 +66,27 @@ export interface PreviewTemplateDto {
   format: "html" | "pdf" | "json";
 }
 
+export interface QuestionMedia {
+  type: "image" | "audio" | "video";
+  url: string;
+  alt?: string;
+  mimeType?: string;
+}
+
+export interface QuestionOption {
+  id: string;
+  text: string;
+}
+
 export interface Question {
   id: string;
   text: string;
+  type: "multiple_choice" | "true_false" | "free_text";
   difficulty: "easy" | "medium" | "hard";
+  description?: string;
+  explanation?: string;
+  media?: QuestionMedia;
+  options?: QuestionOption[];
   created_at: string;
   updated_at: string;
 }
@@ -95,7 +112,10 @@ type ApiTags =
   | "Questionnaire"
   | "UserAnswers"
   | "LearningInstitutions"
-  | "InstructionalCourses";
+  | "InstructionalCourses"
+  | "ExamTemplates"
+  | "ExamTemplateSections"
+  | "Questions";
 
 type Builder = EndpointBuilder<
   BaseQueryFn<
@@ -109,17 +129,17 @@ type Builder = EndpointBuilder<
   "api"
 >;
 
-const examTemplatesApiSlice = apiSlice.injectEndpoints({
+export const examTemplatesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder: Builder) => ({
     getExamTemplates: builder.query<ExamTemplate[], void>({
       query: () => "/exam-templates",
-      providesTags: ["QuestionTemplates"],
+      providesTags: ["ExamTemplates"],
     }),
 
     getExamTemplate: builder.query<ExamTemplate, string>({
       query: (id: string) => `/exam-templates/${id}`,
       providesTags: (_result: unknown, _error: unknown, id: string) => [
-        { type: "QuestionTemplates", id },
+        { type: "ExamTemplates", id },
       ],
     }),
 
@@ -129,7 +149,7 @@ const examTemplatesApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: template,
       }),
-      invalidatesTags: ["QuestionTemplates"],
+      invalidatesTags: ["ExamTemplates"],
     }),
 
     updateExamTemplate: builder.mutation<
@@ -151,7 +171,7 @@ const examTemplatesApiSlice = apiSlice.injectEndpoints({
         _result: unknown,
         _error: unknown,
         { id }: { id: string }
-      ) => [{ type: "QuestionTemplates", id }, "QuestionTemplates"],
+      ) => [{ type: "ExamTemplates", id }, "ExamTemplates"],
     }),
 
     deleteExamTemplate: builder.mutation<void, string>({
@@ -159,7 +179,7 @@ const examTemplatesApiSlice = apiSlice.injectEndpoints({
         url: `/exam-templates/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["QuestionTemplates"],
+      invalidatesTags: ["ExamTemplates"],
     }),
 
     validateExamTemplate: builder.mutation<void, string>({
@@ -175,8 +195,8 @@ const examTemplatesApiSlice = apiSlice.injectEndpoints({
         method: "POST",
       }),
       invalidatesTags: (_result: unknown, _error: unknown, id: string) => [
-        { type: "QuestionTemplates", id },
-        "QuestionTemplates",
+        { type: "ExamTemplates", id },
+        "ExamTemplates",
       ],
     }),
 
@@ -199,8 +219,8 @@ const examTemplatesApiSlice = apiSlice.injectEndpoints({
     getExamTemplateSections: builder.query<ExamTemplateSection[], string>({
       query: (examId: string) => `/exam-templates/${examId}/sections`,
       providesTags: (_result: unknown, _error: unknown, examId: string) => [
-        { type: "QuestionTemplates", id: examId },
-        "QuestionTemplates",
+        { type: "ExamTemplates", id: examId },
+        "ExamTemplates",
       ],
     }),
 
@@ -215,9 +235,9 @@ const examTemplatesApiSlice = apiSlice.injectEndpoints({
         _error: unknown,
         { examId, sectionId }: { examId: string; sectionId: string }
       ) => [
-        { type: "QuestionTemplates", id: `${examId}-${sectionId}` },
-        { type: "QuestionTemplates", id: examId },
-        "QuestionTemplates",
+        { type: "ExamTemplates", id: `${examId}-${sectionId}` },
+        { type: "ExamTemplates", id: examId },
+        "ExamTemplates",
       ],
     }),
 
@@ -240,7 +260,7 @@ const examTemplatesApiSlice = apiSlice.injectEndpoints({
         _result: unknown,
         _error: unknown,
         { examId }: { examId: string }
-      ) => [{ type: "QuestionTemplates", id: examId }, "QuestionTemplates"],
+      ) => [{ type: "ExamTemplates", id: examId }, "ExamTemplates"],
     }),
 
     updateExamTemplateSection: builder.mutation<
@@ -260,8 +280,8 @@ const examTemplatesApiSlice = apiSlice.injectEndpoints({
         sectionId: string;
         section: UpdateExamTemplateSectionDto;
       }) => ({
-        url: `/exam-templates/${examId}/sections/${sectionId}`,
-        method: "PATCH",
+        url: `/exam-templates/sections/${sectionId}`,
+        method: "PUT",
         body: section,
       }),
       invalidatesTags: (
@@ -269,9 +289,9 @@ const examTemplatesApiSlice = apiSlice.injectEndpoints({
         _error: unknown,
         { examId, sectionId }: { examId: string; sectionId: string }
       ) => [
-        { type: "QuestionTemplates", id: `${examId}-${sectionId}` },
-        { type: "QuestionTemplates", id: examId },
-        "QuestionTemplates",
+        { type: "ExamTemplates", id: `${examId}-${sectionId}` },
+        { type: "ExamTemplates", id: examId },
+        "ExamTemplates",
       ],
     }),
 
@@ -281,7 +301,7 @@ const examTemplatesApiSlice = apiSlice.injectEndpoints({
         url: "/questions",
         params,
       }),
-      providesTags: ["QuestionTemplates"],
+      providesTags: ["Questions"],
     }),
 
     bulkAddQuestions: builder.mutation<
@@ -306,9 +326,27 @@ const examTemplatesApiSlice = apiSlice.injectEndpoints({
         _error: unknown,
         { examId, sectionId }: { examId: string; sectionId: string }
       ) => [
-        { type: "QuestionTemplates", id: `${examId}-${sectionId}` },
-        { type: "QuestionTemplates", id: examId },
-        "QuestionTemplates",
+        { type: "Questions", id: `section-${sectionId}-questions` },
+        { type: "Questions", id: `${examId}-${sectionId}` },
+        "Questions",
+      ],
+    }),
+
+    deleteQuestionFromSection: builder.mutation<
+      void,
+      { examId: string; sectionId: string; questionId: string }
+    >({
+      query: ({ examId, sectionId, questionId }) => ({
+        url: `/exam-templates/${examId}/sections/${sectionId}/questions/${questionId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (
+        _result: unknown,
+        _error: unknown,
+        { sectionId }: { examId: string; sectionId: string }
+      ) => [
+        { type: "Questions", id: `section-${sectionId}-questions` },
+        "Questions",
       ],
     }),
 
@@ -331,9 +369,9 @@ const examTemplatesApiSlice = apiSlice.injectEndpoints({
         _error: unknown,
         { examId, sectionId }: { examId: string; sectionId: string }
       ) => [
-        { type: "QuestionTemplates", id: `${examId}-${sectionId}` },
-        { type: "QuestionTemplates", id: examId },
-        "QuestionTemplates",
+        { type: "ExamTemplates", id: `${examId}-${sectionId}` },
+        { type: "ExamTemplates", id: examId },
+        "ExamTemplates",
       ],
     }),
 
@@ -359,9 +397,9 @@ const examTemplatesApiSlice = apiSlice.injectEndpoints({
         _error: unknown,
         { examId, sectionId }: { examId: string; sectionId: string }
       ) => [
-        { type: "QuestionTemplates", id: `${examId}-${sectionId}` },
-        { type: "QuestionTemplates", id: examId },
-        "QuestionTemplates",
+        { type: "ExamTemplates", id: `${examId}-${sectionId}` },
+        { type: "ExamTemplates", id: examId },
+        "ExamTemplates",
       ],
     }),
 
@@ -369,7 +407,7 @@ const examTemplatesApiSlice = apiSlice.injectEndpoints({
       query: (sectionId: string) =>
         `/exam-templates/sections/${sectionId}/questions`,
       providesTags: (_result: unknown, _error: unknown, sectionId: string) => [
-        { type: "QuestionTemplates", id: `section-${sectionId}-questions` },
+        { type: "ExamTemplates", id: `section-${sectionId}-questions` },
       ],
     }),
   }),
@@ -394,4 +432,5 @@ export const {
   useBulkAddQuestionsMutation,
   useDeleteExamTemplateSectionMutation,
   useReorderSectionQuestionsMutation,
+  useDeleteQuestionFromSectionMutation,
 } = examTemplatesApiSlice;
