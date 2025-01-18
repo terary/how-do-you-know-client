@@ -39,6 +39,19 @@ export default function NewExamTemplatePage() {
     examExclusivityType: "exam-practice-both",
   });
 
+  const generateRandomValue = (label: string) => {
+    const randomNum = Math.floor(Math.random() * 10000);
+    return `${label.slice(0, 10)} ${randomNum}`;
+  };
+
+  const populateRandomData = () => {
+    setFormData((prev) => ({
+      ...prev,
+      name: generateRandomValue("Name"),
+      description: generateRandomValue("Description"),
+    }));
+  };
+
   const handleSubmit = async () => {
     try {
       await createTemplate(formData).unwrap();
@@ -65,6 +78,12 @@ export default function NewExamTemplatePage() {
       <Typography variant="h4" sx={{ mb: 4 }}>
         Create New Exam Template
       </Typography>
+
+      <Box sx={{ mb: 2 }}>
+        <Button variant="outlined" onClick={populateRandomData} sx={{ mr: 2 }}>
+          Populate Random Data
+        </Button>
+      </Box>
 
       <Box
         sx={{ display: "flex", flexDirection: "column", gap: 3, maxWidth: 600 }}
