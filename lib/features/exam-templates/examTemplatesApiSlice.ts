@@ -80,15 +80,32 @@ export interface QuestionOption {
 
 export interface Question {
   id: string;
-  text: string;
-  type: "multiple_choice" | "true_false" | "free_text";
-  difficulty: "easy" | "medium" | "hard";
-  description?: string;
-  explanation?: string;
-  media?: QuestionMedia;
-  options?: QuestionOption[];
+  userPromptType: "text" | "multimedia";
+  userResponseType: "free-text-255" | "multiple-choice-4" | "true-false";
+  exclusivityType: "exam-only" | "practice-only" | "exam-practice-both";
+  userPromptText: string;
+  instructionText?: string;
+  media?: MediaDto[];
+  validAnswers: ValidAnswerDto[];
   created_at: string;
   updated_at: string;
+}
+
+export interface MediaDto {
+  mediaContentType: string;
+  height: number;
+  width: number;
+  url: string;
+  specialInstructionText?: string;
+  duration?: number;
+  fileSize?: number;
+  thumbnailUrl?: string;
+}
+
+export interface ValidAnswerDto {
+  text?: string;
+  booleanValue?: boolean;
+  fodderPoolId?: string;
 }
 
 export interface GetQuestionsParams {
@@ -206,12 +223,18 @@ export const examTemplatesApiSlice = apiSlice.injectEndpoints({
 
     previewTemplate: builder.mutation<
       unknown,
-      { id: string; format: PreviewTemplateDto }
+      { id: string; format: { format: "html" | "pdf" | "json" } }
     >({
-      query: ({ id, format }: { id: string; format: PreviewTemplateDto }) => ({
+      query: ({
+        id,
+        format,
+      }: {
+        id: string;
+        format: { format: "html" | "pdf" | "json" };
+      }) => ({
         url: `/exam-templates/${id}/preview`,
         method: "POST",
-        body: format,
+        body: { format: format.format },
       }),
     }),
 
@@ -298,7 +321,7 @@ export const examTemplatesApiSlice = apiSlice.injectEndpoints({
     // Question endpoints
     getQuestions: builder.query<Question[], GetQuestionsParams>({
       query: (params: GetQuestionsParams) => ({
-        url: "/questions",
+        url: "/questions/templates",
         params,
       }),
       providesTags: ["Questions"],
@@ -317,7 +340,7 @@ export const examTemplatesApiSlice = apiSlice.injectEndpoints({
         sectionId: string;
         questionIds: string[];
       }) => ({
-        url: `/exam-templates/${examId}/sections/${sectionId}/questions/bulk`,
+        url: `/exam-templates/sections/${sectionId}/questions/bulk`,
         method: "POST",
         body: { questionIds },
       }),

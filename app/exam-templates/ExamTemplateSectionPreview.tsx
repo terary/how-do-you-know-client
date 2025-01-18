@@ -28,6 +28,13 @@ interface TabPanelProps {
   value: number;
 }
 
+// Define expected response types
+type PreviewFormat = "html" | "pdf" | "json";
+interface PreviewResponse {
+  content: string;
+  format: PreviewFormat;
+}
+
 const TabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props;
 
@@ -51,7 +58,7 @@ export const ExamTemplateSectionPreview = ({
   onClose,
 }: ExamTemplateSectionPreviewProps) => {
   const [previewTemplate] = usePreviewTemplateMutation();
-  const [previewData, setPreviewData] = useState<any>(null);
+  const [previewData, setPreviewData] = useState<PreviewResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -68,7 +75,7 @@ export const ExamTemplateSectionPreview = ({
     }
   };
 
-  const loadPreview = async (format: "html" | "pdf" | "json") => {
+  const loadPreview = async (format: PreviewFormat) => {
     try {
       setIsLoading(true);
       setError(null);
@@ -76,7 +83,16 @@ export const ExamTemplateSectionPreview = ({
         id: examId,
         format: { format },
       }).unwrap();
-      setPreviewData(result);
+
+      // Debug log to see the actual response structure
+      console.log("Preview response:", { format, result });
+
+      // Validate response structure
+      if (!result || typeof result !== "object") {
+        throw new Error("Invalid response format");
+      }
+
+      setPreviewData(result as PreviewResponse);
     } catch (error) {
       console.error("Failed to load preview:", error);
       setError("Failed to load preview");
@@ -91,6 +107,46 @@ export const ExamTemplateSectionPreview = ({
       loadPreview("html");
     }
   }, [open]);
+
+  const renderPreviewContent = () => {
+    if (!previewData?.content) {
+      return (
+        <Typography color="text.secondary">
+          No preview content available
+        </Typography>
+      );
+    }
+
+    switch (previewData.format) {
+      case "html":
+        return (
+          <Paper sx={{ p: 2 }}>
+            <div dangerouslySetInnerHTML={{ __html: previewData.content }} />
+          </Paper>
+        );
+      case "pdf":
+        return (
+          <Box sx={{ height: "60vh" }}>
+            <iframe
+              src={`data:application/pdf;base64,${previewData.content}`}
+              width="100%"
+              height="100%"
+              title="PDF Preview"
+            />
+          </Box>
+        );
+      case "json":
+        return (
+          <Paper sx={{ p: 2 }}>
+            <pre>{previewData.content}</pre>
+          </Paper>
+        );
+      default:
+        return (
+          <Typography color="error">Unsupported preview format</Typography>
+        );
+    }
+  };
 
   return (
     <Dialog
@@ -124,30 +180,13 @@ export const ExamTemplateSectionPreview = ({
         ) : (
           <>
             <TabPanel value={selectedTab} index={0}>
-              {previewData?.html && (
-                <Paper sx={{ p: 2 }}>
-                  <div dangerouslySetInnerHTML={{ __html: previewData.html }} />
-                </Paper>
-              )}
+              {selectedTab === 0 && renderPreviewContent()}
             </TabPanel>
             <TabPanel value={selectedTab} index={1}>
-              {previewData?.pdf && (
-                <Box sx={{ height: "60vh" }}>
-                  <iframe
-                    src={`data:application/pdf;base64,${previewData.pdf}`}
-                    width="100%"
-                    height="100%"
-                    title="PDF Preview"
-                  />
-                </Box>
-              )}
+              {selectedTab === 1 && renderPreviewContent()}
             </TabPanel>
             <TabPanel value={selectedTab} index={2}>
-              {previewData?.json && (
-                <Paper sx={{ p: 2 }}>
-                  <pre>{JSON.stringify(previewData.json, null, 2)}</pre>
-                </Paper>
-              )}
+              {selectedTab === 2 && renderPreviewContent()}
             </TabPanel>
             <TabPanel value={selectedTab} index={3}>
               <ExamTemplateSectionQuestions

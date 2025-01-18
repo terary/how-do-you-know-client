@@ -158,7 +158,7 @@ export const BulkQuestionsDialog = ({
                 .filter((section) => section.id !== sectionId)
                 .map((section) => (
                   <MenuItem key={section.id} value={section.id}>
-                    {section.name}
+                    {section.title}
                   </MenuItem>
                 ))}
             </Select>
@@ -197,9 +197,12 @@ export const BulkQuestionsDialog = ({
                   );
                 }}
               >
-                <Typography variant="subtitle1">{question.text}</Typography>
+                <Typography variant="subtitle1">
+                  {question.userPromptText}
+                </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Difficulty: {question.difficulty}
+                  Type: {question.userResponseType}, Exclusivity:{" "}
+                  {question.exclusivityType}
                 </Typography>
               </Box>
             ))}
