@@ -81,8 +81,10 @@ export const ExamTemplateSectionQuestions = ({
   examId,
   sectionId,
 }: ExamTemplateSectionQuestionsProps) => {
-  const { data: questions = [], isLoading } =
-    useGetSectionQuestionsQuery(sectionId);
+  const { data: questions = [], isLoading } = useGetSectionQuestionsQuery({
+    examId,
+    sectionId,
+  });
   const [reorderQuestions] = useReorderSectionQuestionsMutation();
   const [deleteQuestion] = useDeleteQuestionFromSectionMutation();
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(

@@ -303,7 +303,7 @@ export const examTemplatesApiSlice = apiSlice.injectEndpoints({
         sectionId: string;
         section: UpdateExamTemplateSectionDto;
       }) => ({
-        url: `/exam-templates/sections/${sectionId}`,
+        url: `/exam-templates/${examId}/sections/${sectionId}`,
         method: "PUT",
         body: section,
       }),
@@ -340,7 +340,7 @@ export const examTemplatesApiSlice = apiSlice.injectEndpoints({
         sectionId: string;
         questionIds: string[];
       }) => ({
-        url: `/exam-templates/sections/${sectionId}/questions/bulk`,
+        url: `/exam-templates/${examId}/sections/${sectionId}/questions/bulk`,
         method: "POST",
         body: { questionIds },
       }),
@@ -411,7 +411,7 @@ export const examTemplatesApiSlice = apiSlice.injectEndpoints({
         sectionId: string;
         questionIds: string[];
       }) => ({
-        url: `/exam-templates/sections/${sectionId}/questions/reorder`,
+        url: `/exam-templates/${examId}/sections/${sectionId}/questions/reorder`,
         method: "PUT",
         body: { questionIds },
       }),
@@ -426,10 +426,13 @@ export const examTemplatesApiSlice = apiSlice.injectEndpoints({
       ],
     }),
 
-    getSectionQuestions: builder.query<Question[], string>({
-      query: (sectionId: string) =>
-        `/exam-templates/sections/${sectionId}/questions`,
-      providesTags: (_result: unknown, _error: unknown, sectionId: string) => [
+    getSectionQuestions: builder.query<
+      Question[],
+      { examId: string; sectionId: string }
+    >({
+      query: ({ examId, sectionId }) =>
+        `/exam-templates/${examId}/sections/${sectionId}/questions`,
+      providesTags: (_result: unknown, _error: unknown, { sectionId }) => [
         { type: "ExamTemplates", id: `section-${sectionId}-questions` },
       ],
     }),
