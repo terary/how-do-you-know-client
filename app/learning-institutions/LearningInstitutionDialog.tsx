@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useCreateLearningInstitutionMutation } from "@/lib/features/learning-institutions/learningInstitutionsApiSlice";
 import type { CreateLearningInstitutionDto } from "@/lib/features/learning-institutions/learningInstitutionsApiSlice";
+import { toast } from "react-toastify";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -46,11 +47,13 @@ export function LearningInstitutionDialog({ open, onOpenChange }: Props) {
     try {
       const result = await createInstitution(data);
       if ("data" in result) {
+        toast.success(t("learningInstitutions.createSuccess"));
         onOpenChange(false);
         reset();
       }
     } catch (error) {
       console.error("Failed to create institution:", error);
+      toast.error(t("learningInstitutions.createError"));
     }
   };
 

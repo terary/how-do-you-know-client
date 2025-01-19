@@ -21,6 +21,9 @@ import {
   useDeleteInstructionalCourseMutation,
 } from "@/lib/features/instructional-courses/instructionalCoursesApiSlice";
 import { InstructionalCourseDialog } from "./InstructionalCourseDialog";
+import { toast } from "react-toastify";
+import { RoleProtectedRoute } from "@/lib/features/auth/components/RoleProtectedRoute";
+import { REQUIRED_ROLES } from "@/lib/features/auth/roles";
 
 export default function InstructionalCoursesPage() {
   const { t } = useTranslation();
@@ -37,6 +40,7 @@ export default function InstructionalCoursesPage() {
   }
 
   if (error) {
+    toast.error(t("instructionalCourses.loadError"));
     return (
       <Container>
         <Typography color="error">{t("Error loading courses")}</Typography>
@@ -47,103 +51,109 @@ export default function InstructionalCoursesPage() {
   const handleDelete = async (id: string) => {
     try {
       await deleteCourse(id);
+      toast.success(t("instructionalCourses.deleteSuccess"));
     } catch (error) {
       console.error("Failed to delete course:", error);
+      toast.error(t("instructionalCourses.deleteError"));
     }
   };
 
   return (
-    <Container>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "24px",
-        }}
-      >
-        <Typography variant="h4" component="h1">
-          {t("Instructional Courses")}
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-          onClick={() => setDialogOpen(true)}
+    <RoleProtectedRoute roles={REQUIRED_ROLES.INSTRUCTIONAL_COURSES}>
+      <Container>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "24px",
+          }}
         >
-          {t("Add Course")}
-        </Button>
-      </div>
+          <Typography variant="h4" component="h1">
+            {t("Instructional Courses")}
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+            onClick={() => setDialogOpen(true)}
+          >
+            {t("Add Course")}
+          </Button>
+        </div>
 
-      <Grid container spacing={3}>
-        {courses?.map((course) => (
-          <Grid item xs={12} sm={6} md={4} key={course.id}>
-            <Card>
-              <CardContent>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <Typography variant="h6" component="h2" gutterBottom>
-                    {course.name}
-                  </Typography>
-                  <div>
-                    <IconButton
-                      size="small"
-                      onClick={() => console.log("Edit", course.id)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      onClick={() => handleDelete(course.id)}
-                      data-testid="delete-course-button"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+        <Grid container spacing={3}>
+          {courses?.map((course) => (
+            <Grid item xs={12} sm={6} md={4} key={course.id}>
+              <Card>
+                <CardContent>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <Typography variant="h6" component="h2" gutterBottom>
+                      {course.name}
+                    </Typography>
+                    <div>
+                      <IconButton
+                        size="small"
+                        onClick={() => console.log("Edit", course.id)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        onClick={() => handleDelete(course.id)}
+                        data-testid="delete-course-button"
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </div>
                   </div>
-                </div>
-                <Typography variant="body2" color="textSecondary" paragraph>
-                  {course.description}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>{t("Institution")}:</strong>{" "}
-                  {course.institution?.name || t("Not assigned")}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>{t("Instructor")}:</strong>{" "}
-                  {`${course.instructor?.firstName} ${course.instructor?.lastName}` ||
-                    t("Not assigned")}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>{t("Schedule")}:</strong>{" "}
-                  {course.days_of_week.join(", ")}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>{t("Time")}:</strong> {course.start_time_utc}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>{t("Duration")}:</strong> {course.duration_minutes}{" "}
-                  {t("minutes")}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>{t("Period")}:</strong>{" "}
-                  {new Date(course.start_date).toLocaleDateString()} -{" "}
-                  {new Date(course.finish_date).toLocaleDateString()}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+                  <Typography variant="body2" color="textSecondary" paragraph>
+                    {course.description}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>{t("Institution")}:</strong>{" "}
+                    {course.institution?.name ||
+                      t("instructionalCourses.notAssigned")}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>{t("Instructor")}:</strong>{" "}
+                    {course.instructor
+                      ? `${course.instructor.firstName} ${course.instructor.lastName}`
+                      : t("instructionalCourses.notAssigned")}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>{t("Schedule")}:</strong>{" "}
+                    {course.days_of_week.join(", ")}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>{t("Time")}:</strong> {course.start_time_utc}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>{t("Duration")}:</strong> {course.duration_minutes}{" "}
+                    {t("minutes")}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>{t("Period")}:</strong>{" "}
+                    {new Date(course.start_date).toLocaleDateString()} -{" "}
+                    {new Date(course.finish_date).toLocaleDateString()}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
 
-      <InstructionalCourseDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-      />
-    </Container>
+        <InstructionalCourseDialog
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+        />
+      </Container>
+    </RoleProtectedRoute>
   );
 }

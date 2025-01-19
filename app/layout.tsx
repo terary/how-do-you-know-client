@@ -14,6 +14,7 @@ import "./styles/theme.css";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import { ToastProvider } from "./components/shared/ToastProvider";
+import { Breadcrumbs } from "./components/shared/Breadcrumbs";
 
 interface Props {
   readonly children: ReactNode;
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: Props) {
                       >
                         <TopBar />
                         <Box component="main" sx={{ p: 3 }}>
+                          <Breadcrumbs />
                           {children}
                         </Box>
                       </Box>

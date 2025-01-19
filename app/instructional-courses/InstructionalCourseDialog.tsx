@@ -30,6 +30,7 @@ import type {
 } from "@/lib/features/instructional-courses/types";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/hooks/useAuth";
+import { toast } from "react-toastify";
 
 const DAYS_OF_WEEK: DayOfWeek[] = [
   "MONDAY",
@@ -105,16 +106,19 @@ export function InstructionalCourseDialog({ open, onOpenChange }: Props) {
     console.log("Form submitted with data:", data);
     if (!user?.id) {
       setError("User must be logged in to create a course");
+      toast.error(t("instructionalCourses.userNotLoggedIn"));
       return;
     }
 
     try {
       await createCourse(data);
+      toast.success(t("instructionalCourses.createSuccess"));
       onOpenChange(false);
       form.reset();
     } catch (err) {
       console.error("Failed to create course:", err);
       setError("Failed to create course");
+      toast.error(t("instructionalCourses.createError"));
     }
   };
 

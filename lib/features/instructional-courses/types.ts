@@ -1,3 +1,6 @@
+import type { User } from "@/lib/types";
+import type { LearningInstitution } from "@/lib/features/learning-institutions/learningInstitutionsApiSlice";
+
 export type DayOfWeek =
   | "MONDAY"
   | "TUESDAY"
@@ -22,6 +25,8 @@ export interface InstructionalCourse {
   created_by: string;
   created_at: string;
   updated_at: string;
+  institution?: LearningInstitution;
+  instructor?: User;
 }
 
 export interface CreateInstructionalCourseDto {
