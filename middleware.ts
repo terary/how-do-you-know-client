@@ -5,6 +5,9 @@ import type { NextRequest } from "next/server";
 const protectedPaths = [
   "/question-templates",
   "/profile",
+  "/learning-institutions",
+  "/instructional-courses",
+  "/exam-templates",
   // Add other protected routes here
 ];
 
@@ -17,6 +20,11 @@ export function middleware(request: NextRequest) {
     request.cookies.get("hdyk_token")?.value ||
     request.headers.get("authorization")?.replace("Bearer ", "");
   const { pathname } = request.nextUrl;
+
+  // Skip middleware for API routes and preview endpoints
+  if (pathname.startsWith("/api/") || pathname.includes("/preview")) {
+    return NextResponse.next();
+  }
 
   // Check if the path should be protected
   const isProtectedPath = protectedPaths.some((path) =>

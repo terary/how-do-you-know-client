@@ -10,6 +10,7 @@ import {
   Typography,
   Paper,
   Alert,
+  Container,
 } from "@mui/material";
 
 export default function LoginPage() {
@@ -30,86 +31,83 @@ export default function LoginPage() {
   };
 
   return (
-    <>
-      <div>
-        <h3>Log In Page</h3>
-        <p>
-          A word about Authentication. <br />
-        </p>
-        <p>
-          Current authentication is handled authApiSlice. By indicating a given
-          resource is a protected route the slice automatically adds the
-          appropriate authentication header.
-        </p>
-        <p>
-          I think this will work for websockets as well so there shouldn't need
-          to be other authentication. I believe in both cases jwt token is used
-          as the bearer token.
-        </p>
-        <p>
-          There is a concern have how the authentication token is stored.
-          Currently in dev the client stores the auth token in localStorage
-          which is not idea.
-        </p>
-        <p>
-          Ideally, auth token storage will be stored in a secure cookie.
-          However, Given the dev. environment does not have https and is hosted
-          at different domains its not possible to set a secure cookie.
-        </p>
-        <p>
-          The client is set-up to switch between dev/production
-          localStorage/cookies but the cookies methods is untested
-        </p>
-      </div>
+    <Container maxWidth="md">
       <Box
         sx={{
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "100vh",
+          flexDirection: "column",
+          gap: 4,
+          py: 4,
         }}
       >
-        <Paper sx={{ p: 4, maxWidth: 400, width: "100%" }}>
-          <Typography variant="h4" gutterBottom>
-            Login
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Paper sx={{ p: 4, maxWidth: 400, width: "100%" }}>
+            <Typography variant="h4" gutterBottom>
+              Login
+            </Typography>
+            {error && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                Invalid credentials
+              </Alert>
+            )}
+            <form onSubmit={handleSubmit}>
+              <TextField
+                fullWidth
+                label="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                margin="normal"
+                required
+                autoComplete="username"
+              />
+              <TextField
+                fullWidth
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                margin="normal"
+                required
+                autoComplete="current-password"
+              />
+              <Button
+                fullWidth
+                type="submit"
+                variant="contained"
+                sx={{ mt: 2 }}
+                disabled={isLoading}
+              >
+                {isLoading ? "Logging in..." : "Login"}
+              </Button>
+            </form>
+          </Paper>
+        </Box>
+
+        <Paper sx={{ p: 4 }}>
+          <Typography variant="h6" gutterBottom>
+            Authentication Information
           </Typography>
-          {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              Invalid credentials
-            </Alert>
-          )}
-          <form onSubmit={handleSubmit}>
-            <TextField
-              fullWidth
-              label="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              margin="normal"
-              required
-              autoComplete="false"
-            />
-            <TextField
-              fullWidth
-              label="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              margin="normal"
-              required
-              autoComplete="false"
-            />
-            <Button
-              fullWidth
-              type="submit"
-              variant="contained"
-              sx={{ mt: 2 }}
-              disabled={isLoading}
-            >
-              {isLoading ? "Logging in..." : "Login"}
-            </Button>
-          </form>
+          <Typography paragraph>
+            Current authentication is handled by authApiSlice. Protected routes
+            automatically include the appropriate authentication header.
+          </Typography>
+          <Typography paragraph>
+            Authentication works for both REST API and WebSocket connections
+            using JWT tokens as bearer tokens.
+          </Typography>
+          <Typography paragraph>
+            Note: In development, the auth token is stored in localStorage for
+            simplicity. In production, it should use secure cookies, but this
+            requires HTTPS and proper domain configuration.
+          </Typography>
         </Paper>
       </Box>
-    </>
+    </Container>
   );
 }

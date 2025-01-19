@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Box,
@@ -43,6 +43,7 @@ import {
   type CreateUserDto,
   type UpdateUserDto,
 } from "@/lib/features/users/usersApiSlice";
+import { toast } from "react-toastify";
 
 const AVAILABLE_ROLES = ["admin:exams", "admin:users", "user", "public"];
 
@@ -79,37 +80,54 @@ const UserDialog = ({ open, onClose, user, onSubmit }: UserDialogProps) => {
   const mode: DialogMode = user ? "edit" : "create";
 
   const [formData, setFormData] = useState<FormData>(() => {
-    const baseData: BaseFormData = user
-      ? {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          roles: user.roles,
-        }
-      : {
-          firstName: "",
-          lastName: "",
-          email: "",
-          roles: [],
-        };
-
-    return mode === "create"
-      ? {
-          ...baseData,
-          mode: "create",
-          username: "",
-          password: "",
-        }
-      : {
-          ...baseData,
-          mode: "edit",
-        };
+    if (user) {
+      return {
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.email || "",
+        roles: user.roles || [],
+        mode: "edit",
+      };
+    }
+    return {
+      firstName: "",
+      lastName: "",
+      email: "",
+      roles: [],
+      mode: "create",
+      username: "",
+      password: "",
+    };
   });
 
+  // Update form data when user prop changes or dialog opens/closes
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.email || "",
+        roles: user.roles || [],
+        mode: "edit",
+      });
+    } else {
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        roles: [],
+        mode: "create",
+        username: "",
+        password: "",
+      });
+    }
+  }, [user, open]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
   };
 
@@ -131,8 +149,8 @@ const UserDialog = ({ open, onClose, user, onSubmit }: UserDialogProps) => {
       onSubmit(updateData);
     } else {
       const createData: CreateUserDto = {
-        username: formData.username,
-        password: formData.password,
+        username: (formData as CreateFormData).username,
+        password: (formData as CreateFormData).password,
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
@@ -155,7 +173,7 @@ const UserDialog = ({ open, onClose, user, onSubmit }: UserDialogProps) => {
               <TextField
                 name="username"
                 label={t("users.username")}
-                value={(formData as CreateFormData).username}
+                value={(formData as CreateFormData).username || ""}
                 onChange={handleChange}
                 fullWidth
                 required
@@ -164,7 +182,7 @@ const UserDialog = ({ open, onClose, user, onSubmit }: UserDialogProps) => {
                 name="password"
                 label={t("users.password")}
                 type="password"
-                value={(formData as CreateFormData).password}
+                value={(formData as CreateFormData).password || ""}
                 onChange={handleChange}
                 fullWidth
                 required
@@ -174,7 +192,7 @@ const UserDialog = ({ open, onClose, user, onSubmit }: UserDialogProps) => {
           <TextField
             name="firstName"
             label={t("users.firstName")}
-            value={formData.firstName}
+            value={formData.firstName || ""}
             onChange={handleChange}
             fullWidth
             required
@@ -182,7 +200,7 @@ const UserDialog = ({ open, onClose, user, onSubmit }: UserDialogProps) => {
           <TextField
             name="lastName"
             label={t("users.lastName")}
-            value={formData.lastName}
+            value={formData.lastName || ""}
             onChange={handleChange}
             fullWidth
             required
@@ -191,7 +209,7 @@ const UserDialog = ({ open, onClose, user, onSubmit }: UserDialogProps) => {
             name="email"
             label={t("users.email")}
             type="email"
-            value={formData.email}
+            value={formData.email || ""}
             onChange={handleChange}
             fullWidth
             required
@@ -201,7 +219,7 @@ const UserDialog = ({ open, onClose, user, onSubmit }: UserDialogProps) => {
             <Select
               labelId="roles-label"
               multiple
-              value={formData.roles}
+              value={formData.roles || []}
               onChange={handleRolesChange}
               input={<OutlinedInput label={t("users.roles")} />}
               renderValue={(selected) => (
@@ -242,39 +260,49 @@ export default function UsersPage() {
   const [selectedUser, setSelectedUser] = useState<User | undefined>();
 
   const handleSubmit = async (data: CreateUserDto | UpdateUserDto) => {
-    if (selectedUser) {
-      await handleUpdate(data as UpdateUserDto);
-    } else {
-      await handleCreate(data as CreateUserDto);
+    try {
+      if (selectedUser) {
+        await handleUpdate(data as UpdateUserDto);
+        toast.success(t("users.updateSuccess"));
+      } else {
+        await handleCreate(data as CreateUserDto);
+        toast.success(t("users.createSuccess"));
+      }
+      setDialogOpen(false);
+      setSelectedUser(undefined);
+    } catch (error) {
+      console.error("Failed to save user:", error);
+      toast.error(
+        selectedUser ? t("users.updateError") : t("users.createError")
+      );
     }
   };
 
   const handleCreate = async (data: CreateUserDto) => {
-    try {
-      await createUser(data).unwrap();
-    } catch (error) {
-      console.error("Failed to create user:", error);
-    }
+    await createUser(data).unwrap();
   };
 
   const handleUpdate = async (data: UpdateUserDto) => {
     if (!selectedUser) return;
-    try {
-      await updateUser({
-        username: selectedUser.username,
-        data,
-      }).unwrap();
-    } catch (error) {
-      console.error("Failed to update user:", error);
-    }
+    await updateUser({
+      username: selectedUser.username,
+      data,
+    }).unwrap();
   };
 
   const handleDelete = async (username: string) => {
     try {
       await deleteUser(username).unwrap();
+      toast.success(t("users.deleteSuccess"));
     } catch (error) {
       console.error("Failed to delete user:", error);
+      toast.error(t("users.deleteError"));
     }
+  };
+
+  const handleEditClick = (user: User) => {
+    setSelectedUser(user);
+    setDialogOpen(true);
   };
 
   const columns: GridColDef[] = [
@@ -303,10 +331,7 @@ export default function UsersPage() {
           key="edit"
           icon={<EditIcon />}
           label={t("singleword.edit")}
-          onClick={() => {
-            setSelectedUser(params.row);
-            setDialogOpen(true);
-          }}
+          onClick={() => handleEditClick(params.row)}
         />,
         <GridActionsCellItem
           key="delete"

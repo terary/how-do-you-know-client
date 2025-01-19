@@ -4,7 +4,9 @@
     "verify": "تحقق",
     "quotes": "اقتباسات",
     "questionnaires": "استبيانات",
-    "errorTest": "اختبار الأخطاء"
+    "errorTest": "اختبار الأخطاء",
+    "learningInstitutions": "المؤسسات التعليمية",
+    "instructionalCourses": "الدورات التعليمية"
   },
   "footer": {
     "learn": "تعلم",
@@ -41,5 +43,25 @@
     "profile": "الملف الشخصي",
     "account": "الحساب",
     "logout": "تسجيل الخروج"
+  },
+  "instructionalCourses": {
+    "title": "الدورات التعليمية",
+    "addCourse": "إضافة دورة",
+    "editCourse": "تعديل الدورة",
+    "name": "الاسم",
+    "description": "الوصف",
+    "startDate": "تاريخ البدء",
+    "finishDate": "تاريخ الانتهاء",
+    "startTime": "وقت البدء",
+    "duration": "المدة (بالدقائق)",
+    "daysOfWeek": "أيام الأسبوع",
+    "institution": "المؤسسة",
+    "instructor": "المدرس",
+    "proctors": "المراقبون",
+    "loading": "جاري التحميل...",
+    "errorLoading": "خطأ في تحميل الدورات",
+    "errorCreating": "خطأ في إنشاء الدورة",
+    "errorUpdating": "خطأ في تحديث الدورة",
+    "errorDeleting": "خطأ في حذف الدورة"
   }
 }
