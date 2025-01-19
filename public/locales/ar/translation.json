@@ -5,5 +5,38 @@
     "flagQuestion": "وضع علامة على السؤال",
     "userNotes": "ملاحظات المستخدم",
     "sortPosition": "ترتيب الموضع"
+  },
+  "navigation": {
+    "studentDashboard": "لوحة تحكم الطالب",
+    "instructorDashboard": "لوحة تحكم المدرس",
+    "proctorDashboard": "لوحة تحكم المراقب"
+  },
+  "dashboard": {
+    "welcome": "مرحباً بك في لوحة التحكم",
+    "activeCourses": "الدورات النشطة",
+    "upcomingExams": "الامتحانات القادمة",
+    "studyGuides": "أدلة الدراسة",
+    "nextClass": "الصف التالي",
+    "instructor": "المدرس",
+    "daysLeft": "الأيام المتبقية",
+    "lastAccessed": "آخر وصول",
+    "instructorWelcome": "مرحباً بك في لوحة تحكم المدرس",
+    "totalStudents": "إجمالي الطلاب",
+    "pendingAssignments": "المهام المعلقة",
+    "recentStudentActivity": "نشاط الطلاب الأخير",
+    "facultyStatus": "حالة أعضاء هيئة التدريس",
+    "courseStatistics": "إحصائيات الدورة",
+    "lastActive": "آخر نشاط",
+    "averageProgress": "متوسط التقدم",
+    "upcomingDeadlines": "المواعيد النهائية القادمة",
+    "proctorWelcome": "لوحة تحكم مراقبة الامتحانات",
+    "activeExams": "الامتحانات النشطة",
+    "alertsAndFlags": "التنبيهات والإشارات",
+    "timeRemaining": "الوقت المتبقي",
+    "activeStudents": "الطلاب النشطون",
+    "activeFlags": "الإشارات النشطة",
+    "review": "مراجعة",
+    "startsAt": "يبدأ في",
+    "expectedStudents": "الطلاب المتوقعون"
   }
 }

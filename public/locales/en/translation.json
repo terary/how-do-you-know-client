@@ -5,5 +5,38 @@
     "flagQuestion": "Flag Question",
     "userNotes": "User Notes",
     "sortPosition": "Sort Position"
+  },
+  "navigation": {
+    "studentDashboard": "Student Dashboard",
+    "instructorDashboard": "Instructor Dashboard",
+    "proctorDashboard": "Proctor Dashboard"
+  },
+  "dashboard": {
+    "welcome": "Welcome to Your Dashboard",
+    "activeCourses": "Active Courses",
+    "upcomingExams": "Upcoming Exams",
+    "studyGuides": "Study Guides",
+    "nextClass": "Next Class",
+    "instructor": "Instructor",
+    "daysLeft": "Days Left",
+    "lastAccessed": "Last Accessed",
+    "instructorWelcome": "Welcome to Instructor Dashboard",
+    "totalStudents": "Total Students",
+    "pendingAssignments": "Pending Assignments",
+    "recentStudentActivity": "Recent Student Activity",
+    "facultyStatus": "Faculty Status",
+    "courseStatistics": "Course Statistics",
+    "lastActive": "Last Active",
+    "averageProgress": "Average Progress",
+    "upcomingDeadlines": "Upcoming Deadlines",
+    "proctorWelcome": "Exam Supervision Dashboard",
+    "activeExams": "Active Exams",
+    "alertsAndFlags": "Alerts & Flags",
+    "timeRemaining": "Time Remaining",
+    "activeStudents": "Active Students",
+    "activeFlags": "Active Flags",
+    "review": "Review",
+    "startsAt": "Starts At",
+    "expectedStudents": "Expected Students"
   }
 }
