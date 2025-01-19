@@ -36,6 +36,14 @@ import { useToast } from "@/lib/hooks/useToast";
 import { QuestionPreview } from "./QuestionPreview";
 import { StrictModeDroppable } from "./StrictModeDroppable";
 
+interface QuestionWithTemplate extends Question {
+  questionTemplate: {
+    userPromptType: "text" | "multimedia";
+    userPromptText: string;
+    userResponseType: string;
+  };
+}
+
 const formatResponseType = (type: string): string => {
   switch (type) {
     case "one-of-4":
@@ -171,12 +179,18 @@ export const ExamTemplateSectionQuestions = ({
                       >
                         <CardContent>
                           <Typography>
-                            {question.questionTemplate.userPromptType === "text"
-                              ? question.questionTemplate.userPromptText
-                              : question.questionTemplate.userPromptType}
+                            {(question as any).questionTemplate
+                              .userPromptType === "text"
+                              ? (question as any).questionTemplate
+                                  .userPromptText
+                              : (question as any).questionTemplate
+                                  .userPromptType}
                           </Typography>
                           <Typography>
-                            {question.questionTemplate.userResponseType}
+                            {
+                              (question as any).questionTemplate
+                                .userResponseType
+                            }
                           </Typography>
                         </CardContent>
                       </Card>
