@@ -1,15 +1,22 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { screen, fireEvent, waitFor } from "@testing-library/react";
 import LearningInstitutionsPage from "@/app/learning-institutions/page";
 import {
   useGetLearningInstitutionsQuery,
   useDeleteLearningInstitutionMutation,
   useCreateLearningInstitutionMutation,
 } from "@/lib/features/learning-institutions/learningInstitutionsApiSlice";
-import { StoreProvider } from "@/app/StoreProvider";
+import { renderWithProviders } from "../../test-utils/render";
 
 // Mock the API hooks
 const mockDeleteInstitution = jest.fn();
 const mockCreateInstitution = jest.fn();
+
+// Mock RoleProtectedRoute
+jest.mock("@/lib/features/auth/components/RoleProtectedRoute", () => ({
+  RoleProtectedRoute: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+}));
 
 jest.mock(
   "@/lib/features/learning-institutions/learningInstitutionsApiSlice",
@@ -67,11 +74,7 @@ describe("LearningInstitutionsPage", () => {
       error: null,
     });
 
-    render(
-      <StoreProvider>
-        <LearningInstitutionsPage />
-      </StoreProvider>
-    );
+    renderWithProviders(<LearningInstitutionsPage />);
 
     expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
   });
@@ -83,11 +86,7 @@ describe("LearningInstitutionsPage", () => {
       error: { message: "Failed to fetch institutions" },
     });
 
-    render(
-      <StoreProvider>
-        <LearningInstitutionsPage />
-      </StoreProvider>
-    );
+    renderWithProviders(<LearningInstitutionsPage />);
 
     expect(screen.getByText(/Error loading institutions/i)).toBeInTheDocument();
   });
@@ -99,19 +98,31 @@ describe("LearningInstitutionsPage", () => {
       error: null,
     });
 
-    render(
-      <StoreProvider>
-        <LearningInstitutionsPage />
-      </StoreProvider>
-    );
+    renderWithProviders(<LearningInstitutionsPage />);
 
     mockInstitutions.forEach((institution) => {
       expect(screen.getByText(institution.name)).toBeInTheDocument();
       expect(screen.getByText(institution.description)).toBeInTheDocument();
-      expect(screen.getByText(institution.website)).toBeInTheDocument();
-      expect(screen.getByText(institution.email)).toBeInTheDocument();
-      expect(screen.getByText(institution.phone)).toBeInTheDocument();
-      expect(screen.getByText(institution.address)).toBeInTheDocument();
+      expect(
+        screen.getByText((content) => {
+          return content.includes(institution.website);
+        })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText((content) => {
+          return content.includes(institution.email);
+        })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText((content) => {
+          return content.includes(institution.phone);
+        })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText((content) => {
+          return content.includes(institution.address);
+        })
+      ).toBeInTheDocument();
     });
   });
 
@@ -122,11 +133,7 @@ describe("LearningInstitutionsPage", () => {
       error: null,
     });
 
-    render(
-      <StoreProvider>
-        <LearningInstitutionsPage />
-      </StoreProvider>
-    );
+    renderWithProviders(<LearningInstitutionsPage />);
 
     fireEvent.click(screen.getByText(/Add Institution/i));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
@@ -139,11 +146,7 @@ describe("LearningInstitutionsPage", () => {
       error: null,
     });
 
-    render(
-      <StoreProvider>
-        <LearningInstitutionsPage />
-      </StoreProvider>
-    );
+    renderWithProviders(<LearningInstitutionsPage />);
 
     const deleteButtons = screen.getAllByTestId("delete-institution-button");
     fireEvent.click(deleteButtons[0]);

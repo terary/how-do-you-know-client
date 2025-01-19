@@ -19,6 +19,11 @@ i18next
     interpolation: {
       escapeValue: false,
     },
+    debug: true, // Enable debug mode to see missing keys
+    load: "languageOnly", // Load only the language without region code
+    fallbackNS: "common", // Use common namespace as fallback
+    returnNull: false, // Return key instead of null for missing translations
+    returnEmptyString: false, // Return key instead of empty string
   });
 
 export default i18next;

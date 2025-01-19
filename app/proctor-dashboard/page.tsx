@@ -221,7 +221,9 @@ export default function ProctorDashboard() {
                         >
                           <Typography variant="h6">{exam.name}</Typography>
                           <Chip
-                            label={exam.status}
+                            label={t(
+                              `dashboard.status.${exam.status.replace("-", "")}`
+                            )}
                             color={getStatusColor(exam.status)}
                             size="small"
                           />

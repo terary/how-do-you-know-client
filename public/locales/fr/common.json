@@ -1,7 +1,9 @@
 {
   "questionnaire": {
     "advanced": "Avancé",
-    "skipQuestion": "Sauter la Question",
+    "skipQuestion": "Passer la Question",
+    "flagQuestion": "Marquer la question",
+    "userNotes": "Notes de l'utilisateur",
     "userTags": "Balises Utilisateur",
     "sortPosition": "Position de Tri",
     "filterAndSort": "Filtrer et Trier",

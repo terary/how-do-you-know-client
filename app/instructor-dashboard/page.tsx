@@ -272,7 +272,7 @@ export default function InstructorDashboard() {
                     divider
                     secondaryAction={
                       <Chip
-                        label={faculty.status}
+                        label={t(`dashboard.status.${faculty.status}`)}
                         color={
                           faculty.status === "online" ? "success" : "default"
                         }

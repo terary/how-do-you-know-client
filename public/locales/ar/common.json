@@ -1,12 +1,18 @@
 {
-  "nav": {
+  "navigation": {
     "home": "الرئيسية",
+    "users": "المستخدمون",
+    "questionTemplates": "قوالب الأسئلة",
+    "fodderPools": "مجموعات المواد",
     "verify": "تحقق",
-    "quotes": "اقتباسات",
     "questionnaires": "استبيانات",
     "errorTest": "اختبار الأخطاء",
+    "profile": "الملف الشخصي",
     "learningInstitutions": "المؤسسات التعليمية",
-    "instructionalCourses": "الدورات التعليمية"
+    "instructionalCourses": "الدورات التعليمية",
+    "studentDashboard": "لوحة تحكم الطالب",
+    "instructorDashboard": "لوحة تحكم المدرس",
+    "proctorDashboard": "لوحة تحكم المراقب"
   },
   "footer": {
     "learn": "تعلم",
@@ -35,14 +41,106 @@
     "sortPosition": "موضع الترتيب"
   },
   "singleword": {
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "loading": "جاري التحميل",
+    "error": "خطأ",
+    "add": "إضافة",
+    "create": "إنشاء",
     "hide": "إخفاء",
     "show": "عرض",
-    "save": "حفظ"
+    "reset": "إعادة تعيين"
   },
   "settings": {
     "profile": "الملف الشخصي",
     "account": "الحساب",
     "logout": "تسجيل الخروج"
+  },
+  "dashboard": {
+    "welcome": "مرحباً بك في لوحة التحكم",
+    "activeCourses": "الدورات النشطة",
+    "upcomingExams": "الامتحانات القادمة",
+    "studyGuides": "أدلة الدراسة",
+    "nextClass": "الصف التالي",
+    "instructor": "المدرس",
+    "daysLeft": "الأيام المتبقية",
+    "lastAccessed": "آخر وصول",
+    "instructorWelcome": "مرحباً بك في لوحة تحكم المدرس",
+    "totalStudents": "إجمالي الطلاب",
+    "pendingAssignments": "المهام المعلقة",
+    "recentStudentActivity": "نشاط الطلاب الأخير",
+    "facultyStatus": "حالة أعضاء هيئة التدريس",
+    "courseStatistics": "إحصائيات الدورة",
+    "lastActive": "آخر نشاط",
+    "averageProgress": "متوسط التقدم",
+    "upcomingDeadlines": "المواعيد النهائية القادمة",
+    "proctorWelcome": "لوحة تحكم مراقبة الامتحانات",
+    "activeExams": "الامتحانات النشطة",
+    "alertsAndFlags": "التنبيهات والإشارات",
+    "timeRemaining": "الوقت المتبقي",
+    "activeStudents": "الطلاب النشطون",
+    "activeFlags": "الإشارات النشطة",
+    "review": "مراجعة",
+    "startsAt": "يبدأ في",
+    "expectedStudents": "الطلاب المتوقعون",
+    "status": {
+      "online": "متصل",
+      "offline": "غير متصل",
+      "inProgress": "قيد التنفيذ",
+      "startingSoon": "يبدأ قريباً",
+      "endingSoon": "ينتهي قريباً"
+    },
+    "examType": {
+      "actual": "امتحان فعلي",
+      "practice": "امتحان تجريبي"
+    },
+    "complete": "مكتمل"
+  },
+  "questionTemplates": {
+    "title": "قوالب الأسئلة",
+    "createTemplate": "إنشاء قالب",
+    "editTemplate": "تعديل القالب",
+    "userPromptType": "نوع السؤال",
+    "userResponseType": "نوع الإجابة",
+    "exclusivityType": "نوع الحصرية",
+    "userPromptText": "نص السؤال",
+    "instructionText": "التعليمات",
+    "actions": "الإجراءات",
+    "promptTypes": {
+      "text": "نص",
+      "multimedia": "وسائط متعددة"
+    },
+    "responseTypes": {
+      "free-text-255": "نص حر (255)",
+      "multiple-choice-4": "اختيار متعدد (4)",
+      "true-false": "صح/خطأ"
+    },
+    "exclusivityTypes": {
+      "exam-only": "امتحان فقط",
+      "practice-only": "تدريب فقط",
+      "exam-practice-both": "امتحان وتدريب"
+    }
+  },
+  "learningInstitutions": {
+    "title": "المؤسسات التعليمية",
+    "addInstitution": "إضافة مؤسسة",
+    "editInstitution": "تعديل مؤسسة",
+    "name": "الاسم",
+    "description": "الوصف",
+    "website": "الموقع الإلكتروني",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "address": "العنوان",
+    "loading": "جاري التحميل...",
+    "errorLoading": "خطأ في تحميل المؤسسات",
+    "errorCreating": "خطأ في إنشاء المؤسسة",
+    "errorUpdating": "خطأ في تحديث المؤسسة",
+    "errorDeleting": "خطأ في حذف المؤسسة",
+    "createSuccess": "تم إنشاء المؤسسة بنجاح",
+    "updateSuccess": "تم تحديث المؤسسة بنجاح",
+    "deleteSuccess": "تم حذف المؤسسة بنجاح"
   },
   "instructionalCourses": {
     "title": "الدورات التعليمية",
@@ -62,6 +160,10 @@
     "errorLoading": "خطأ في تحميل الدورات",
     "errorCreating": "خطأ في إنشاء الدورة",
     "errorUpdating": "خطأ في تحديث الدورة",
-    "errorDeleting": "خطأ في حذف الدورة"
+    "errorDeleting": "خطأ في حذف الدورة",
+    "createSuccess": "تم إنشاء الدورة بنجاح",
+    "updateSuccess": "تم تحديث الدورة بنجاح",
+    "deleteSuccess": "تم حذف الدورة بنجاح",
+    "notAssigned": "غير معين"
   }
 }

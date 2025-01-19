@@ -237,7 +237,7 @@ export default function StudentDashboard() {
                       )}`}
                     />
                     <Chip
-                      label={exam.type}
+                      label={t(`dashboard.examType.${exam.type}`)}
                       color={exam.type === "actual" ? "error" : "success"}
                       size="small"
                     />
@@ -279,7 +279,7 @@ export default function StudentDashboard() {
                             color="text.secondary"
                             sx={{ mt: 1 }}
                           >
-                            {guide.completionRate}% Complete
+                            {guide.completionRate}% {t("dashboard.complete")}
                           </Typography>
                         </Box>
                         <Typography variant="body2" color="text.secondary">

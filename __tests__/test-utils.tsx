@@ -5,6 +5,8 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import type { RootState } from "@/lib/store";
 import { questionFilterSlice } from "@/lib/features/question-filter/questionFilterSlice";
 import { authSlice } from "@/lib/features/auth/authSlice";
+import { ReactNode } from "react";
+import { StoreProvider } from "@/app/StoreProvider";
 
 // First, mock the API slice module
 jest.mock("@/lib/features/user-response/userResponseApiSlice", () => {
@@ -91,6 +93,39 @@ function render(
     store,
   };
 }
+
+// Mock next/navigation
+jest.mock("next/navigation", () => ({
+  useRouter() {
+    return {
+      push: jest.fn(),
+      replace: jest.fn(),
+      prefetch: jest.fn(),
+      back: jest.fn(),
+      forward: jest.fn(),
+      refresh: jest.fn(),
+      pathname: "/",
+    };
+  },
+  usePathname() {
+    return "/";
+  },
+  useSearchParams() {
+    return new URLSearchParams();
+  },
+}));
+
+interface WrapperProps {
+  children: ReactNode;
+}
+
+export const TestWrapper = ({ children }: WrapperProps) => {
+  return <StoreProvider>{children}</StoreProvider>;
+};
+
+export const renderWithProviders = (ui: ReactNode) => {
+  return render(ui, { wrapper: TestWrapper });
+};
 
 export * from "@testing-library/react";
 export { render };
