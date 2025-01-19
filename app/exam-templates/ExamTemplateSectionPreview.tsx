@@ -11,8 +11,13 @@ import {
   CircularProgress,
   Tabs,
   Tab,
+  Card,
+  CardContent,
 } from "@mui/material";
-import { usePreviewTemplateMutation } from "@/lib/features/exam-templates/examTemplatesApiSlice";
+import {
+  usePreviewTemplateMutation,
+  useGetSectionQuestionsQuery,
+} from "@/lib/features/exam-templates/examTemplatesApiSlice";
 import { ExamTemplateSectionQuestions } from "./ExamTemplateSectionQuestions";
 
 interface ExamTemplateSectionPreviewProps {
@@ -48,6 +53,58 @@ const TabPanel = (props: TabPanelProps) => {
     >
       {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
+  );
+};
+
+const PreviewQuestions = ({
+  examId,
+  sectionId,
+}: {
+  examId: string;
+  sectionId: string;
+}) => {
+  const { data: questions = [], isLoading } = useGetSectionQuestionsQuery({
+    examId,
+    sectionId,
+  });
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  return (
+    <Box>
+      <Typography variant="h6" sx={{ mb: 2 }}>
+        Questions ({questions.length})
+      </Typography>
+
+      {questions.length === 0 ? (
+        <Typography color="text.secondary">
+          No questions in this section.
+        </Typography>
+      ) : (
+        <Box>
+          {questions.map((question: any) => (
+            <Card key={question.id} sx={{ mb: 2 }}>
+              <CardContent>
+                <Typography>
+                  {question.questionTemplate?.userPromptType === "text"
+                    ? question.questionTemplate?.userPromptText
+                    : question.questionTemplate?.userPromptType}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Response Type: {question.questionTemplate?.userResponseType}
+                </Typography>
+              </CardContent>
+            </Card>
+          ))}
+        </Box>
+      )}
+    </Box>
   );
 };
 
@@ -189,10 +246,7 @@ export const ExamTemplateSectionPreview = ({
               {selectedTab === 2 && renderPreviewContent()}
             </TabPanel>
             <TabPanel value={selectedTab} index={3}>
-              <ExamTemplateSectionQuestions
-                examId={examId}
-                sectionId={sectionId}
-              />
+              <PreviewQuestions examId={examId} sectionId={sectionId} />
             </TabPanel>
           </>
         )}

@@ -173,27 +173,48 @@ export const ExamTemplateSectionQuestions = ({
                       <Card
                         ref={provided.innerRef}
                         {...provided.draggableProps}
-                        {...provided.dragHandleProps}
                         sx={{
                           mb: 2,
                           opacity: snapshot.isDragging ? 0.5 : 1,
                         }}
                       >
                         <CardContent>
-                          <Typography>
-                            {(question as any).questionTemplate
-                              .userPromptType === "text"
-                              ? (question as any).questionTemplate
-                                  .userPromptText
-                              : (question as any).questionTemplate
-                                  .userPromptType}
-                          </Typography>
-                          <Typography>
-                            {
-                              (question as any).questionTemplate
-                                .userResponseType
-                            }
-                          </Typography>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            <Box
+                              {...provided.dragHandleProps}
+                              sx={{ cursor: "grab", display: "flex" }}
+                            >
+                              <DragIndicatorIcon
+                                sx={{ color: "text.secondary" }}
+                              />
+                            </Box>
+                            <Box sx={{ flex: 1 }}>
+                              <Typography>
+                                {(question as any).questionTemplate
+                                  .userPromptType === "text"
+                                  ? (question as any).questionTemplate
+                                      .userPromptText
+                                  : (question as any).questionTemplate
+                                      .userPromptType}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                              >
+                                Response Type:{" "}
+                                {formatResponseType(
+                                  (question as any).questionTemplate
+                                    .userResponseType
+                                )}
+                              </Typography>
+                            </Box>
+                          </Box>
                         </CardContent>
                       </Card>
                     )}

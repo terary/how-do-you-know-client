@@ -287,35 +287,32 @@ export const examTemplatesApiSlice = apiSlice.injectEndpoints({
     }),
 
     updateExamTemplateSection: builder.mutation<
-      ExamTemplateSection,
+      void,
       {
         examId: string;
         sectionId: string;
         section: UpdateExamTemplateSectionDto;
       }
     >({
-      query: ({
-        examId,
-        sectionId,
-        section,
-      }: {
-        examId: string;
-        sectionId: string;
-        section: UpdateExamTemplateSectionDto;
-      }) => ({
+      query: ({ examId, sectionId, section }) => ({
         url: `/exam-templates/${examId}/sections/${sectionId}`,
-        method: "PUT",
+        method: "PATCH",
         body: section,
       }),
-      invalidatesTags: (
-        _result: unknown,
-        _error: unknown,
-        { examId, sectionId }: { examId: string; sectionId: string }
-      ) => [
-        { type: "ExamTemplates", id: `${examId}-${sectionId}` },
+      invalidatesTags: (_result, _error, { examId }) => [
         { type: "ExamTemplates", id: examId },
         "ExamTemplates",
       ],
+      async onQueryStarted(
+        { examId, sectionId, section },
+        { dispatch, queryFulfilled }
+      ) {
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          console.error("Failed to update section:", error);
+        }
+      },
     }),
 
     // Question endpoints

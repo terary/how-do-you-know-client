@@ -36,6 +36,7 @@ import {
   type CreateExamTemplateSectionDto,
   type UpdateExamTemplateSectionDto,
 } from "@/lib/features/exam-templates/examTemplatesApiSlice";
+import { useToast } from "@/lib/hooks/useToast";
 import { ExamTemplateSectionPreview } from "./ExamTemplateSectionPreview";
 import { BulkQuestionsDialog } from "./BulkQuestionsDialog";
 import { SectionDialog } from "./SectionDialog";
@@ -55,6 +56,8 @@ export const ExamTemplateSections = ({ examId }: ExamTemplateSectionsProps) => {
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [bulkQuestionsOpen, setBulkQuestionsOpen] = useState(false);
+  const [isReordering, setIsReordering] = useState(false);
+  const toast = useToast();
 
   // Sort sections by position
   const orderedSections = useMemo(
@@ -70,8 +73,10 @@ export const ExamTemplateSections = ({ examId }: ExamTemplateSectionsProps) => {
       }).unwrap();
       setDialogOpen(false);
       setSelectedSection(null);
+      toast.info("Section created successfully");
     } catch (error) {
       console.error("Failed to create section:", error);
+      toast.error("Failed to create section");
     }
   };
 
@@ -86,16 +91,20 @@ export const ExamTemplateSections = ({ examId }: ExamTemplateSectionsProps) => {
       }).unwrap();
       setDialogOpen(false);
       setSelectedSection(null);
+      toast.info("Section updated successfully");
     } catch (error) {
       console.error("Failed to update section:", error);
+      toast.error("Failed to update section");
     }
   };
 
   const handleDeleteSection = async (sectionId: string) => {
     try {
       await deleteSection({ examId, sectionId }).unwrap();
+      toast.info("Section deleted successfully");
     } catch (error) {
       console.error("Failed to delete section:", error);
+      toast.error("Failed to delete section");
     }
   };
 
@@ -107,6 +116,7 @@ export const ExamTemplateSections = ({ examId }: ExamTemplateSectionsProps) => {
 
     if (sourceIndex === destinationIndex) return;
 
+    setIsReordering(true);
     try {
       const updatedSections = Array.from(orderedSections);
       const [movedSection] = updatedSections.splice(sourceIndex, 1);
@@ -121,8 +131,12 @@ export const ExamTemplateSections = ({ examId }: ExamTemplateSectionsProps) => {
           }).unwrap()
         )
       );
+      toast.info("Sections reordered successfully");
     } catch (error) {
       console.error("Failed to reorder sections:", error);
+      toast.error("Failed to reorder sections");
+    } finally {
+      setIsReordering(false);
     }
   };
 
@@ -148,119 +162,132 @@ export const ExamTemplateSections = ({ examId }: ExamTemplateSectionsProps) => {
         </Button>
       </Box>
 
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <StrictModeDroppable
-          droppableId="sections"
-          isDropDisabled={false}
-          isCombineEnabled={false}
-          ignoreContainerClipping={false}
-        >
-          {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
-            <Box
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              sx={{ minHeight: 1 }}
-            >
-              {orderedSections.map((section, index) => (
-                <Draggable
-                  key={section.id}
-                  draggableId={section.id}
-                  index={index}
-                >
-                  {(
-                    provided: DraggableProvided,
-                    snapshot: DraggableStateSnapshot
-                  ) => (
-                    <Box
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      sx={{
-                        mb: 2,
-                        opacity: snapshot.isDragging ? 0.8 : 1,
-                      }}
-                    >
-                      <Card>
-                        <CardContent>
-                          <Box display="flex" alignItems="center">
-                            <Box
-                              {...provided.dragHandleProps}
-                              component="span"
-                              sx={{ cursor: "grab" }}
-                            >
-                              <DragIndicatorIcon />
-                            </Box>
-                            <Box ml={2} flexGrow={1}>
-                              <Typography variant="h6">
-                                {section.title}
-                              </Typography>
-                              <Typography
-                                variant="body2"
-                                color="text.secondary"
+      {isLoading || isReordering ? (
+        <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <StrictModeDroppable
+            droppableId="sections"
+            isDropDisabled={false}
+            isCombineEnabled={false}
+            ignoreContainerClipping={false}
+          >
+            {(
+              provided: DroppableProvided,
+              snapshot: DroppableStateSnapshot
+            ) => (
+              <Box
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                sx={{
+                  minHeight: 1,
+                  opacity: isReordering ? 0.7 : 1,
+                  pointerEvents: isReordering ? "none" : "auto",
+                }}
+              >
+                {orderedSections.map((section, index) => (
+                  <Draggable
+                    key={section.id}
+                    draggableId={section.id}
+                    index={index}
+                  >
+                    {(
+                      provided: DraggableProvided,
+                      snapshot: DraggableStateSnapshot
+                    ) => (
+                      <Box
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        sx={{
+                          mb: 2,
+                          opacity: snapshot.isDragging ? 0.8 : 1,
+                        }}
+                      >
+                        <Card>
+                          <CardContent>
+                            <Box display="flex" alignItems="center">
+                              <Box
+                                {...provided.dragHandleProps}
+                                component="span"
+                                sx={{ cursor: "grab" }}
                               >
-                                {section.instructions}
-                              </Typography>
-                              {section.timeLimitSeconds && (
-                                <Typography variant="body2">
-                                  Time Limit: {section.timeLimitSeconds / 60}{" "}
-                                  minutes
+                                <DragIndicatorIcon />
+                              </Box>
+                              <Box ml={2} flexGrow={1}>
+                                <Typography variant="h6">
+                                  {section.title}
                                 </Typography>
-                              )}
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                >
+                                  {section.instructions}
+                                </Typography>
+                                {section.timeLimitSeconds && (
+                                  <Typography variant="body2">
+                                    Time Limit: {section.timeLimitSeconds / 60}{" "}
+                                    minutes
+                                  </Typography>
+                                )}
+                              </Box>
                             </Box>
-                          </Box>
-                        </CardContent>
-                        <CardActions>
-                          <Tooltip title="Edit Section">
-                            <IconButton
-                              onClick={() => {
-                                setSelectedSection(section.id);
-                                setDialogOpen(true);
-                              }}
-                              size="small"
-                            >
-                              <EditIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Delete Section">
-                            <IconButton
-                              onClick={() => handleDeleteSection(section.id)}
-                              size="small"
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Preview Section">
-                            <IconButton
-                              onClick={() => {
-                                setSelectedSection(section.id);
-                                setPreviewOpen(true);
-                              }}
-                              size="small"
-                            >
-                              <PreviewIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Manage Questions">
-                            <IconButton
-                              onClick={() => {
-                                setSelectedSection(section.id);
-                                setBulkQuestionsOpen(true);
-                              }}
-                              size="small"
-                            >
-                              <QuestionIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </CardActions>
-                      </Card>
-                    </Box>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </Box>
-          )}
-        </StrictModeDroppable>
-      </DragDropContext>
+                          </CardContent>
+                          <CardActions>
+                            <Tooltip title="Edit Section">
+                              <IconButton
+                                onClick={() => {
+                                  setSelectedSection(section.id);
+                                  setDialogOpen(true);
+                                }}
+                                size="small"
+                              >
+                                <EditIcon />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Delete Section">
+                              <IconButton
+                                onClick={() => handleDeleteSection(section.id)}
+                                size="small"
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Preview Section">
+                              <IconButton
+                                onClick={() => {
+                                  setSelectedSection(section.id);
+                                  setPreviewOpen(true);
+                                }}
+                                size="small"
+                              >
+                                <PreviewIcon />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Manage Questions">
+                              <IconButton
+                                onClick={() => {
+                                  setSelectedSection(section.id);
+                                  setBulkQuestionsOpen(true);
+                                }}
+                                size="small"
+                              >
+                                <QuestionIcon />
+                              </IconButton>
+                            </Tooltip>
+                          </CardActions>
+                        </Card>
+                      </Box>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </Box>
+            )}
+          </StrictModeDroppable>
+        </DragDropContext>
+      )}
 
       <SectionDialog
         open={dialogOpen}
