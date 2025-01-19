@@ -23,11 +23,14 @@ import {
   type ExamTemplate,
 } from "@/lib/features/exam-templates/examTemplatesApiSlice";
 import { useRouter } from "next/navigation";
+import { ExamTemplateSectionPreview } from "./ExamTemplateSectionPreview";
 
 export default function ExamTemplatesPage() {
   const router = useRouter();
   const { data: templates = [], isLoading } = useGetExamTemplatesQuery();
   const [deleteTemplate] = useDeleteExamTemplateMutation();
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
 
   const handleDelete = async (id: string) => {
     try {
@@ -102,9 +105,10 @@ export default function ExamTemplatesPage() {
                 </IconButton>
                 <IconButton
                   size="small"
-                  onClick={() =>
-                    router.push(`/exam-templates/${template.id}/preview`)
-                  }
+                  onClick={() => {
+                    setSelectedTemplate(template.id);
+                    setPreviewOpen(true);
+                  }}
                 >
                   <PreviewIcon />
                 </IconButton>
@@ -113,6 +117,16 @@ export default function ExamTemplatesPage() {
           ))}
         </Box>
       )}
+
+      <ExamTemplateSectionPreview
+        examId={selectedTemplate || ""}
+        sectionId=""
+        open={previewOpen}
+        onClose={() => {
+          setPreviewOpen(false);
+          setSelectedTemplate(null);
+        }}
+      />
     </Box>
   );
 }
