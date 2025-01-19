@@ -12,6 +12,10 @@ const nextConfig = {
         destination: 'http://localhost:3001/exam-templates/:id/preview',
       },
       {
+        source: '/exam-templates/sections/:sectionId/questions/bulk',
+        destination: 'http://localhost:3001/exam-templates/sections/:sectionId/questions/bulk',
+      },
+      {
         source: '/exam-templates/:id/sections',
         has: [
           {

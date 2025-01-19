@@ -337,7 +337,7 @@ export const examTemplatesApiSlice = apiSlice.injectEndpoints({
         sectionId: string;
         questionIds: string[];
       }) => ({
-        url: `/exam-templates/${examId}/sections/${sectionId}/questions/bulk`,
+        url: `/exam-templates/sections/${sectionId}/questions/bulk`,
         method: "POST",
         body: { questionIds },
       }),
