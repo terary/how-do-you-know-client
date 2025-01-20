@@ -1,14 +1,18 @@
 {
-  "nav": {
+  "navigation": {
     "home": "Inicio",
+    "users": "Usuarios",
+    "questionTemplates": "Plantillas de Preguntas",
+    "fodderPools": "Grupos de Elementos",
     "verify": "Verificar",
-    "quotes": "Citas",
     "questionnaires": "Cuestionarios",
     "errorTest": "Probar Errores",
-    "users": "Usuarios",
-    "fodderPools": "Grupos de Elementos",
+    "profile": "Perfil",
     "learningInstitutions": "Instituciones Educativas",
-    "instructionalCourses": "Cursos Educativos"
+    "instructionalCourses": "Cursos Educativos",
+    "studentDashboard": "Panel del Estudiante",
+    "instructorDashboard": "Panel del Instructor",
+    "proctorDashboard": "Panel del Supervisor"
   },
   "footer": {
     "learn": "Aprender",
@@ -30,9 +34,11 @@
     "cancelEdit": "Cancelar Edición"
   },
   "questionnaire": {
-    "skipQuestion": "Saltar Pregunta",
-    "userTags": "Etiquetas de Usuario",
     "advanced": "Avanzado",
+    "skipQuestion": "Saltar Pregunta",
+    "flagQuestion": "Marcar pregunta",
+    "userNotes": "Notas del usuario",
+    "userTags": "Etiquetas de Usuario",
     "sortPosition": "Posición de Clasificación",
     "filterAndSort": "Filtrar y Ordenar",
     "filterByTag": "Filtrar por Etiqueta",
@@ -52,7 +58,9 @@
     "create": "Crear",
     "edit": "Editar",
     "delete": "Eliminar",
-    "add": "Agregar"
+    "add": "Agregar",
+    "loading": "Cargando",
+    "error": "Error"
   },
   "settings": {
     "profile": "Perfil",
@@ -79,6 +87,90 @@
     "items": "Elementos",
     "actions": "Acciones"
   },
+  "dashboard": {
+    "welcome": "Bienvenido a tu Panel",
+    "activeCourses": "Cursos Activos",
+    "upcomingExams": "Próximos Exámenes",
+    "studyGuides": "Guías de Estudio",
+    "nextClass": "Próxima Clase",
+    "instructor": "Instructor",
+    "daysLeft": "Días Restantes",
+    "lastAccessed": "Último Acceso",
+    "instructorWelcome": "Bienvenido al Panel del Instructor",
+    "totalStudents": "Total de Estudiantes",
+    "pendingAssignments": "Tareas Pendientes",
+    "recentStudentActivity": "Actividad Reciente de Estudiantes",
+    "facultyStatus": "Estado de la Facultad",
+    "courseStatistics": "Estadísticas del Curso",
+    "lastActive": "Última Actividad",
+    "averageProgress": "Progreso Promedio",
+    "upcomingDeadlines": "Próximas Fechas Límite",
+    "proctorWelcome": "Panel de Supervisión de Exámenes",
+    "activeExams": "Exámenes Activos",
+    "alertsAndFlags": "Alertas y Marcadores",
+    "timeRemaining": "Tiempo Restante",
+    "activeStudents": "Estudiantes Activos",
+    "activeFlags": "Marcadores Activos",
+    "review": "Revisar",
+    "startsAt": "Comienza a las",
+    "expectedStudents": "Estudiantes Esperados",
+    "status": {
+      "online": "En línea",
+      "offline": "Desconectado",
+      "inProgress": "En Progreso",
+      "startingSoon": "Comenzando Pronto",
+      "endingSoon": "Terminando Pronto"
+    },
+    "examType": {
+      "actual": "Examen Real",
+      "practice": "Examen de Práctica"
+    },
+    "complete": "Completado"
+  },
+  "questionTemplates": {
+    "title": "Plantillas de Preguntas",
+    "createTemplate": "Crear Plantilla",
+    "editTemplate": "Editar Plantilla",
+    "userPromptType": "Tipo de Indicación",
+    "userResponseType": "Tipo de Respuesta",
+    "exclusivityType": "Exclusividad",
+    "userPromptText": "Texto de Indicación",
+    "instructionText": "Instrucciones",
+    "actions": "Acciones",
+    "promptTypes": {
+      "text": "Texto",
+      "multimedia": "Multimedia"
+    },
+    "responseTypes": {
+      "free-text-255": "Texto Libre (255)",
+      "multiple-choice-4": "Opción Múltiple (4)",
+      "true-false": "Verdadero/Falso"
+    },
+    "exclusivityTypes": {
+      "exam-only": "Solo Examen",
+      "practice-only": "Solo Práctica",
+      "exam-practice-both": "Examen y Práctica"
+    }
+  },
+  "learningInstitutions": {
+    "title": "Instituciones Educativas",
+    "addInstitution": "Agregar Institución",
+    "editInstitution": "Editar Institución",
+    "name": "Nombre",
+    "description": "Descripción",
+    "website": "Sitio Web",
+    "email": "Correo Electrónico",
+    "phone": "Teléfono",
+    "address": "Dirección",
+    "loading": "Cargando...",
+    "errorLoading": "Error al cargar instituciones",
+    "errorCreating": "Error al crear institución",
+    "errorUpdating": "Error al actualizar institución",
+    "errorDeleting": "Error al eliminar institución",
+    "createSuccess": "Institución creada exitosamente",
+    "updateSuccess": "Institución actualizada exitosamente",
+    "deleteSuccess": "Institución eliminada exitosamente"
+  },
   "instructionalCourses": {
     "title": "Cursos Educativos",
     "addCourse": "Agregar Curso",
@@ -94,9 +186,13 @@
     "instructor": "Instructor",
     "proctors": "Supervisores",
     "loading": "Cargando...",
-    "errorLoading": "Error al cargar los cursos",
-    "errorCreating": "Error al crear el curso",
-    "errorUpdating": "Error al actualizar el curso",
-    "errorDeleting": "Error al eliminar el curso"
+    "errorLoading": "Error al cargar cursos",
+    "errorCreating": "Error al crear curso",
+    "errorUpdating": "Error al actualizar curso",
+    "errorDeleting": "Error al eliminar curso",
+    "createSuccess": "Curso creado exitosamente",
+    "updateSuccess": "Curso actualizado exitosamente",
+    "deleteSuccess": "Curso eliminado exitosamente",
+    "notAssigned": "No asignado"
   }
 }

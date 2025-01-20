@@ -1,10 +1,18 @@
 {
-  "nav": {
+  "navigation": {
     "home": "หน้าแรก",
+    "users": "ผู้ใช้",
+    "questionTemplates": "เทมเพลตคำถาม",
+    "fodderPools": "คลังข้อมูล",
     "verify": "ตรวจสอบ",
-    "quotes": "คำคม",
     "questionnaires": "แบบสอบถาม",
-    "errorTest": "ทดสอบข้อผิดพลาด"
+    "errorTest": "ทดสอบข้อผิดพลาด",
+    "profile": "โปรไฟล์",
+    "learningInstitutions": "สถาบันการศึกษา",
+    "instructionalCourses": "หลักสูตรการเรียนการสอน",
+    "studentDashboard": "แดชบอร์ดนักเรียน",
+    "instructorDashboard": "แดชบอร์ดผู้สอน",
+    "proctorDashboard": "แดชบอร์ดผู้คุมสอบ"
   },
   "footer": {
     "learn": "เรียนรู้",
@@ -29,8 +37,8 @@
     "advanced": "ขั้นสูง",
     "skipQuestion": "ข้ามคำถาม",
     "flagQuestion": "ทำเครื่องหมายคำถาม",
-    "userTags": "แท็ก",
-    "sortPosition": "ตำแหน่งการเรียง",
+    "userNotes": "บันทึกของผู้ใช้",
+    "sortPosition": "ตำแหน่งการเรียงลำดับ",
     "filterAndSort": "กรองและเรียง",
     "filterByTag": "กรองตามแท็ก",
     "showSkipped": "แสดงที่ข้าม",
@@ -40,15 +48,130 @@
     "useSpacesToSeparateTags": "ใช้เว้นวรรคเพื่อแยกแท็กหลายรายการ"
   },
   "singleword": {
+    "save": "บันทึก",
+    "cancel": "ยกเลิก",
+    "edit": "แก้ไข",
+    "delete": "ลบ",
+    "loading": "กำลังโหลด",
+    "error": "ข้อผิดพลาด",
+    "add": "เพิ่ม",
+    "create": "สร้าง",
     "hide": "ซ่อน",
     "show": "แสดง",
-    "save": "บันทึก",
-    "apply": "นำไปใช้",
-    "reset": "รีเซ็ต"
+    "reset": "รีเซ็ต",
+    "apply": "นำไปใช้"
   },
   "settings": {
     "profile": "โปรไฟล์",
     "account": "บัญชี",
     "logout": "ออกจากระบบ"
+  },
+  "dashboard": {
+    "welcome": "ยินดีต้อนรับสู่แดชบอร์ดของคุณ",
+    "activeCourses": "หลักสูตรที่กำลังเรียน",
+    "upcomingExams": "การสอบที่กำลังจะมาถึง",
+    "studyGuides": "คู่มือการเรียน",
+    "nextClass": "ชั้นเรียนถัดไป",
+    "instructor": "ผู้สอน",
+    "daysLeft": "วันที่เหลือ",
+    "lastAccessed": "เข้าถึงล่าสุด",
+    "instructorWelcome": "ยินดีต้อนรับสู่แดชบอร์ดผู้สอน",
+    "totalStudents": "จำนวนนักเรียนทั้งหมด",
+    "pendingAssignments": "งานที่รอดำเนินการ",
+    "recentStudentActivity": "กิจกรรมนักเรียนล่าสุด",
+    "facultyStatus": "สถานะคณะ",
+    "courseStatistics": "สถิติหลักสูตร",
+    "lastActive": "ใช้งานล่าสุด",
+    "averageProgress": "ความคืบหน้าเฉลี่ย",
+    "upcomingDeadlines": "กำหนดส่งที่กำลังจะมาถึง",
+    "proctorWelcome": "แดชบอร์ดการควบคุมการสอบ",
+    "activeExams": "การสอบที่กำลังดำเนินการ",
+    "alertsAndFlags": "การแจ้งเตือนและสถานะ",
+    "timeRemaining": "เวลาที่เหลือ",
+    "activeStudents": "นักเรียนที่กำลังใช้งาน",
+    "activeFlags": "สถานะที่กำลังใช้งาน",
+    "review": "ตรวจสอบ",
+    "startsAt": "เริ่มเวลา",
+    "expectedStudents": "จำนวนนักเรียนที่คาดหวัง",
+    "status": {
+      "online": "ออนไลน์",
+      "offline": "ออฟไลน์",
+      "inProgress": "กำลังดำเนินการ",
+      "startingSoon": "กำลังจะเริ่ม",
+      "endingSoon": "กำลังจะจบ"
+    },
+    "examType": {
+      "actual": "การสอบจริง",
+      "practice": "การสอบฝึกหัด"
+    },
+    "complete": "เสร็จสิ้น"
+  },
+  "questionTemplates": {
+    "title": "เทมเพลตคำถาม",
+    "createTemplate": "สร้างเทมเพลต",
+    "editTemplate": "แก้ไขเทมเพลต",
+    "userPromptType": "ประเภทคำถาม",
+    "userResponseType": "ประเภทคำตอบ",
+    "exclusivityType": "ความเฉพาะเจาะจง",
+    "userPromptText": "ข้อความคำถาม",
+    "instructionText": "คำแนะนำ",
+    "actions": "การดำเนินการ",
+    "promptTypes": {
+      "text": "ข้อความ",
+      "multimedia": "มัลติมีเดีย"
+    },
+    "responseTypes": {
+      "free-text-255": "ข้อความอิสระ (255)",
+      "multiple-choice-4": "ตัวเลือก (4)",
+      "true-false": "จริง/เท็จ"
+    },
+    "exclusivityTypes": {
+      "exam-only": "เฉพาะการสอบ",
+      "practice-only": "เฉพาะการฝึกหัด",
+      "exam-practice-both": "ทั้งการสอบและการฝึกหัด"
+    }
+  },
+  "learningInstitutions": {
+    "title": "สถาบันการศึกษา",
+    "addInstitution": "เพิ่มสถาบัน",
+    "editInstitution": "แก้ไขสถาบัน",
+    "name": "ชื่อ",
+    "description": "คำอธิบาย",
+    "website": "เว็บไซต์",
+    "email": "อีเมล",
+    "phone": "โทรศัพท์",
+    "address": "ที่อยู่",
+    "loading": "กำลังโหลด...",
+    "errorLoading": "เกิดข้อผิดพลาดในการโหลดสถาบัน",
+    "errorCreating": "เกิดข้อผิดพลาดในการสร้างสถาบัน",
+    "errorUpdating": "เกิดข้อผิดพลาดในการอัปเดตสถาบัน",
+    "errorDeleting": "เกิดข้อผิดพลาดในการลบสถาบัน",
+    "createSuccess": "สร้างสถาบันสำเร็จ",
+    "updateSuccess": "อัปเดตสถาบันสำเร็จ",
+    "deleteSuccess": "ลบสถาบันสำเร็จ"
+  },
+  "instructionalCourses": {
+    "title": "หลักสูตรการเรียนการสอน",
+    "addCourse": "เพิ่มหลักสูตร",
+    "editCourse": "แก้ไขหลักสูตร",
+    "name": "ชื่อ",
+    "description": "คำอธิบาย",
+    "startDate": "วันที่เริ่ม",
+    "finishDate": "วันที่สิ้นสุด",
+    "startTime": "เวลาเริ่ม",
+    "duration": "ระยะเวลา (นาที)",
+    "daysOfWeek": "วันในสัปดาห์",
+    "institution": "สถาบัน",
+    "instructor": "ผู้สอน",
+    "proctors": "ผู้คุมสอบ",
+    "loading": "กำลังโหลด...",
+    "errorLoading": "เกิดข้อผิดพลาดในการโหลดหลักสูตร",
+    "errorCreating": "เกิดข้อผิดพลาดในการสร้างหลักสูตร",
+    "errorUpdating": "เกิดข้อผิดพลาดในการอัปเดตหลักสูตร",
+    "errorDeleting": "เกิดข้อผิดพลาดในการลบหลักสูตร",
+    "createSuccess": "สร้างหลักสูตรสำเร็จ",
+    "updateSuccess": "อัปเดตหลักสูตรสำเร็จ",
+    "deleteSuccess": "ลบหลักสูตรสำเร็จ",
+    "notAssigned": "ไม่ได้กำหนด"
   }
 }

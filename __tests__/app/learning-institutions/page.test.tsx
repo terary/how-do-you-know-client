@@ -1,71 +1,78 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import LearningInstitutionsPage from "@/app/learning-institutions/page";
 import {
   useGetLearningInstitutionsQuery,
   useDeleteLearningInstitutionMutation,
   useCreateLearningInstitutionMutation,
 } from "@/lib/features/learning-institutions/learningInstitutionsApiSlice";
-import { StoreProvider } from "@/app/StoreProvider";
+import { renderWithProviders } from "../../test-utils/render";
 
 // Mock the API hooks
+const mockDeleteInstitution = jest.fn();
+const mockCreateInstitution = jest.fn();
+
+// Mock RoleProtectedRoute
+jest.mock("@/lib/features/auth/components/RoleProtectedRoute", () => ({
+  RoleProtectedRoute: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+}));
+
+// Mock react-toastify
+jest.mock("react-toastify", () => ({
+  toast: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+
 jest.mock(
   "@/lib/features/learning-institutions/learningInstitutionsApiSlice",
   () => ({
     useGetLearningInstitutionsQuery: jest.fn(),
-    useDeleteLearningInstitutionMutation: jest.fn(),
-    useCreateLearningInstitutionMutation: jest.fn(() => {
-      const mockCreateInstitution = jest.fn().mockResolvedValue({ data: {} });
-      return [mockCreateInstitution, { isLoading: false }];
-    }),
+    useDeleteLearningInstitutionMutation: jest.fn(() => [
+      mockDeleteInstitution,
+      { isLoading: false },
+    ]),
+    useCreateLearningInstitutionMutation: jest.fn(() => [
+      mockCreateInstitution,
+      { isLoading: false },
+    ]),
   })
 );
 
-const mockInstitutions = [
-  {
-    id: "1",
-    name: "Test Institution 1",
-    description: "Description 1",
-    website: "https://test1.com",
-    email: "test1@test.com",
-    phone: "123-456-7890",
-    address: "123 Test St",
-    created_by: "user1",
-    created_at: "2024-03-14T00:00:00.000Z",
-    updated_at: "2024-03-14T00:00:00.000Z",
-    courses: [],
-  },
-  {
-    id: "2",
-    name: "Test Institution 2",
-    description: "Description 2",
-    website: "https://test2.com",
-    email: "test2@test.com",
-    phone: "098-765-4321",
-    address: "456 Test Ave",
-    created_by: "user1",
-    created_at: "2024-03-14T00:00:00.000Z",
-    updated_at: "2024-03-14T00:00:00.000Z",
-    courses: [],
-  },
-];
-
 describe("LearningInstitutionsPage", () => {
-  const mockDeleteInstitution = jest.fn();
+  const mockInstitutions = [
+    {
+      id: "1",
+      name: "Test Institution 1",
+      description: "Description 1",
+      website: "https://test1.com",
+      email: "test1@test.com",
+      phone: "123-456-7890",
+      address: "123 Test St",
+    },
+    {
+      id: "2",
+      name: "Test Institution 2",
+      description: "Description 2",
+      website: "https://test2.com",
+      email: "test2@test.com",
+      phone: "987-654-3210",
+      address: "456 Test Ave",
+    },
+  ];
 
   beforeEach(() => {
-    (useGetLearningInstitutionsQuery as jest.Mock).mockReturnValue({
-      data: mockInstitutions,
-      isLoading: false,
-      error: null,
-    });
-    (useDeleteLearningInstitutionMutation as jest.Mock).mockReturnValue([
-      mockDeleteInstitution,
-      { isLoading: false },
-    ]);
-  });
-
-  afterEach(() => {
     jest.clearAllMocks();
+    mockDeleteInstitution.mockImplementation(async (id: string) => ({
+      data: { id },
+      unwrap: () => Promise.resolve({ id }),
+    }));
+    mockCreateInstitution.mockImplementation(async (data: any) => ({
+      data,
+      unwrap: () => Promise.resolve(data),
+    }));
   });
 
   it("renders loading state", () => {
@@ -75,66 +82,82 @@ describe("LearningInstitutionsPage", () => {
       error: null,
     });
 
-    render(
-      <StoreProvider>
-        <LearningInstitutionsPage />
-      </StoreProvider>
-    );
+    renderWithProviders(<LearningInstitutionsPage />);
 
-    expect(screen.getByText(/Loading/i)).toBeInTheDocument();
+    expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
   });
 
   it("renders error state", () => {
     (useGetLearningInstitutionsQuery as jest.Mock).mockReturnValue({
       data: null,
       isLoading: false,
-      error: { status: 500, data: "Error message" },
+      error: { message: "Failed to fetch institutions" },
     });
 
-    render(
-      <StoreProvider>
-        <LearningInstitutionsPage />
-      </StoreProvider>
-    );
+    renderWithProviders(<LearningInstitutionsPage />);
 
     expect(screen.getByText(/Error loading institutions/i)).toBeInTheDocument();
   });
 
   it("renders list of institutions", () => {
-    render(
-      <StoreProvider>
-        <LearningInstitutionsPage />
-      </StoreProvider>
-    );
+    (useGetLearningInstitutionsQuery as jest.Mock).mockReturnValue({
+      data: mockInstitutions,
+      isLoading: false,
+      error: null,
+    });
 
-    expect(screen.getByText("Test Institution 1")).toBeInTheDocument();
-    expect(screen.getByText("Test Institution 2")).toBeInTheDocument();
-    expect(screen.getByText("Description 1")).toBeInTheDocument();
-    expect(screen.getByText("Description 2")).toBeInTheDocument();
+    renderWithProviders(<LearningInstitutionsPage />);
+
+    mockInstitutions.forEach((institution) => {
+      expect(screen.getByText(institution.name)).toBeInTheDocument();
+      expect(screen.getByText(institution.description)).toBeInTheDocument();
+      expect(
+        screen.getByText((content) => {
+          return content.includes(institution.website);
+        })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText((content) => {
+          return content.includes(institution.email);
+        })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText((content) => {
+          return content.includes(institution.phone);
+        })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText((content) => {
+          return content.includes(institution.address);
+        })
+      ).toBeInTheDocument();
+    });
   });
 
   it("opens dialog when add button is clicked", () => {
-    render(
-      <StoreProvider>
-        <LearningInstitutionsPage />
-      </StoreProvider>
-    );
+    (useGetLearningInstitutionsQuery as jest.Mock).mockReturnValue({
+      data: mockInstitutions,
+      isLoading: false,
+      error: null,
+    });
 
-    fireEvent.click(screen.getByText(/Add Institution/i));
+    renderWithProviders(<LearningInstitutionsPage />);
+
+    fireEvent.click(screen.getByRole("button", { name: /add institution/i }));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
   it("calls delete mutation when delete button is clicked", () => {
-    mockDeleteInstitution.mockResolvedValueOnce({});
+    (useGetLearningInstitutionsQuery as jest.Mock).mockReturnValue({
+      data: mockInstitutions,
+      isLoading: false,
+      error: null,
+    });
 
-    render(
-      <StoreProvider>
-        <LearningInstitutionsPage />
-      </StoreProvider>
-    );
+    renderWithProviders(<LearningInstitutionsPage />);
 
-    const deleteButtons = screen.getAllByTestId("DeleteIcon");
-    fireEvent.click(deleteButtons[0].closest("button")!);
+    const deleteButtons = screen.getAllByTestId("delete-institution-button");
+    fireEvent.click(deleteButtons[0]);
 
     expect(mockDeleteInstitution).toHaveBeenCalledWith("1");
   });

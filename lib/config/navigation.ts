@@ -10,6 +10,9 @@ import {
   School as SchoolIcon,
   Class as ClassIcon,
   Assignment as AssignmentIcon,
+  Dashboard as DashboardIcon,
+  SupervisorAccount as SupervisorAccountIcon,
+  RemoveRedEye as EyeIcon,
 } from "@mui/icons-material";
 
 export const navigation = [
@@ -17,6 +20,21 @@ export const navigation = [
     name: "home",
     href: "/",
     icon: HomeIcon,
+  },
+  {
+    name: "studentDashboard",
+    href: "/student-dashboard",
+    icon: DashboardIcon,
+  },
+  {
+    name: "instructorDashboard",
+    href: "/instructor-dashboard",
+    icon: SupervisorAccountIcon,
+  },
+  {
+    name: "proctorDashboard",
+    href: "/proctor-dashboard",
+    icon: EyeIcon,
   },
   {
     name: "verify",
